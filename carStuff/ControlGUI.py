@@ -1,8 +1,53 @@
 import time
 from MotorControl import MotorContol as Motor
-from Tkinter import *
+from tkinter import *
+from AccelInterface import AccelInterface as Accel
+import csv
+import datetime
+
+root = Tk()
 
 MC = Motor()
+
+#set up accelerometer interface
+Ac = Accel()
+
+#set up datafile and data writer
+dataFile = open('manual-'+str(datetime.datetime.now())+'.csv', mode='w')
+dataWriter = csv.writer(dataFile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL) 
+#make headers
+dataWriter.writerow([
+    "datetime.datetime.now()"
+    ,"getAccelX()"
+    ,"getAccelY()"
+    ,"getAccelZ()"
+    ,"getGyroX()"
+    ,"getGyroY()"
+    ,"getGyroZ()"
+    ,"get_x_rotation()"
+    ,"get_y_rotation()"
+    ,"throttle"
+    ,"steering"
+    ,"movement"])
+def addToCSV(throttle, steering, movement):
+    dataWriter = csv.writer(dataFile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL) 
+    dataWriter.writerow([
+       str(datetime.datetime.now())
+        ,Ac.getAccelX()
+        ,Ac.getAccelY()
+        ,Ac.getAccelZ()
+        ,Ac.getGyroX()
+        ,Ac.getGyroY()
+        ,Ac.getGyroZ()
+        ,Ac.getXRotation()
+        ,Ac.getYRotation()
+        ,throttle
+        ,steering
+        ,movement])
+
+def SEND():
+    addToCSV(MC.getThrottle(), MC.getHeading(), MC.getMovement())
+    root.after(250, SEND)
 
 def key(event, e):
     inChar = repr(event.char)
@@ -24,12 +69,14 @@ def key(event, e):
         MC.sendCommand(MC.RIGHT)
     MC.printSerial()
 
+
+
 def main():
     print("Connecting to Arduino")
     
     
 
-    root = Tk()
+    
     isMoving = False
     isMovingForward = False
     frame = Text(root, width=10, height=1)
@@ -38,6 +85,7 @@ def main():
     frame.pack()
     e.pack()
     frame.focus_set()
+    SEND()
     root.mainloop()
 
     

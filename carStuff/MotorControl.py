@@ -18,13 +18,13 @@ class MotorContol(object):
         self.currentHeading = 'x'
         self.throttle = 0
     
-    def getMovement():
+    def getMovement(self):
         return self.currentMovement
     
-    def getHeading():
+    def getHeading(self):
         return self.currentHeading
 
-    def getThrottle():
+    def getThrottle(self):
         return self.throttle
     
     def sendCommand(self, command):
@@ -49,14 +49,10 @@ class MotorContol(object):
         if throttle > 255:
             self.throttle = 255
         elif throttle <= 0:
-            self.throttle = 100
+            self.throttle = 90
         else:
             self.throttle = throttle
-        print ("tje boy")
-        print (throttle)
         byte = bytes([int(self.throttle)])
-        print ("tje boy")
-        print (byte)
         self.ser.write(byte)
         
     def printSerial(self):

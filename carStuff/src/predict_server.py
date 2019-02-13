@@ -138,7 +138,7 @@ def run_steering_server(address, model_fnm, image_folder=None, image_cb=None):
 
     @sio.on('telemetry')
     def telemetry(sid, data):
-        print(data)
+        # print(data)
         ss.telemetry(sid, data)
 
     @sio.on('connect')
