@@ -99,9 +99,20 @@ public class SocketIODriveClient : MonoBehaviour {
     void OnSteer(SocketIOEvent obj)
     {
         JSONObject jsonObject = obj.data;
-
-        float steering = float.Parse(jsonObject.GetField("steering_angle").str);
+        float steering = 0.0f;
+        float steeringnum = float.Parse(jsonObject.GetField("steering_angle").str);
 		float throttle = float.Parse(jsonObject.GetField("throttle").str);
+
+        if (steeringnum < -1.0f)
+        {
+            steering = -7.0f;
+        } else if (steeringnum > 1.0f)
+        {
+            steering = 7.0f;
+        } else
+        {
+            steering = 0.0f;
+        }
 
         car.RequestSteering(steering);
 		car.RequestThrottle(throttle);
