@@ -23,7 +23,7 @@ public class PIDController : MonoBehaviour {
 
 	float diffErr = 0f;
 	public float prevErr = 0f;
-	public float steeringReq = 0.0f;
+	public int steeringReq = 0;
 	public float throttleVal = 0.3f;
 	public float totalError = 0f;
 	public float absTotalError = 0f;
@@ -69,7 +69,7 @@ public class PIDController : MonoBehaviour {
 		if(!pm.isActiveAndEnabled || pm.path == null)
 			return;
 
-		steeringReq = 0f;
+		steeringReq = 0;
 		prevErr = 0f;
 		totalError = 0f;
 		totalAcc = 0f;
@@ -171,7 +171,7 @@ public class PIDController : MonoBehaviour {
 
 		diffErr = err - prevErr;
 
-		steeringReq = (-Kp * err) - (Kd * diffErr) - (Ki * totalError);
+		steeringReq = (int)System.Math.Round((-Kp * err) - (Kd * diffErr) - (Ki * totalError));
 
 		if(doDrive)
 			car.RequestSteering(steeringReq);

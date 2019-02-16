@@ -213,7 +213,7 @@ def go(model_name, epochs=50, inputs='./log/*.jpg', limit=None, aug_mult=1, aug_
 
     steps_per_epoch = n_train // batch_size
     validation_steps = n_val // batch_size
-
+    
     print("steps_per_epoch", steps_per_epoch, "validation_steps", validation_steps)
 
     history = model.fit_generator(train_generator, 

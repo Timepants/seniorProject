@@ -6,7 +6,7 @@ using UnityStandardAssets.CrossPlatformInput;
 public class UnityStandardCarAdapter : MonoBehaviour, ICar {
 
 	public UnityStandardAssets.Vehicles.Car.CarController unityCar;
-	public float MaximumSteerAngle = 25.0f; //has to be kept in sync with the car, as that's a private var.
+	public float MaximumSteerAngle = 1.0f; //has to be kept in sync with the car, as that's a private var.
 	float steering = 0.0f;
 	float throttle = 0.0f;
 	float footBrake = 0.0f;
