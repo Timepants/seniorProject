@@ -1,0 +1,14 @@
+
+sdsandbox-master/logs_Sat_Feb__9_11_17_53_2019/
+
+sdsandbox-master/logs_Sat_Feb_16_09_19_03_2019/
+
+sdsandbox-master/dataset/
+
+carStuff/dataset/
+
+carStuff/img/
+
+*.jpg
+
+carStuff/src/__pycache__/
