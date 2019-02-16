@@ -90,7 +90,15 @@ def generator(samples, batch_size=32, perc_to_augment=0.5):
                     data = parse_img_filepath(fullpath)
                 
                     steering = data["steering"]
-                    throttle = data["throttle"]
+                    if steering < -0.5:
+                        steering = -7.0
+                    elif steering > 0.5:
+                        steering = 7.0
+                    else:
+                        steering = 0.0
+                    throttle = data["throttle"] * 300
+                    #TODO throttle seems to be mostly zero when generating training data, imma force it to be 120
+                    throttle = 120.0
 
                     try:
                         image = Image.open(fullpath)
@@ -213,7 +221,7 @@ def go(model_name, epochs=50, inputs='./log/*.jpg', limit=None, aug_mult=1, aug_
 
     steps_per_epoch = n_train // batch_size
     validation_steps = n_val // batch_size
-    
+
     print("steps_per_epoch", steps_per_epoch, "validation_steps", validation_steps)
 
     history = model.fit_generator(train_generator, 
