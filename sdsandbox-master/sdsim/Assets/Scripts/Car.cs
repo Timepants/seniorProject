@@ -14,7 +14,7 @@ public class Car : MonoBehaviour, ICar {
 
 	public float requestTorque = 0f;
 	public float requestBrake = 0f;
-	public float requestSteering = 0f;
+	public float requestSteering = 10;
 
 	public Vector3 acceleration = Vector3.zero;
 	public Vector3 prevVel = Vector3.zero;
@@ -48,7 +48,7 @@ public class Car : MonoBehaviour, ICar {
 		}
 
 		requestTorque = 0f;
-		requestSteering = 0f;
+		requestSteering = 0;
 
 		SavePosRot();
 	}
