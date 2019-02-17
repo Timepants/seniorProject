@@ -59,7 +59,7 @@ class SteeringServer(object):
             # The current steering angle of the car
             steering_angle = float(data["steering_angle"])
             # The current throttle of the car
-            throttle = float(data["throttle"])
+            throttle = float(data["throttle"]) 
             # The current speed of the car
             speed = float(data["speed"])
             # The current image from the center camera of the car
@@ -84,8 +84,8 @@ class SteeringServer(object):
                 #set throttle value here
                 throttle, brake = self.throttle_man.get_throttle_brake(speed, steering_angle)
 
-            #print(steering_angle, throttle)
-            self.send_control(steering_angle, throttle)
+            print(steering_angle, throttle)
+            self.send_control(steering_angle, throttle/ 300)
 
             # save frame
             if self.image_folder is not None:
