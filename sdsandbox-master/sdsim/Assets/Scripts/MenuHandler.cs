@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityStandardAssets.Vehicles.Car;
 
@@ -95,6 +96,13 @@ public class MenuHandler : MonoBehaviour {
 	{
 		if(trainingManager != null)
 			trainingManager.OnMenuRegenTrack();
+    }
+
+    public void PrepareData()
+    {
+        if (trainingManager != null)
+            trainingManager.OnPrepareData();
+
     }
 
     public void OnStop()
