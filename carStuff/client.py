@@ -23,26 +23,33 @@ camera.resolution = (160, 120)
 time.sleep(2)
 my_stream = BytesIO()
 
+
+class thingsINeed():
+    #create counter for image number
+    counter =0 
+
+things = thingsINeed()
+
 #set up accelerometer interface
 Ac = Accel()
 
 #set up datafile and data writer
-dataFile = open('log-'+str(datetime.datetime.now())+'.csv', mode='w')
-dataWriter = csv.writer(dataFile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL) 
+# dataFile = open('log-'+str(datetime.datetime.now())+'.csv', mode='w')
+# dataWriter = csv.writer(dataFile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL) 
 #make headers
-dataWriter.writerow([
-    "datetime.datetime.now()"
-    ,"getAccelX()"
-    ,"getAccelY()"
-    ,"getAccelZ()"
-    ,"getGyroX()"
-    ,"getGyroY()"
-    ,"getGyroZ()"
-    ,"get_x_rotation()"
-    ,"get_y_rotation()"
-    ,"throttle"
-    ,"steering"
-    ,"movement"])
+# dataWriter.writerow([
+#     "datetime.datetime.now()"
+#     ,"getAccelX()"
+#     ,"getAccelY()"
+#     ,"getAccelZ()"
+#     ,"getGyroX()"
+#     ,"getGyroY()"
+#     ,"getGyroZ()"
+#     ,"get_x_rotation()"
+#     ,"get_y_rotation()"
+#     ,"throttle"
+#     ,"steering"
+#     ,"movement"])
 def addToCSV(throttle, steering, movement):
     dataWriter = csv.writer(dataFile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL) 
     dataWriter.writerow([
@@ -61,6 +68,7 @@ def addToCSV(throttle, steering, movement):
 
 @sio.on('connect')
 def on_connect():
+    counter = 0
     print('connection established')
 
 @sio.on('steer')
@@ -70,16 +78,25 @@ def on_message(data):
     my_stream.seek(0)
    
     #get incoming data and set
-    print('message s received with ', data)
+    # print('message s received with ', data)
     MC.setSteering(float(data['steering_angle']))
-    MC.setThrottle(float(data['throttle']))
-    
-    #add to log file
-    addToCSV(MC.getThrottle(), MC.getSteering(), MC.getMovement())
+    # MC.setThrottle(float(data['throttle']), 1)
+    MC.setThrottle(90, 1)
 
+    if float(data['steering_angle'])  > 1.5:
+        print ("right")
+    elif float(data['steering_angle'])  < -1.5:
+        print("left")
+    else:
+        print("straight")
+    #add to log file
+    # addToCSV(MC.getThrottle(), MC.getSteering(), MC.getMovement())
+    # print(things.counter)
+    # print(MC.printSerial())
+    things.counter += 1
     #take a new picture
     camera.capture(my_stream, 'jpeg')
-    time.sleep(interval)
+    # time.sleep(interval)
     #send response data
     #TODO this should not have to return speed
     data =	{
