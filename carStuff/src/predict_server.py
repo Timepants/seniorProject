@@ -84,7 +84,7 @@ class SteeringServer(object):
                 #set throttle value here
                 throttle, brake = self.throttle_man.get_throttle_brake(speed, steering_angle)
 
-            #print(steering_angle, throttle)
+            print(steering_angle, throttle)
             self.send_control(steering_angle, throttle)
 
             # save frame

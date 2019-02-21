@@ -98,7 +98,7 @@ def generator(samples, batch_size=32, perc_to_augment=0.5):
                         steering = 0.0
                     throttle = data["throttle"] * 300
                     #TODO throttle seems to be mostly zero when generating training data, imma force it to be 120
-                    throttle = 120.0
+                    throttle = 90.0
 
                     try:
                         image = Image.open(fullpath)
