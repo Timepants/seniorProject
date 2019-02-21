@@ -24,12 +24,12 @@ public class PIDController : MonoBehaviour {
 	float diffErr = 0f;
 	public float prevErr = 0f;
 	public int steeringReq = 0;
-	public float throttleVal = 0.3f;
+	public float throttleVal = 255f;
 	public float totalError = 0f;
 	public float absTotalError = 0f;
-	public float totalAcc = 0f;
+	public float totalAcc = 90f;
 	public float totalOscilation = 0f;
-	public float AccelErrFactor = 0.1f;
+	public float AccelErrFactor = 0.0f;
 	public float OscilErrFactor = 10f;
 
 	public delegate void OnEndOfPathCB();
@@ -44,7 +44,7 @@ public class PIDController : MonoBehaviour {
 	public bool brakeOnEnd = true;
 
 	public bool doDrive = true;
-	public float maxSpeed = 5.0f;
+	public float maxSpeed = 10f;
 
 	public Text pid_steering;
 
@@ -84,7 +84,7 @@ public class PIDController : MonoBehaviour {
         {
             if (!waitForStill && doDrive)
             {
-                car.RequestThrottle(throttleVal);
+                car.RequestThrottle(throttleVal*90);
             }
 
             car.RestorePosRot();
@@ -95,8 +95,8 @@ public class PIDController : MonoBehaviour {
 	{
 		isDriving = false;
 		car.RequestThrottle(0.0f);
-		car.RequestHandBrake(1.0f);
-		car.RequestFootBrake(1.0f);
+		car.RequestHandBrake(100.0f);
+		car.RequestFootBrake(100.0f);
 	}
 		
 	// Update is called once per frame
@@ -110,14 +110,14 @@ public class PIDController : MonoBehaviour {
 
 		if(waitForStill)
 		{
-			car.RequestFootBrake(1.0f);
+			car.RequestFootBrake(100.0f);
 
 			if(car.GetAccel().magnitude < 0.001f)
 			{
 				waitForStill = false;
 
 				if(doDrive)
-					car.RequestThrottle(throttleVal);
+					car.RequestThrottle(throttleVal*90);
 			}
 			else
 			{
@@ -148,7 +148,7 @@ public class PIDController : MonoBehaviour {
 		{
 			if(brakeOnEnd)
 			{
-				car.RequestFootBrake(1.0f);
+				car.RequestFootBrake(100.0f);
 
 				if(car.GetAccel().magnitude < 0.0001f)
 				{
@@ -179,13 +179,15 @@ public class PIDController : MonoBehaviour {
 		if(doDrive)
 		{
 			if(car.GetVelocity().magnitude < maxSpeed)
-				car.RequestThrottle(throttleVal);
+				car.RequestThrottle(throttleVal*90);
 			else
 				car.RequestThrottle(0.0f);
 		}
-		
+        string throttle = string.Format("{0:N0}", throttleVal);
 		if(pid_steering != null)
-			pid_steering.text = string.Format("PID: {0}", steeringReq);
+			pid_steering.text = string.Format("PID: {0} {1}", steeringReq, throttle);
+
+        
 
 		//accumulate total error
 		totalError += err;

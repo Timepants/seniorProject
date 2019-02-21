@@ -88,7 +88,7 @@ public class TrainingManager : MonoBehaviour {
 
     public void OnPrepareData()
     {
-        string path = "C:\\Users\\steve\\source\\repos\\seniorProject\\carStuff\\src";
+        string path = "../../carStuff/src";
         Process p = new Process();
         ProcessStartInfo startInfo = new ProcessStartInfo();
 

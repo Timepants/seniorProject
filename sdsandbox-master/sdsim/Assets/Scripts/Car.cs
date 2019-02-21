@@ -7,14 +7,14 @@ public class Car : MonoBehaviour, ICar {
 	public WheelCollider[] wheelColliders;
 	public Transform[] wheelMeshes;
 
-	public float maxTorque = 50f;
+	public float maxTorque = 1000f;
 	public float maxSpeed = 10f;
 
 	public Transform centrOfMass;
 
 	public float requestTorque = 0f;
 	public float requestBrake = 0f;
-	public float requestSteering = 10;
+	public float requestSteering = 1;
 
 	public Vector3 acceleration = Vector3.zero;
 	public Vector3 prevVel = Vector3.zero;
