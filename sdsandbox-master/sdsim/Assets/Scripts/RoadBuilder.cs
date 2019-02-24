@@ -55,18 +55,18 @@ public class RoadBuilder : MonoBehaviour {
         /*
         if (roadTextures.Length > 0)		
 			customRoadTexure = roadTextures[ iVariation % roadTextures.Length ];
-   */
+ 
          
 		if(roadOffsets.Length > 0)
 			roadOffsetW = roadOffsets[ iVariation % roadOffsets.Length ];
 
 		if(roadWidths.Length > 0)
 			roadWidth = roadWidths[ iVariation % roadWidths.Length ];
-           
-		
-	}
+            */
 
-	public void NegateYTiling()
+    }
+
+    public void NegateYTiling()
 	{
 		//todo
 		if(createdRoad == null)

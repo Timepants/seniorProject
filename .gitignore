@@ -9,6 +9,10 @@ carStuff/dataset/
 
 carStuff/img/
 
-*.jpg
+sdsandbox-master/oldData/
+
+sdsandbox-master/sdsim/log/
+
+carStuff/src/img/
 
 carStuff/src/__pycache__/

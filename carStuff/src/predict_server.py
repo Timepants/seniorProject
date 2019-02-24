@@ -47,7 +47,7 @@ class FPSTimer(object):
 class SteeringServer(object):
     def __init__(self, _sio, image_folder = None, image_cb = None):
         self.model = None
-        self.timer = FPSTimer()
+        # self.timer = FPSTimer()
         self.sio = _sio
         self.app = Flask(__name__)
         self.throttle_man = throttle_manager.ThrottleManager(idealSpeed = 10.)
@@ -96,11 +96,11 @@ class SteeringServer(object):
             # NOTE: DON'T EDIT THIS.
             self.sio.emit('manual', data={}, skip_sid=True)
 
-        self.timer.on_frame()
+        # self.timer.on_frame()
 
     def connect(self, sid, environ):
         print("connect ", sid)
-        self.timer.reset()
+        # self.timer.reset()
         self.send_control(0, 0)
 
     def send_control(self, steering_angle, throttle):
