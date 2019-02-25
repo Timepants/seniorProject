@@ -2,56 +2,57 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class PIDController : MonoBehaviour {
+public class PIDController : MonoBehaviour
+{
 
-	public GameObject carObj;
-	public ICar car;
-	public PathManager pm;
+    public GameObject carObj;
+    public ICar car;
+    public PathManager pm;
 
-	float errA, errB;
-	public float Kp = 10.0f;
-	public float Kd = 10.0f;
-	public float Ki = 0.1f;
+    float errA, errB;
+    public float Kp = 10.0f;
+    public float Kd = 10.0f;
+    public float Ki = 0.1f;
 
-	//Ks is the proportion of the current vel that
-	//we use to sample ahead of the vehicles actual position.
-	public float Kv = 1.0f; 
+    //Ks is the proportion of the current vel that
+    //we use to sample ahead of the vehicles actual position.
+    public float Kv = 1.0f;
 
-	//Ks is the proportion of the current err that
-	//we use to change throtlle.
-	public float Kt = 1.0f; 
+    //Ks is the proportion of the current err that
+    //we use to change throtlle.
+    public float Kt = 1.0f;
 
-	float diffErr = 0f;
-	public float prevErr = 0f;
-	public int steeringReq = 0;
-	public float throttleVal = 1f;
-	public float totalError = 0f;
-	public float absTotalError = 0f;
-	public float totalAcc = 90f;
-	public float totalOscilation = 0f;
-	public float AccelErrFactor = 0.0f;
-	public float OscilErrFactor = 10f;
+    float diffErr = 0f;
+    public float prevErr = 0f;
+    public int steeringReq = 0;
+    public float throttleVal = 0.3f;
+    public float totalError = 0f;
+    public float absTotalError = 0f;
+    public float totalAcc = 0f;
+    public float totalOscilation = 0f;
+    public float AccelErrFactor = 0.1f;
+    public float OscilErrFactor = 10f;
 
-	public delegate void OnEndOfPathCB();
+    public delegate void OnEndOfPathCB();
 
-	public OnEndOfPathCB endOfPathCB;
+    public OnEndOfPathCB endOfPathCB;
 
-	bool isDriving = false;
-	public bool waitForStill = true;
+    bool isDriving = false;
+    public bool waitForStill = true;
 
-	public bool startOnWake = false;
+    public bool startOnWake = false;
 
-	public bool brakeOnEnd = true;
+    public bool brakeOnEnd = true;
 
-	public bool doDrive = true;
-	public float maxSpeed = 1f;
+    public bool doDrive = true;
+    public float maxSpeed = 5.0f;
 
-	public Text pid_steering;
+    public Text pid_steering;
 
-	void Awake()
-	{
-		car = carObj.GetComponent<ICar>();
-	}
+    void Awake()
+    {
+        car = carObj.GetComponent<ICar>();
+    }
 
     private void OnEnable()
     {
@@ -64,147 +65,145 @@ public class PIDController : MonoBehaviour {
         StopDriving();
     }
 
-	public void StartDriving()
-	{
-		if(!pm.isActiveAndEnabled || pm.path == null)
-			return;
+    public void StartDriving()
+    {
+        if (!pm.isActiveAndEnabled || pm.path == null)
+            return;
 
-		steeringReq = 0;
-		prevErr = 0f;
-		totalError = 0f;
-		totalAcc = 0f;
-		totalOscilation = 0f;
-		absTotalError = 0f;
+        steeringReq = 0;
+        prevErr = 0f;
+        totalError = 0f;
+        totalAcc = 0f;
+        totalOscilation = 0f;
+        absTotalError = 0f;
 
-		pm.path.ResetActiveSpan();
-		isDriving = true;
-		waitForStill = false;//true;
+        pm.path.ResetActiveSpan();
+        isDriving = true;
+        waitForStill = false;//true;
 
-        if(car != null)
+        if (car != null)
         {
             if (!waitForStill && doDrive)
             {
-                car.RequestThrottle(throttleVal*90);
+                car.RequestThrottle(throttleVal);
             }
 
             car.RestorePosRot();
         }
-	}
+    }
 
-	public void StopDriving()
-	{
-		isDriving = false;
-		car.RequestThrottle(0.0f);
-		car.RequestHandBrake(100.0f);
-		car.RequestFootBrake(100.0f);
-	}
-		
-	// Update is called once per frame
-	void Update () 
-	{
-		if(!pm.isActiveAndEnabled)
-			return;
+    public void StopDriving()
+    {
+        isDriving = false;
+        car.RequestThrottle(0.0f);
+        car.RequestHandBrake(1.0f);
+        car.RequestFootBrake(1.0f);
+    }
 
-		if(!isDriving)
-			return;
+    // Update is called once per frame
+    void Update()
+    {
+        if (!pm.isActiveAndEnabled)
+            return;
 
-		if(waitForStill)
-		{
-			car.RequestFootBrake(100.0f);
+        if (!isDriving)
+            return;
 
-			if(car.GetAccel().magnitude < 0.001f)
-			{
-				waitForStill = false;
+        if (waitForStill)
+        {
+            car.RequestFootBrake(1.0f);
 
-				if(doDrive)
-					car.RequestThrottle(throttleVal*90);
-			}
-			else
-			{
-				//don't continue until we've settled.
-				return;
-			}
-		}
+            if (car.GetAccel().magnitude < 0.001f)
+            {
+                waitForStill = false;
 
-		//set the activity from the path node.
-		PathNode n = pm.path.GetActiveNode();
+                if (doDrive)
+                    car.RequestThrottle(throttleVal);
+            }
+            else
+            {
+                //don't continue until we've settled.
+                return;
+            }
+        }
 
-		if(n != null && n.activity != null && n.activity.Length > 1)
-		{
-			car.SetActivity(n.activity);
-		}
-		else
-		{
-			car.SetActivity("image");
-		}
+        //set the activity from the path node.
+        PathNode n = pm.path.GetActiveNode();
 
-		float err = 0.0f;
+        if (n != null && n.activity != null && n.activity.Length > 1)
+        {
+            car.SetActivity(n.activity);
+        }
+        else
+        {
+            car.SetActivity("image");
+        }
 
-		float velMag = car.GetVelocity().magnitude;
+        float err = 0.0f;
 
-		Vector3 samplePos = car.GetTransform().position + (car.GetTransform().forward * velMag * Kv);
+        float velMag = car.GetVelocity().magnitude;
 
-		if(!pm.path.GetCrossTrackErr(samplePos, ref err))
-		{
-			if(brakeOnEnd)
-			{
-				car.RequestFootBrake(100.0f);
+        Vector3 samplePos = car.GetTransform().position + (car.GetTransform().forward * velMag * Kv);
 
-				if(car.GetAccel().magnitude < 0.0001f)
-				{
-					isDriving = false;
+        if (!pm.path.GetCrossTrackErr(samplePos, ref err))
+        {
+            if (brakeOnEnd)
+            {
+                car.RequestFootBrake(1.0f);
 
-					if(endOfPathCB != null)
-						endOfPathCB.Invoke();
-				}
-			}
-			else
-			{
-				isDriving = false;
-				
-				if(endOfPathCB != null)
-					endOfPathCB.Invoke();
-			}
+                if (car.GetAccel().magnitude < 0.0001f)
+                {
+                    isDriving = false;
 
-			return;
-		}
+                    if (endOfPathCB != null)
+                        endOfPathCB.Invoke();
+                }
+            }
+            else
+            {
+                isDriving = false;
 
-		diffErr = err - prevErr;
+                if (endOfPathCB != null)
+                    endOfPathCB.Invoke();
+            }
 
-		steeringReq = (int)System.Math.Round((-Kp * err) - (Kd * diffErr) - (Ki * totalError));
+            return;
+        }
 
-		if(doDrive)
-			car.RequestSteering(steeringReq);
+        diffErr = err - prevErr;
 
-		if(doDrive)
-		{
-			if(car.GetVelocity().magnitude < maxSpeed)
-				car.RequestThrottle(throttleVal*90);
-			else
-				car.RequestThrottle(0.0f);
-		}
-        string throttle = string.Format("{0:N0}", throttleVal);
-		if(pid_steering != null)
-			pid_steering.text = string.Format("PID: {0} {1}", steeringReq, throttle);
+        steeringReq = (int)System.Math.Round((-Kp * err) - (Kd * diffErr) - (Ki * totalError));
 
-        
+        if (doDrive)
+            car.RequestSteering(steeringReq);
 
-		//accumulate total error
-		totalError += err;
+        if (doDrive)
+        {
+            if (car.GetVelocity().magnitude < maxSpeed)
+                car.RequestThrottle(throttleVal);
+            else
+                car.RequestThrottle(0.0f);
+        }
 
-		//save err for next iteration.
-		prevErr = err;
+        if (pid_steering != null)
+            pid_steering.text = string.Format("PID: {0}", steeringReq);
 
-		float carPosErr = 0.0f;
+        //accumulate total error
+        totalError += err;
 
-		//accumulate error at car, not steering decision point.
-		pm.path.GetCrossTrackErr(car.GetTransform().position, ref carPosErr);
+        //save err for next iteration.
+        prevErr = err;
+
+        float carPosErr = 0.0f;
+
+        //accumulate error at car, not steering decision point.
+        pm.path.GetCrossTrackErr(car.GetTransform().position, ref carPosErr);
 
 
-		//now get a measure of overall fitness.
-		//we don't with this to cancel out when it oscilates.
-		absTotalError += Mathf.Abs(carPosErr) + 
-		                 AccelErrFactor * car.GetAccel().magnitude;
+        //now get a measure of overall fitness.
+        //we don't with this to cancel out when it oscilates.
+        absTotalError += Mathf.Abs(carPosErr) +
+                         AccelErrFactor * car.GetAccel().magnitude;
 
-	}
+    }
 }
