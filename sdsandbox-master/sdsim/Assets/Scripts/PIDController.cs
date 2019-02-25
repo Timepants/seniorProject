@@ -24,7 +24,7 @@ public class PIDController : MonoBehaviour {
 	float diffErr = 0f;
 	public float prevErr = 0f;
 	public int steeringReq = 0;
-	public float throttleVal = 255f;
+	public float throttleVal = 1f;
 	public float totalError = 0f;
 	public float absTotalError = 0f;
 	public float totalAcc = 90f;
@@ -44,7 +44,7 @@ public class PIDController : MonoBehaviour {
 	public bool brakeOnEnd = true;
 
 	public bool doDrive = true;
-	public float maxSpeed = 10f;
+	public float maxSpeed = 1f;
 
 	public Text pid_steering;
 
