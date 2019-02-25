@@ -20,29 +20,41 @@ class MotorInterface(object):
             self.MC.sendCommand(self.MC.BACKWARD)
         else:
             self.MC.sendCommand(self.MC.CLEAR_MOVEMENT)
+            self.MC.setThrottle(0)
 
     def setThrottle(self, throttle):
         self.MC.setThrottle(throttle)
         self.MC.sendCommand(self.MC.FORWARD)
 
-    def stop(self, throttle):
+    def setThrottle(self, throttle, movement):
+        self.MC.setThrottle(throttle)
+        self.setMovement(movement)
+
+    def stop(self):
         self.MC.sendCommand(self.MC.CLEAR_ALL)
+        self.MC.setThrottle(0)
 
     def getSteering(self):
         if self.MC.getHeading() == self.MC.RIGHT:
-            return 1
+            return 7
         elif self.MC.getHeading() == self.MC.LEFT:
-            return -1
+            return -7
         else:
             return 0
 
     def getThrottle(self):
-        return self.MC.getThrottle()
+        if self.MC.getThrottle() <= 11:
+            return 0
+        else:
+            return self.MC.getThrottle()
 
     def getMovement(self):
         if self.MC.getMovement() == self.MC.FORWARD:
-            return 1
+            return 7
         elif self.MC.getMovement() == self.MC.BACKWARD:
-            return -1
+            return -7
         else:
             return 0
+
+    def printSerial(self):
+        self.MC.printSerial()

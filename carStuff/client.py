@@ -19,82 +19,58 @@ sio = socketio.Client()
 
 #set up camera stuff
 camera = PiCamera()
-camera.resolution = (160, 120)
+camera.resolution = (160, 128)
 time.sleep(2)
 my_stream = BytesIO()
+# camera.capture(my_stream, 'jpeg')
 
-#set up accelerometer interface
-Ac = Accel()
+class thingsINeed():
+    #create counter for image number
+    counter =0 
 
-#set up datafile and data writer
-dataFile = open('log-'+str(datetime.datetime.now())+'.csv', mode='w')
-dataWriter = csv.writer(dataFile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL) 
-#make headers
-dataWriter.writerow([
-    "datetime.datetime.now()"
-    ,"getAccelX()"
-    ,"getAccelY()"
-    ,"getAccelZ()"
-    ,"getGyroX()"
-    ,"getGyroY()"
-    ,"getGyroZ()"
-    ,"get_x_rotation()"
-    ,"get_y_rotation()"
-    ,"throttle"
-    ,"steering"
-    ,"movement"])
-def addToCSV(throttle, steering, movement):
-    dataWriter = csv.writer(dataFile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL) 
-    dataWriter.writerow([
-       str(datetime.datetime.now())
-        ,Ac.getAccelX()
-        ,Ac.getAccelY()
-        ,Ac.getAccelZ()
-        ,Ac.getGyroX()
-        ,Ac.getGyroY()
-        ,Ac.getGyroZ()
-        ,Ac.getXRotation()
-        ,Ac.getYRotation()
-        ,throttle
-        ,steering
-        ,movement])
+things = thingsINeed()
 
 @sio.on('connect')
 def on_connect():
+    counter = 0
     print('connection established')
-
-@sio.on('steer')
-def on_message(data):
-    #TODO add emergency stop
-    #reset photo stream
+    start = time.time()
     my_stream.seek(0)
-   
-    #get incoming data and set
-    print('message s received with ', data)
-    MC.setSteering(float(data['steering_angle']))
-    MC.setThrottle(float(data['throttle']))
-    
+    for foo in camera.capture_continuous(my_stream, 'bgr'):
+        # Write the length of the capture to the stream and flush to
+        # ensure it actually gets sent
+        data =	{
+            "steering_angle": 0,
+            "throttle": 90,
+            "speed": 90,
+            "image": my_stream.getvalue()
+        }
+        sio.emit('telemetry', data)
+        # If we've been capturing for more than 30 seconds, quit
+        if time.time() - start > 30:
+            break
+        # Reset the stream for the next capture
+        my_stream.seek(0)
+        my_stream.truncate()
+    # Write a length of zero to the stream to signal we're done
     #add to log file
-    addToCSV(MC.getThrottle(), MC.getSteering(), MC.getMovement())
-
+    # addToCSV(MC.getThrottle(), MC.getSteering(), MC.getMovement())
+    # print(things.counter)
+    # print(MC.printSerial())
+    things.counter += 1
     #take a new picture
-    camera.capture(my_stream, 'jpeg')
-    time.sleep(interval)
+    # camera.capture(my_stream, 'jpeg')
+    # time.sleep(interval)
     #send response data
     #TODO this should not have to return speed
-    data =	{
-        "steering_angle": MC.getSteering(),
-        "throttle": MC.getThrottle(),
-        "speed": MC.getThrottle(),
-        "image": my_stream.getvalue()
-    }
-    sio.emit('telemetry', data)
+
+
 
 @sio.on('disconnect')
 def on_disconnect():
     MC.stop()
     print('disconnected from server')
 
-sio.connect('http://192.168.4.17:9090')
+sio.connect('http://192.168.4.18:9090')
 sio.wait()
 

@@ -48,8 +48,8 @@ class MotorContol(object):
         self.ser.write('t'.encode())        
         if throttle > 255:
             self.throttle = 255
-        elif throttle <= 0:
-            self.throttle = 90
+        elif throttle <= 11:
+            self.throttle = 11
         else:
             self.throttle = throttle
         byte = bytes([int(self.throttle)])

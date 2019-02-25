@@ -90,7 +90,15 @@ def generator(samples, batch_size=32, perc_to_augment=0.5):
                     data = parse_img_filepath(fullpath)
                 
                     steering = data["steering"]
-                    throttle = data["throttle"]
+                    if steering < -0.5:
+                        steering = -7.0
+                    elif steering > 0.5:
+                        steering = 7.0
+                    else:
+                        steering = 0.0
+                    throttle = data["throttle"] * 300
+                    #TODO throttle seems to be mostly zero when generating training data, imma force it to be 120
+                    throttle = 90.0
 
                     try:
                         image = Image.open(fullpath)

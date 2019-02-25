@@ -54,8 +54,8 @@ def parse_img_filepath(filepath):
     f = basename[:-4]
     f = f.split('_')
 
-    steering = float(f[3])
-    throttle = float(f[5])
+    steering = int(f[3])
+    throttle = int(f[5])
     
     data = {'steering':steering, 'throttle':throttle }
 
