@@ -12,6 +12,23 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
+    public void GenerateData()
+    {
+        string modelFolder = "/Assets/Textures/roads/";
+
+        string modelpath = EditorUtility.OpenFilePanel("Choose Terrain to deploy", modelFolder, "png");
+        print(modelpath);
+
+        if (modelpath != null)
+        {
+
+        }
+        else
+        {
+            EditorUtility.DisplayDialog("Error", "Please choose a proper file type!", "Ok", "No");
+        }
+    }
+
     public void OpenModels()
     {
             string itemPath = "../../carStuff/src/carModels/"; //Maybe to be replaced with something else?
@@ -40,7 +57,7 @@ public class MainMenu : MonoBehaviour
     {
         string title = "Train";
         string message = "type in model name";
-        string model = EditorUtility.SaveFilePanel("Save Your model", "../../carStuff/src/carModels/", "My_Model", "h5");
+        string model = EditorUtility.SaveFilePanel("Save Your model", "../../carStuff/src/carModels/", "Test_Model", "h5");
         print(model);
         if (!string.IsNullOrEmpty(model))
         {
@@ -51,6 +68,7 @@ public class MainMenu : MonoBehaviour
         else
         {
             EditorUtility.DisplayDialog("Error!", "Please enter something in the correct format", "Ok");
+            
         }
 
     }
@@ -97,7 +115,7 @@ public class MainMenu : MonoBehaviour
             ProcessStartInfo startInfo = new ProcessStartInfo();
 
             startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = "/c \"python " + path + "\\predict_server.py\" " + modelpath;
+            startInfo.Arguments = "/k \"python " + path + "\\predict_server.py\" " + modelpath;
             p.StartInfo = startInfo;
             p.Start();
         } else
