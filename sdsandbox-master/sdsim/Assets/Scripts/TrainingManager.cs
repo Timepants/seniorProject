@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class TrainingManager : MonoBehaviour {
@@ -83,6 +84,18 @@ public class TrainingManager : MonoBehaviour {
     {
         StartNewRun();
         car.RequestFootBrake(1);
+    }
+
+    public void OnPrepareData()
+    {
+        string path = "../../carStuff/src";
+        Process p = new Process();
+        ProcessStartInfo startInfo = new ProcessStartInfo();
+
+        startInfo.FileName = "cmd.exe";
+        startInfo.Arguments = "/k \"python " + path + "\\prepare_data.py\"";
+        p.StartInfo = startInfo;
+        p.Start();
     }
 
 	void OnPathDone()
