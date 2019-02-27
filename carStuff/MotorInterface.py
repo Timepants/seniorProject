@@ -7,14 +7,16 @@ class MotorInterface(object):
 
     def setSteering(self, steering):
         if steering > 0.5:
-            self.MC.sendCommand(self.MC.RIGHT)
+            if self.MC.getHeading not == self.MC.RIGHT:
+                self.MC.sendCommand(self.MC.RIGHT)
         elif steering < -0.5:
-            self.MC.sendCommand(self.MC.LEFT)
+            if self.MC.getHeading not == self.MC.LEFT:
+                self.MC.sendCommand(self.MC.LEFT)
         else:
             self.MC.sendCommand(self.MC.CLEAR_HEADING)
 
     def setMovement(self, movement):
-        if movement > 0.5:
+        if movement > 0.5:)
             self.MC.sendCommand(self.MC.FORWARD)
         elif movement < -0.5:
             self.MC.sendCommand(self.MC.BACKWARD)
@@ -23,12 +25,22 @@ class MotorInterface(object):
             self.MC.setThrottle(0)
 
     def setThrottle(self, throttle):
-        self.MC.setThrottle(throttle)
-        self.MC.sendCommand(self.MC.FORWARD)
+        if throttle <= -10 or throttle >= 10:
+            self.setMovement(0)
+        else:
+            if throttle < 0:
+                movement = -1
+            elif throttle > 0:
+                movement = 1
+            else:
+                movement = 0
+            self.setThrottle(throttle, movement)
 
     def setThrottle(self, throttle, movement):
-        self.MC.setThrottle(throttle)
-        self.setMovement(movement)
+        if(self.getThrottle not == throttle):
+            self.MC.setThrottle(throttle)
+        if(self.getMovement not == movement): 
+            self.setMovement(movement)
 
     def stop(self):
         self.MC.sendCommand(self.MC.CLEAR_ALL)
