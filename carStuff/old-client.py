@@ -81,7 +81,7 @@ def on_message(data):
     # print('message s received with ', data)
     MC.setSteering(float(data['steering_angle']))
     # MC.setThrottle(float(data['throttle']), 1)
-    MC.setThrottle(90, 1)
+    MC.setThrottle(90)
 
     if float(data['steering_angle'])  > 1.5:
         print ("right")
@@ -112,6 +112,6 @@ def on_disconnect():
     MC.stop()
     print('disconnected from server')
 
-sio.connect('http://192.168.4.18:9090')
+sio.connect('http://192.168.4.17:9090')
 sio.wait()
 

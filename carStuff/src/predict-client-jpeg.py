@@ -52,16 +52,15 @@ class SteeringServer(object):
             # The current image from the center camera of the car
             imgString = data["image"]
             # print(imgString)
-            # image = Image.open(BytesIO(imgString))
+            image = Image.open(BytesIO(imgString))
 
-            # image_array = np.asarray(image)
-            image_array = np.load(BytesIO(imgString))['frame']
+            image_array = np.asarray(image)
+            # image_array = np.load(BytesIO(imgString))['frame']
             # if self.image_cb is not None:
             #     self.image_cb(image_array, steering_angle)
             
             with graph.as_default():
                 outputs = self.model.predict(image_array[None, :, :, :])
-                # outputs = self.model.predict(image_array[:, :, :])
 
             #steering
             steering_angle = outputs[0][0]

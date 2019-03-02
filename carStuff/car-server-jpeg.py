@@ -39,10 +39,9 @@ class SteeringServer(object):
         self.camera = PiCamera()
         self.camera.resolution = (160, 120)
 
-        self.my_stream = np.empty((240* 320* 3), dtype=np.uint8)
         # self.camera.shutter_speed = 1600
         time.sleep(2)
-        # self.my_stream = BytesIO()
+        self.my_stream = BytesIO()
 
     def steer(self, sid, data):
         #TODO add emergency stop
@@ -69,20 +68,8 @@ class SteeringServer(object):
         # print(things.counter)
         # print(MC.printSerial())
         #take a new picture
-        # self.camera.capture(self.my_stream, 'jpeg', use_video_port=True, thumbnail=None)
-        self.my_stream = np.empty((240* 320* 3), dtype=np.uint8)
-        self.camera.capture(self.my_stream, 'bgr', use_video_port=True)
+        self.camera.capture(self.my_stream, 'jpeg', use_video_port=True, thumbnail=None)
 
-        self.my_stream = self.my_stream.reshape((240, 320, 3))
-        self.my_stream = self.my_stream[:120, :160, :]
-        if not isinstance(self.my_stream,np.ndarray):
-            print('not a valid numpy image')
-        else:
-            print('is a numpy image')
-        f = BytesIO()
-        np.savez_compressed(f,frame=self.my_stream)
-        f.seek(0)
-        out = f.read()
         
 
         print(str(time.time() - start)+" to take picture")
@@ -94,8 +81,8 @@ class SteeringServer(object):
             "steering_angle": self.MC.getSteering(),
             "throttle": self.MC.getThrottle(),
             "speed": self.MC.getThrottle(),
-            # "image": self.my_stream.getvalue()
-             "image": out
+            "image": self.my_stream.getvalue()
+
         }
         self.sio.emit('telemetry', data,
             skip_sid=True)
