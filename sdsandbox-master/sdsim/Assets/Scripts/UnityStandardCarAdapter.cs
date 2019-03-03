@@ -11,7 +11,8 @@ public class UnityStandardCarAdapter : MonoBehaviour, ICar {
 	float throttle = 0.0f;
 	float footBrake = 0.0f;
 	float handBrake = 0.0f;
-	Vector3 vel = Vector3.zero;
+    float maxSpeed = 0.0f;
+    Vector3 vel = Vector3.zero;
 	Vector3 accel = Vector3.zero;
 	public string activity = "keep_lane";
 
@@ -41,7 +42,9 @@ public class UnityStandardCarAdapter : MonoBehaviour, ICar {
 
 	public float GetThrottle() { return throttle; }
 
-	public float GetFootBrake() { return footBrake; }
+    public float GetSpeed() { return maxSpeed; }
+
+    public float GetFootBrake() { return footBrake; }
 
 	public float GetHandBrake() { return handBrake; }
 

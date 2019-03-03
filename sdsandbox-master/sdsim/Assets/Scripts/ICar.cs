@@ -21,6 +21,7 @@ public interface ICar
 	float GetSteering();
 
 	float GetThrottle();
+    float GetSpeed();
 
 	float GetFootBrake();
 

@@ -25,7 +25,7 @@ public class PIDController : MonoBehaviour
     float diffErr = 0f;
     public float prevErr = 0f;
     public int steeringReq = 0;
-    public float throttleVal = 0.3f;
+    public float throttleVal = 1f;
     public float totalError = 0f;
     public float absTotalError = 0f;
     public float totalAcc = 0f;
@@ -151,7 +151,7 @@ public class PIDController : MonoBehaviour
             {
                 car.RequestFootBrake(1.0f);
 
-                if (car.GetAccel().magnitude < 0.0001f)
+                if (car.GetAccel().magnitude < 0.01f)
                 {
                     isDriving = false;
 
@@ -172,21 +172,45 @@ public class PIDController : MonoBehaviour
 
         diffErr = err - prevErr;
 
-        steeringReq = (int)System.Math.Round((-Kp * err) - (Kd * diffErr) - (Ki * totalError));
+       int steering = (int)System.Math.Round((-Kp * err) - (Kd * diffErr) - (Ki * totalError));
+
+        if (steering > .1)
+        {
+            steeringReq = 7;
+        } else if (steering < -.1)
+        {
+            steeringReq = -7;
+        } else
+        {
+            steeringReq = 0;
+        }
 
         if (doDrive)
             car.RequestSteering(steeringReq);
 
         if (doDrive)
         {
-            if (car.GetVelocity().magnitude < maxSpeed)
+            if (car.GetVelocity().magnitude < car.GetSpeed())
                 car.RequestThrottle(throttleVal);
             else
                 car.RequestThrottle(0.0f);
+
+            if (car.GetAccel().z > 4f)
+            {
+                car.RequestThrottle(0.0f);
+                car.RequestFootBrake(1.0f);
+            }
+            //} else
+            //{
+            //    //car.RequestFootBrake(0.0f);
+            //}
+                    
         }
 
         if (pid_steering != null)
-            pid_steering.text = string.Format("PID: {0}", steeringReq);
+            pid_steering.text = string.Format("PID: {0} {1} {2}", steeringReq, car.GetAccel().z, car.GetThrottle());
+        print(car.GetThrottle());
+        //print(car.GetThrottle());
 
         //accumulate total error
         totalError += err;

@@ -9,7 +9,8 @@ public class Car : MonoBehaviour, ICar
     public Transform[] wheelMeshes;
 
     public float maxTorque = 50f;
-    public float maxSpeed = 10f;
+    public float maxSpeed = 100f;
+    //public float AvgSpeed = 5f;
 
     public Transform centrOfMass;
 
@@ -18,6 +19,7 @@ public class Car : MonoBehaviour, ICar
     public float requestSteering = 10;
 
     public Vector3 acceleration = Vector3.zero;
+    //public Vector3 Velecity = Vector3.zero;
     public Vector3 prevVel = Vector3.zero;
 
     public Vector3 startPos;
@@ -67,6 +69,7 @@ public class Car : MonoBehaviour, ICar
 
     public void RequestThrottle(float val)
     {
+        //print("Why the F is this 3 " + val);
         requestTorque = val;
         requestBrake = 0f;
         //Debug.Log("request throttle: " + val);
@@ -109,6 +112,11 @@ public class Car : MonoBehaviour, ICar
     public float GetThrottle()
     {
         return requestTorque;
+    }
+
+    public float GetSpeed()
+    {
+        return maxSpeed;
     }
 
     public float GetFootBrake()
@@ -193,17 +201,27 @@ public class Car : MonoBehaviour, ICar
         {
             if (rb.velocity.magnitude < maxSpeed)
             {
+               // print(rb.velocity.magnitude.ToString());
                 wc.motorTorque = throttle;
             }
-            else
+
+            else 
+            
             {
+                
                 wc.motorTorque = 0.0f;
+                
             }
 
-            wc.brakeTorque = 400f * brake;
+            
+
+                wc.brakeTorque = 400f * brake;
+
+              
         }
 
         acceleration = rb.velocity - prevVel;
+        
     }
 
     void FlipUpright()
