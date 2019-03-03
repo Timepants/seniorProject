@@ -18,13 +18,34 @@ public class JoystickCarControl : MonoBehaviour
 
 	private void FixedUpdate()
 	{
-		// pass the input to the car!
-		float h = CrossPlatformInputManager.GetAxis("Horizontal");
+
+        int steer;
+        // pass the input to the car!
+        float h = CrossPlatformInputManager.GetAxis("Horizontal") * MaximumSteerAngle;
+        if (h > .5)
+            steer = 7;
+        else if (h < -.5)
+            steer = -7;
+        else
+            steer = 0;
+        // pass the input to the car!
+        //float h = CrossPlatformInputManager.GetAxis("Horizontal");
 		float v = CrossPlatformInputManager.GetAxis("Vertical");
 		float handbrake = CrossPlatformInputManager.GetAxis("Jump");
-		car.RequestSteering(h * MaximumSteerAngle);
-		car.RequestThrottle(v);
-		//car.RequestFootBrake(v);
-		car.RequestHandBrake(handbrake);
-	}
+        bool handbrake1 = CrossPlatformInputManager.GetButton("xBoxA");
+		car.RequestSteering(steer);
+		car.RequestThrottle(v * 90);
+        car.RequestFootBrake(handbrake);
+        if (handbrake1)
+        {
+            print("HIT ME");
+            car.RequestThrottle(0f);
+            car.RequestFootBrake(1f);
+            
+        }
+        else
+            car.RequestFootBrake(0);
+        
+        
+    }
 }
