@@ -195,7 +195,7 @@ public class PIDController : MonoBehaviour
             else
                 car.RequestThrottle(0.0f);
 
-            if (car.GetAccel().z > 4f)
+            if (car.GetAccel().magnitude > 4f)
             {
                 car.RequestThrottle(0.0f);
                 car.RequestFootBrake(1.0f);
