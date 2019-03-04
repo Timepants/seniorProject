@@ -12,7 +12,7 @@ root = Tk()
 MC = Motor()
 
 #set up accelerometer interface
-Ac = Accel()
+# Ac = Accel()
 
 #set up camera stuff
 camera = PiCamera()
@@ -65,16 +65,16 @@ def addToCSV(throttle, steering, movement):
         things.counter += 1
 
 def SEND():
-    addToCSV(MC.getThrottle(), MC.getSteering(), MC.getMovement())
+    # addToCSV(MC.getThrottle(), MC.getSteering(), MC.getMovement())
     root.after(500, SEND)
 
 def key(event, e):
     inChar = repr(event.char)
     if 'w' in inChar:
-        MC.setThrottle(int(e.get("1.0",'end-1c')),1)
+        MC.setThrottle(int(e.get("1.0",'end-1c')))
         # MC.sendCommand(MC.FORWARD)
     if 's' in inChar:
-        MC.setThrottle(int(e.get("1.0",'end-1c')),-1)
+        MC.setThrottle(int(e.get("1.0",'end-1c')))
         # MC.sendCommand(MC.BACKWARD)
     if 'z' in inChar:
         MC.stop()
