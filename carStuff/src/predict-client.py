@@ -14,6 +14,7 @@ from datetime import datetime
 import shutil
 import base64
 
+
 import numpy as np
 import socketio
 import eventlet
@@ -30,19 +31,35 @@ import throttle_manager
 
 
 class SteeringServer(object):
-    def __init__(self, _sio, image_folder = None, image_cb = None):
+    def __init__(self, _sio, image_cb = None):
         self.model = None
         # self.timer = FPSTimer()
         self.sio = _sio
         self.app = Flask(__name__)
         self.throttle_man = throttle_manager.ThrottleManager(idealSpeed = 10.)
         self.image_cb = image_cb
-        self.image_folder = image_folder
         self.counter = 0
+        self.counter2 = 0
         self.start = time.time()
+        self.start2 = time.time()
+        self.start3 = time.time()
+        self.responseTime= 0
+        self.lastCounter = 0
+        self.my_stream = np.empty((128, 160, 3), dtype=np.uint8)
 
+        self.showTime = True
     def telemetry(self, data):
+        os.system('cls' if os.name == 'nt' else 'clear')
+        self.start3 = time.time()
         if data:
+            if self.showTime:
+                print("______________________"+str(self.counter2)+"___________________________"+str(self.lastCounter))
+                self.responseTime =time.time() - self.start
+                
+                print(str(self.responseTime)+"   - response time")
+                
+                self.start = time.time()
+                self.counter2 += 1
             # The current steering angle of the car
             steering_angle = float(data["steering_angle"])
             # The current throttle of the car
@@ -56,13 +73,23 @@ class SteeringServer(object):
 
             # image_array = np.asarray(image)
             image_array = np.load(BytesIO(imgString))['frame']
+
+            # if self.showTime:
+                # print(str(time.time() - self.start)+"   - loading data")
+                # self.start = time.time()
+
             # if self.image_cb is not None:
             #     self.image_cb(image_array, steering_angle)
-            
+            image_array = image_array[:120, :160, :]
+
             with graph.as_default():
+                
                 outputs = self.model.predict(image_array[None, :, :, :])
                 # outputs = self.model.predict(image_array[:, :, :])
 
+            # if self.showTime:
+                # print(str(time.time() - self.start)+"   - NN processing")
+                # self.start = time.time()
             #steering
             steering_angle = outputs[0][0]
 
@@ -76,17 +103,15 @@ class SteeringServer(object):
             print(steering_angle, throttle)
             self.send_control(steering_angle, throttle)
             
+            if self.showTime:
+                # print(str(time.time() - self.start)+"   - send controll time")
+                self.start = time.time()            
             self.counter += 1
-            if time.time() - self.start > 10:
-                print("Time----------------------------------------"+str(self.counter))
-                self.start = time.time()
+            if time.time() - self.start2 > 10:
+                self.lastCounter = self.counter
+                self.start2 = time.time()
                 self.counter = 0
-
-            # save frame
-            if self.image_folder is not None:
-                timestamp = datetime.utcnow().strftime('%Y_%m_%d_%H_%M_%S_%f')[:-3]
-                image_filename = os.path.join(self.image_folder, timestamp)
-                image.save('{}.jpg'.format(image_filename))
+                
         else:
             # NOTE: DON'T EDIT THIS.
             self.sio.emit('manual', data={})
@@ -99,6 +124,24 @@ class SteeringServer(object):
         self.send_control(0, 0)
 
     def send_control(self, steering_angle, throttle):
+        setupTime =(time.time() - self.start3)
+        # waitTime = 0.004
+        # print(setupTime)
+        # # if self.responseTime < 0.15:
+        # if setupTime < waitTime: 
+        #     time.sleep(waitTime - setupTime)
+        # if self.counter2 % 160 == 0:
+        #     print("butts")
+        #     print("butts")
+        #     print("butts")
+        #     print("butts")
+        #     print("butts")
+        #     print("butts")
+        #     print("butts")
+        #     print("butts")
+        #     print("butts")
+
+        #     time.sleep(0.01)
         self.sio.emit(
             "steer",
             data={
@@ -122,11 +165,11 @@ class SteeringServer(object):
         #     print('stopping')
 
 
-def run_steering_server(address, model_fnm, image_folder=None, image_cb=None):
+def run_steering_server(address, model_fnm, image_cb=None):
 
     sio = socketio.Client()
 
-    ss = SteeringServer(sio, image_cb=image_cb, image_folder=image_folder)
+    ss = SteeringServer(sio, image_cb=image_cb)
 
     @sio.on('telemetry')
     def telemetry(data):
@@ -143,26 +186,10 @@ def run_steering_server(address, model_fnm, image_folder=None, image_cb=None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='prediction server')
     parser.add_argument('model', type=str, help='model name')
-    parser.add_argument(
-          'image_folder',
-          type=str,
-          nargs='?',
-          default=None,
-          help='Path to image folder. This is where the images from the run will be saved.'
-      )
 
     args = parser.parse_args()
 
-    if args.image_folder is not None:
-        print("Creating image folder at {}".format(args.image_folder))
-        if not os.path.exists(args.image_folder):
-            os.makedirs(args.image_folder)
-        else:
-            shutil.rmtree(args.image_folder)
-            os.makedirs(args.image_folder)
-        print("RECORDING THIS RUN ...")
-
     model_fnm = args.model
     address = "http://192.168.4.1:9090"
-    run_steering_server(address, model_fnm, image_folder=args.image_folder)
+    run_steering_server(address, model_fnm)
     

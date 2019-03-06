@@ -39,10 +39,25 @@ class SteeringServer(object):
         self.image_cb = image_cb
         self.image_folder = image_folder
         self.counter = 0
+        self.counter2 = 0
         self.start = time.time()
-
+        self.start2 = time.time()
+        self.start3 = time.time()
+        self.responseTime= 0
+        self.lastCounter = 0
+        self.showTime = True
     def telemetry(self, data):
+        os.system('cls' if os.name == 'nt' else 'clear')
         if data:
+            if self.showTime:
+                print("______________________"+str(self.counter2)+"___________________________"+str(self.lastCounter))
+                self.responseTime =time.time() - self.start
+                
+                
+                print(str(self.responseTime)+"   - response time")
+                
+                self.start = time.time()
+                self.counter2 += 1
             # The current steering angle of the car
             steering_angle = float(data["steering_angle"])
             # The current throttle of the car
@@ -75,10 +90,13 @@ class SteeringServer(object):
             print(steering_angle, throttle)
             self.send_control(steering_angle, throttle)
             
+            if self.showTime:
+                # print(str(time.time() - self.start)+"   - send controll time")
+                self.start = time.time()            
             self.counter += 1
-            if time.time() - self.start > 10:
-                print("Time----------------------------------------"+str(self.counter))
-                self.start = time.time()
+            if time.time() - self.start2 > 10:
+                self.lastCounter = self.counter
+                self.start2 = time.time()
                 self.counter = 0
 
             # save frame
