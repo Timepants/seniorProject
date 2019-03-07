@@ -174,10 +174,10 @@ public class PIDController : MonoBehaviour
 
        int steering = (int)System.Math.Round((-Kp * err) - (Kd * diffErr) - (Ki * totalError));
 
-        if (steering > .1)
+        if (steering > 1)
         {
             steeringReq = 7;
-        } else if (steering < -.1)
+        } else if (steering < -1)
         {
             steeringReq = -7;
         } else
