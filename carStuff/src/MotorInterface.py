@@ -13,7 +13,8 @@ class MotorInterface(object):
             if self.MC.getHeading() != self.MC.LEFT:
                 self.MC.sendCommand(self.MC.LEFT)
         else:
-            self.MC.sendCommand(self.MC.CLEAR_HEADING)
+            if self.MC.getHeading() != self.MC.NOT_SET:
+                self.MC.sendCommand(self.MC.CLEAR_HEADING)
 
     def setMovement(self, movement):
         if movement > 0.5:
