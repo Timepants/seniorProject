@@ -30,6 +30,7 @@ class MotorInterface(object):
         else:
             if throttle < 0:
                 movement = -1
+                throttle = throttle * -1
             elif throttle > 0:
                 movement = 1
             else:
