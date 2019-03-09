@@ -32,7 +32,7 @@ public class PIDController : MonoBehaviour
     public float totalOscilation = 0f;
     public float AccelErrFactor = 0.1f;
     public float OscilErrFactor = 10f;
-
+    public float steeringCompensationLevel = 0.5f;
     public delegate void OnEndOfPathCB();
 
     public OnEndOfPathCB endOfPathCB;
@@ -174,10 +174,10 @@ public class PIDController : MonoBehaviour
 
        int steering = (int)System.Math.Round((-Kp * err) - (Kd * diffErr) - (Ki * totalError));
 
-        if (steering > 1)
+        if (steering > steeringCompensationLevel)
         {
             steeringReq = 7;
-        } else if (steering < -1)
+        } else if (steering < steeringCompensationLevel * -1)
         {
             steeringReq = -7;
         } else

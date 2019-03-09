@@ -17,7 +17,7 @@ class ThrottleManager(object):
     '''
     def __init__(self, idealSpeed = 90.0, 
                         turnSlowFactor = 1.5,
-                        brakeThresh = 255.0,
+                        brakeThresh = 95.0,
                         constThrottleReq = 90.0 ):
         #the ideal speed sets the target meters per second speed
         self.idealSpeed = idealSpeed

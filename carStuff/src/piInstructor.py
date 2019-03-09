@@ -31,75 +31,63 @@ from picamera import PiCamera
 from MotorInterface import MotorInterface as Motor
 from AccelInterface import AccelInterface as Accel
 import csv
+from multiprocessing.pool import ThreadPool
+from multiprocessing import Lock, Queue
 
-class SteeringServer(object):
-    def __init__(self, image_cb = None):
+continueRunningAI = True
+
+class CarControllerAI(object):
+    def __init__(self):
         self.model = None
-        # self.timer = FPSTimer()
-        #get motor ready
         self.MC = Motor()
-        self.AC = Accel()
+        # self.AC = Accel()
         self.throttle_man = throttle_manager.ThrottleManager(idealSpeed = 10.)
-        self.image_cb = image_cb
+
+        # for counting IPS
         self.counter = 0
-        self.counter2 = 0
-        self.start = time.time()
         self.start2 = time.time()
-        self.start3 = time.time()
-        self.responseTime= 0
         self.lastCounter = 0
         #set up camera stuff
         self.camera = PiCamera()
         self.camera.resolution = (160, 128)
         self.camera.framerate = 60
         self.my_stream = np.empty((128, 160, 3), dtype=np.uint8)
+        
+        #show debug text?
         self.showTime = True
-    def telemetry(self, data):
-        os.system('cls' if os.name == 'nt' else 'clear')
-        self.start3 = time.time()
+
+    def getCameraData(self, lock):
+            
+            global image_array
+            # global continueRunningAI
+            while continueRunningAI:
+                time.sleep(0.005)
+                # print("its me the camera")
+
+                self.camera.capture(self.my_stream, 'bgr', use_video_port=True)
+                lock.acquire()
+                image_array = self.my_stream[:120, :160, :]
+                lock.release()
+
+            return image_array
+
+    def telemetry(self, data, outputQueue, lock):
         if data:
-            if self.showTime:
-                print("______________________"+str(self.counter2)+"___________________________"+str(self.lastCounter))
-                self.responseTime =time.time() - self.start
-                
-                print(str(self.responseTime)+"   - response time")
-                
-                self.start = time.time()
-                self.counter2 += 1
             # The current steering angle of the car
             steering_angle = float(data["steering_angle"])
             # The current throttle of the car
             throttle = float(data["throttle"])
             # The current speed of the car
             speed = float(data["speed"])
-            # The current image from the center camera of the car
-            # imgString = data["image"]
-            # print(imgString)
-            # image = Image.open(BytesIO(imgString))
+            lock.acquire()
+            inImage = image_array
+            lock.release()
+            # get information from model
+            outputs = self.model.predict(inImage[None, :, :, :])
 
-            # image_array = np.asarray(image)
-            # time.sleep(1)
-            self.camera.capture(self.my_stream, 'bgr', use_video_port=True)
-
-            # if self.showTime:
-                # print(str(time.time() - self.start)+"   - loading data")
-                # self.start = time.time()
-
-            # if self.image_cb is not None:
-            #     self.image_cb(image_array, steering_angle)
-            image_array = self.my_stream[:120, :160, :]
-
-            with graph.as_default():
-                
-                outputs = self.model.predict(image_array[None, :, :, :])
-                # outputs = self.model.predict(image_array[:, :, :])
-
-            # if self.showTime:
-                # print(str(time.time() - self.start)+"   - NN processing")
-                # self.start = time.time()
-            #steering
             steering_angle = outputs[0][0]
 
+            
             #do we get throttle from our network?
             if conf.num_outputs == 2 and len(outputs[0]) == 2:
                 throttle = outputs[0][1]
@@ -107,97 +95,96 @@ class SteeringServer(object):
                 #set throttle value here
                 throttle, brake = self.throttle_man.get_throttle_brake(speed, steering_angle)
 
-            print(steering_angle, throttle)
+            # print(steering_angle, throttle)
+            outputQueue.put([self.lastCounter, steering_angle,throttle])
             self.send_control(steering_angle, throttle)
             
-            # if self.showTime:
-            #     # print(str(time.time() - self.start)+"   - send controll time")
-            #     self.start = time.time()            
+            # for effciency counting
             self.counter += 1
             if time.time() - self.start2 > 10:
                 self.lastCounter = self.counter
                 self.start2 = time.time()
                 self.counter = 0
-                
-        else:
-            # NOTE: DON'T EDIT THIS.
-            self.sio.emit('manual', data={})
 
-        # self.timer.on_frame()
 
     def send_control(self, steering_angle, throttle):
-        setupTime =(time.time() - self.start3)
-        # waitTime = 0.004
-        # print(setupTime)
-        # # if self.responseTime < 0.15:
-        # if setupTime < waitTime: 
-        #     time.sleep(waitTime - setupTime)
-        # if self.counter2 % 160 == 0:
-        #     print("butts")
-        #     print("butts")
-        #     print("butts")
-        #     print("butts")
-        #     print("butts")
-        #     print("butts")
-        #     print("butts")
-        #     print("butts")
-        #     print("butts")
 
-        #     time.sleep(0.01)
-        print(self.AC.getAccelX()
-        ,self.AC.getAccelY()
-        ,self.AC.getAccelZ()
-        ,self.AC.getGyroX()
-        ,self.AC.getGyroY()
-        ,self.AC.getGyroZ()
-        ,self.AC.getXRotation()
-        ,self.AC.getYRotation())
+        # print(self.AC.getAccelX()
+        # ,self.AC.getAccelY()
+        # ,self.AC.getAccelZ()
+        # ,self.AC.getGyroX()
+        # ,self.AC.getGyroY()
+        # ,self.AC.getGyroZ()
+        # ,self.AC.getXRotation()
+        # ,self.AC.getYRotation())
         self.MC.setSteering(steering_angle)
         self.MC.setThrottle(throttle)
 
-    def go(self, model_fnm):
+    
+
+    def telemetryLoop(self, outputQueue, lock):
+        while continueRunningAI:    
+            data={
+                    'steering_angle': self.MC.getSteering(),
+                    'throttle': self.MC.getThrottle(),
+                    'speed': self.MC.getThrottle()
+                }
+            # self.getCameraData()
+            self.telemetry(data, outputQueue, lock)   
+
+    def go(self, model_fnm, outputQueue, lock):
         
         self.model = keras.models.load_model(model_fnm)
-        global graph
-        graph = tf.get_default_graph() 
-        #In this mode, looks like we have to compile it
-        #self.model.compile("sgd", "mse")
+
+        global continueRunningAI
+
+        self.telemetryLoop(outputQueue, lock)
 
 
 
-        # f = BytesIO()
-        # np.savez_compressed(f,frame=self.my_stream)
-        # f.seek(0)
-        # out = f.read()
 
-        data={
-                'steering_angle': 0,
-                'throttle': 90,
-                'speed': 90
-            }
-        for i in range(3000):
-            self.telemetry(data)   
+def run_steering_server(model_fnm, outputQueue):
+    pool = ThreadPool(processes=2)
 
-        # self.sio.connect(address)
-            # eventlet.wsgi.server(eventlet.listen(address), self.app)
-        # except KeyboardInterrupt:
-        #     #unless some hits Ctrl+C and then we get this interrupt
-        #     print('stopping')
+    lock = Lock()   
+
+    ss = CarControllerAI()
+    
 
 
-def run_steering_server(model_fnm, image_cb=None):
+    cameraRelsult = pool.apply_async(ss.getCameraData, (lock,)) # tuple of args for foo
 
-    ss = SteeringServer(image_cb=image_cb)
+    time.sleep(0.01)
 
-    ss.go(model_fnm)
+    async_result = pool.apply_async(ss.go, (model_fnm,outputQueue, lock)) # tuple of args for foo
+
+    # return_val = async_result.get()  # get the return value from your function.
+
+    # print(return_val)
+    # ss.go(model_fnm)
 
 # ***** main loop *****
 if __name__ == "__main__":
+
     parser = argparse.ArgumentParser(description='prediction server')
     parser.add_argument('model', type=str, help='model name')
 
     args = parser.parse_args()
+    outputQueue = Queue()
 
     model_fnm = args.model
-    run_steering_server(model_fnm)
+    run_steering_server(model_fnm, outputQueue)
+    try:
+        while True:
+            time.sleep(0.1)
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print(outputQueue.get())
+
+                
+    except KeyboardInterrupt:
+            print ('Interrupted - closing')
+            continueRunningAI = False
+            time.sleep(0.5)
+            sys.exit(0)
+
     

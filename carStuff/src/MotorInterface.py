@@ -4,12 +4,13 @@ from MotorControl import MotorContol as Motor
 class MotorInterface(object):
     def __init__(self):
         self.MC = Motor()
+        self.TurningThreshold = 0.5
 
     def setSteering(self, steering):
-        if steering > 0.5:
+        if steering > self.TurningThreshold:
             if self.MC.getHeading() != self.MC.RIGHT:
                 self.MC.sendCommand(self.MC.RIGHT)
-        elif steering < -0.5:
+        elif steering < self.TurningThreshold * -1:
             if self.MC.getHeading() != self.MC.LEFT:
                 self.MC.sendCommand(self.MC.LEFT)
         else:
