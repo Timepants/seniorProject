@@ -25,15 +25,18 @@ from io import StringIO
 import keras
 import tensorflow as tf
 
+from MotorInterface import MotorInterface as Motor
 import conf
 import throttle_manager
 from picamera import PiCamera
-from MotorInterface import MotorInterface as Motor
+
 from AccelInterface import AccelInterface as Accel
 import csv
 from multiprocessing.pool import ThreadPool
 from multiprocessing import Lock, Queue
 
+inputQueueCamera = Queue()
+inputQueueMotor = Queue()
 continueRunningAI = True
 
 class CarControllerAI(object):
@@ -56,18 +59,21 @@ class CarControllerAI(object):
         #show debug text?
         self.showTime = True
 
-    def getCameraData(self, lock):
+    def getCameraData(self, lock, inputQueue):
             
             global image_array
             # global continueRunningAI
-            while continueRunningAI:
+            while continueRunningAI and inputQueue.get():
+            
                 time.sleep(0.005)
-                # print("its me the camera")
+                print("its me the camera")
 
                 self.camera.capture(self.my_stream, 'bgr', use_video_port=True)
                 lock.acquire()
                 image_array = self.my_stream[:120, :160, :]
                 lock.release()
+
+                inputQueue.put(True)
 
             return image_array
 
@@ -122,26 +128,34 @@ class CarControllerAI(object):
 
     
 
-    def telemetryLoop(self, outputQueue, lock):
-        while continueRunningAI:    
+    def telemetryLoop(self, outputQueue, lock, inputQueue):
+        while continueRunningAI and inputQueue.get():
             data={
                     'steering_angle': self.MC.getSteering(),
                     'throttle': self.MC.getThrottle(),
                     'speed': self.MC.getThrottle()
                 }
-            # self.getCameraData()
+            inputQueue.put(True)
             self.telemetry(data, outputQueue, lock)   
 
-    def go(self, model_fnm, outputQueue, lock):
+    def go(self, model_fnm, outputQueue, lock, inputQueue):
         
         self.model = keras.models.load_model(model_fnm)
 
         global continueRunningAI
 
-        self.telemetryLoop(outputQueue, lock)
+        self.telemetryLoop(outputQueue, lock, inputQueue)
 
 
-
+def stop():
+    while not inputQueueCamera.empty():
+        inputQueueCamera.get() 
+    for i in range(20):
+        inputQueueCamera.put(False)
+    while not inputQueueMotor.empty():
+        inputQueueMotor.get() 
+    for i in range(20):
+        inputQueueMotor.put(False)
 
 def run_steering_server(model_fnm, outputQueue):
     pool = ThreadPool(processes=2)
@@ -150,13 +164,20 @@ def run_steering_server(model_fnm, outputQueue):
 
     ss = CarControllerAI()
     
+    while not inputQueueCamera.empty():
+        inputQueueCamera.get() 
+    inputQueueCamera.put(True)
+
+    while not inputQueueMotor.empty():
+        inputQueueMotor.get() 
+    inputQueueMotor.put(True)
 
 
-    cameraRelsult = pool.apply_async(ss.getCameraData, (lock,)) # tuple of args for foo
+    cameraRelsult = pool.apply_async(ss.getCameraData, (lock, inputQueueCamera)) # tuple of args for foo
 
     time.sleep(0.01)
 
-    async_result = pool.apply_async(ss.go, (model_fnm,outputQueue, lock)) # tuple of args for foo
+    async_result = pool.apply_async(ss.go, (model_fnm,outputQueue, lock, inputQueueMotor)) # tuple of args for foo
 
     # return_val = async_result.get()  # get the return value from your function.
 
@@ -183,7 +204,7 @@ if __name__ == "__main__":
                 
     except KeyboardInterrupt:
             print ('Interrupted - closing')
-            continueRunningAI = False
+            stop()
             time.sleep(0.5)
             sys.exit(0)
 

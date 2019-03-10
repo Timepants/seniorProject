@@ -1,6 +1,5 @@
 def butts():
     print('butts')
-    return butts
-
+    return 'buttsbuts'
 if __name__ == '__main__':
     butts()

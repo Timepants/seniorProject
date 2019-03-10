@@ -31,7 +31,8 @@
   }
   $(function() {
     $('a#calculate').bind('click', async function() {
-      for (i = 0; i < 10; i++) { 
+      // for (i = 0; i < 10; i++) { 
+      while (true){
         await sleep(100);
         $.getJSON($SCRIPT_ROOT + '/_add_numbers', {
           a: $('input[name="a"]').val(),
