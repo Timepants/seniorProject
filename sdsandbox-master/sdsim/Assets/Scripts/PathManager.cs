@@ -85,7 +85,8 @@ public class PathManager : MonoBehaviour {
 			for(int iN = 0; iN < path.nodes.Count; iN++)
 			{
 				Vector3 np = path.nodes[iN].pos;
-				GameObject go = Instantiate(prefab, np, Quaternion.identity) as GameObject;
+                
+                GameObject go = Instantiate(prefab, np, Quaternion.identity) as GameObject;
 				go.tag = "pathNode";
 				go.transform.parent = this.transform;
 			}
@@ -277,7 +278,7 @@ public class PathManager : MonoBehaviour {
 	public void SetPath(CarPath p)
 	{
 		path = p;
-
+        
 		GameObject[] prev = GameObject.FindGameObjectsWithTag("pathNode");
 
 		Debug.Log(string.Format("Cleaning up {0} old nodes. {1} new ones.", prev.Length, p.nodes.Count));
@@ -286,8 +287,8 @@ public class PathManager : MonoBehaviour {
 
 		foreach(PathNode pn in path.nodes)
 		{
-			GameObject go = Instantiate(prefab, pn.pos, Quaternion.identity) as GameObject;
-			go.tag = "pathNode";
+			//GameObject go = Instantiate(prefab, pn.pos, Quaternion.identity) as GameObject;
+			//go.tag = "pathNode";
 		}
 	}
 }
