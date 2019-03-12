@@ -60,11 +60,14 @@ public class Lidar : MonoBehaviour {
 
 	//what is the scalar on the perlin noise applied to point position
 	public float noise = 0.2f;
+    public PIDController pid;
 
 	public bool DisplayDebugInScene = false;
 
 	void Awake()
 	{
+        Time.timeScale = pid.TimeScale;
+        print("Lidar-- " + pid.TimeScale);
 		pointArr = new LidarPointArray();
 		pointArr.Init(360 / degPerSweepInc * numSweepsLevels);
 	}
