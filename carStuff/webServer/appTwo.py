@@ -1,15 +1,17 @@
 import sys
 
-# sys.path.append('../src/unused')
+import os,sys
 
-# from ..src.unused.phpTest import butts
 from piInstructor import run_steering_server, stop
 
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, Response
 
 from picamera import PiCamera
 
 from multiprocessing import Queue
+
+from io import BytesIO
+
 class AppServer():
     def __init__(self):
         self.a = 0
@@ -22,13 +24,19 @@ class AppServer():
         self.a += 1
         self.b += 1
 
-
-
         while not outputQueue.empty():
             self.value = outputQueue.get()[2]
 
         return jsonify(result=float(self.value))
         # return jsonify(result=self.a + self.b)
+
+    def getModels(self):
+        files = os.listdir("carModels/")
+        fileStr = list()
+        for name in files:
+            fileStr.append(str(name))
+            print(name)
+        return fileStr
 
 appServer = AppServer()
 
@@ -36,27 +44,50 @@ app = Flask(__name__)
 
 outputQueue = Queue()
 
-
+my_stream = BytesIO()
 
 @app.route('/_add_numbers')
 def add_numbers():
     return appServer.add_numbers(outputQueue)
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    if request.method == 'POST':
+        model = request.form.get('model', None)
+        if model is not None:
+            run_steering_server("carModels/"+model, outputQueue)
+        stopper = request.form.get('stop', None)
+        if stopper is not None:
+            stop()
+    return render_template('index.html', models = appServer.getModels())
 
-@app.route('/start')
-def startServer():
+@app.route('/start<model>')
+def startServer(model):
     
-    run_steering_server("carModels/maroon.h5", outputQueue)
+
     return index()
 
 @app.route('/stop')
 def stopServer():
-    # camera.close()
     stop()
     return index()
+
+@app.route('/video')
+def video():
+    return render_template('videoTest.html')
+
+def gen():
+    with PiCamera() as camera:
+        while True:
+            my_stream.seek(0)
+            camera.capture(my_stream, 'jpeg', use_video_port=True)
+            yield (b'--frame\r\n'
+                b'Content-Type: image/jpeg\r\n\r\n' + my_stream.getvalue() + b'\r\n')
+
+@app.route('/video_feed')
+def video_feed():
+    return Response(gen(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
 
 if __name__ == '__main__':
     # if __package__ is None:

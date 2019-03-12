@@ -24,7 +24,20 @@
       });
     });
   </script> -->
+  {% for model in models %}
+    <form method="POST">
+        <input type="submit" name="model" value={{ model }}>
+    </form>
 
+    <!-- <li><h2>{{ entry }}</h2>{{ entry | safe }} -->
+  {% else %}
+    <li><em>Unbelievable.  No entries here so far</em>
+  {% endfor %}
+
+
+  <form method="POST">
+    <input type="submit" name="stop" value=stop>
+</form>
 <script type=text/javascript>
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));

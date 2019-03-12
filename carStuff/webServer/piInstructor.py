@@ -43,7 +43,7 @@ class CarControllerAI(object):
     def __init__(self):
         self.model = None
         self.MC = Motor()
-        # self.AC = Accel()
+        self.AC = Accel()
         self.throttle_man = throttle_manager.ThrottleManager(idealSpeed = 10.)
 
         # for counting IPS
@@ -96,7 +96,6 @@ class CarControllerAI(object):
 
             steering_angle = outputs[0][0]
 
-            
             #do we get throttle from our network?
             if conf.num_outputs == 2 and len(outputs[0]) == 2:
                 throttle = outputs[0][1]
@@ -117,15 +116,16 @@ class CarControllerAI(object):
 
 
     def send_control(self, steering_angle, throttle):
+        # TODO log this
+        print(self.AC.getAccelX()
+        ,self.AC.getAccelY()
+        ,self.AC.getAccelZ()
+        ,self.AC.getGyroX()
+        ,self.AC.getGyroY()
+        ,self.AC.getGyroZ()
+        ,self.AC.getXRotation()
+        ,self.AC.getYRotation())
 
-        # print(self.AC.getAccelX()
-        # ,self.AC.getAccelY()
-        # ,self.AC.getAccelZ()
-        # ,self.AC.getGyroX()
-        # ,self.AC.getGyroY()
-        # ,self.AC.getGyroZ()
-        # ,self.AC.getXRotation()
-        # ,self.AC.getYRotation())
         self.MC.setSteering(steering_angle)
         self.MC.setThrottle(throttle)
 
@@ -133,7 +133,6 @@ class CarControllerAI(object):
 
     def telemetryLoop(self, outputQueue, lock, inputQueue):
         while continueRunningAI and inputQueue.get():
-            print("telem loop ")
             data={
                     'steering_angle': self.MC.getSteering(),
                     'throttle': self.MC.getThrottle(),
@@ -145,9 +144,7 @@ class CarControllerAI(object):
     def go(self, model_fnm, outputQueue, lock, inputQueue):
         
         self.model = keras.models.load_model(model_fnm)
-        print("modle")
         global continueRunningAI
-        print("bool")
         self.telemetryLoop(outputQueue, lock, inputQueue)
         keras.backend.clear_session()
 
@@ -160,17 +157,14 @@ def stop():
         inputQueueMotor.get() 
     for i in range(20):
         inputQueueMotor.put(False)
-    # camera.close()
 
 def run_steering_server(model_fnm, outputQueue):
 
 
     pool = ThreadPool(processes=2)
-    print("pool")
     lock = Lock()   
 
     ss = CarControllerAI()
-    print("ss")
     while not inputQueueCamera.empty():
         inputQueueCamera.get() 
     inputQueueCamera.put(True)
@@ -179,17 +173,10 @@ def run_steering_server(model_fnm, outputQueue):
         inputQueueMotor.get() 
     inputQueueMotor.put(True)
 
-    print("q")
     cameraRelsult = pool.apply_async(ss.getCameraData, (lock, inputQueueCamera)) 
-    print("cam")
     time.sleep(0.01)
 
-    async_result = pool.apply_async(ss.go, (model_fnm,outputQueue, lock, inputQueueMotor)) # tuple of args for foo
-    print("go")
-    # return_val = async_result.get()  # get the return value from your function.
-
-    # print(return_val)
-    # ss.go(model_fnm)
+    async_result = pool.apply_async(ss.go, (model_fnm,outputQueue, lock, inputQueueMotor)) 
 
 # ***** main loop *****
 if __name__ == "__main__":

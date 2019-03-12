@@ -35,6 +35,8 @@ public class PIDController : MonoBehaviour
     public float steeringCompensationLevel = 0.5f;
     public delegate void OnEndOfPathCB();
 
+    public int maxSteeringAngle = 7;
+
     public OnEndOfPathCB endOfPathCB;
 
     bool isDriving = false;
@@ -176,10 +178,10 @@ public class PIDController : MonoBehaviour
 
         if (steering > steeringCompensationLevel)
         {
-            steeringReq = 7;
+            steeringReq = maxSteeringAngle;
         } else if (steering < steeringCompensationLevel * -1)
         {
-            steeringReq = -7;
+            steeringReq = maxSteeringAngle *-1;
         } else
         {
             steeringReq = 0;

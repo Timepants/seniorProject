@@ -40,6 +40,8 @@ inputQueue = Queue()
 
 
 def stop():
+    while not inputQueue.empty():
+        inputQueue.get() 
     print("trying to stop")
     inputQueue.put(False)
 
