@@ -23,7 +23,7 @@ class AppServer():
         self.b += 1
 
         while not outputQueue.empty():
-            self.value = outputQueue.get()["steering"]
+            self.value = outputQueue.get()["throttle"]
             print(self.value)
 
         return jsonify(result=float(self.value))
