@@ -25,7 +25,7 @@ class CarControllerAI(object):
     def telemetryLoop(self, outputQueue, lock, inputQueue):
         while inputQueue.get(): 
             print("Telem")
-            time.sleep(0.2)  
+            time.sleep(0.1)  
             data={
                     'steering_angle': 0,
                     'throttle': 90,

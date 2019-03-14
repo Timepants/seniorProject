@@ -20,25 +20,42 @@
     <title>Hello, world!</title>
   </head>
   <body>
-    <h1>Hello, world!</h1>
-    <div style="width:75%;">
-      <canvas id="canvasThrottle"></canvas>
-    </div>
-    <br>
-    <br>
-    <button id="addDataThrottle">Add Data</button>
-    <script>
+      <div class="container-fluid">
+        <!-- <div> -->
+          <div class="row">
+              <div class="col-md">
+            <h1>Hello, world!</h1>
+            <div style="width:75%;">
+              <canvas id="canvasThrottle"></canvas>
+            </div>
+            <br>
+            <br>
+            <button id="addDataThrottle">Add Data</button>
+        </div>
 
-    </script>
+        <div class="col-md">
+          </div>
+          <div class="col-md">
+        <h1>Hello, world!</h1>
+        <div style="width:75%;">
+          <canvas id="canvasAccel"></canvas>
+        </div>
+        <br>
+        <br>
+        <button id="addDataAccel">Add Data</button>
+        </div>
+        </div>
+        </div>
 
 
-<h1>Hello, world!</h1>
-<div style="width:75%;">
-  <canvas id="canvasAccel"></canvas>
-</div>
-<br>
-<br>
-<button id="addDataAccel">Add Data</button>
+
+
+
+
+
+
+
+
 <script>
         var configThrottle = {
         type: 'line',
@@ -55,7 +72,7 @@
         },
         options: {
           animation: {
-            duration : 400
+            duration : 1000
           },
           elements: {
                     point:{
@@ -99,35 +116,35 @@
       };
   
 
-      document.getElementById('addDataThrottle').addEventListener('click', async function() {
-          // for (i = 0; i < 10; i++) { 
-        while (true){
-          await sleep(100);
-          $.getJSON("{{ url_for('add_numbers') }}", {
-            a: $('input[name="a"]').val(),
-            b: $('input[name="b"]').val()
-          }, function(data) {
-            if (configThrottle.data.datasets.length > 0) {
-              configThrottle.data.labels.push(data.result);
+      // document.getElementById('addDataThrottle').addEventListener('click', async function() {
+      //     // for (i = 0; i < 10; i++) { 
+      //   while (true){
+      //     await sleep(100);
+      //     $.getJSON("{{ url_for('add_numbers') }}", {
+      //       a: $('input[name="a"]').val(),
+      //       b: $('input[name="b"]').val()
+      //     }, function(data) {
+      //       if (configThrottle.data.datasets.length > 0) {
+      //         configThrottle.data.labels.push(data.result);
 
-              configThrottle.data.datasets.forEach(function(dataset) {
-                dataset.data.push(data.result);
+      //         configThrottle.data.datasets.forEach(function(dataset) {
+      //           dataset.data.push(data.result);
 
-                if (dataset.data.length > 100){
-                  configThrottle.data.labels.shift(); // remove the label first
-                  dataset.data.shift()
-                  // dataset.data.splice(0, 1);
-                }
+      //           if (dataset.data.length > 100){
+      //             configThrottle.data.labels.shift(); // remove the label first
+      //             dataset.data.shift()
+      //             // dataset.data.splice(0, 1);
+      //           }
                 
-              });
-              window.myLineThrottle.update();
+      //         });
+      //         window.myLineThrottle.update();
               
-            }
-            // dataset.data.push(data.result);
-          });
-        }
-        return false;
-      });
+      //       }
+      //       // dataset.data.push(data.result);
+      //     });
+      //   }
+      //   return false;
+      // });
 
   var configAccel = {
     type: 'line',
@@ -152,7 +169,7 @@
     },
     options: {
       animation: {
-        duration : 400
+        duration : 1000
       },
       elements: {
                 point:{
@@ -200,6 +217,22 @@
         a: $('input[name="a"]').val(),
         b: $('input[name="b"]').val()
       }, function(data) {
+        if (configThrottle.data.datasets.length > 0) {
+              configThrottle.data.labels.push(data.result);
+
+              configThrottle.data.datasets.forEach(function(dataset) {
+                dataset.data.push(data.result);
+
+                if (dataset.data.length > 100){
+                  configThrottle.data.labels.shift(); // remove the label first
+                  dataset.data.shift()
+                  // dataset.data.splice(0, 1);
+                }
+                
+              });
+              window.myLineThrottle.update();
+              
+            }
         if (configAccel.data.datasets.length > 0) {
           if (configAccel.data.labels.length <= 100){
             configAccel.data.labels.push(data.result);

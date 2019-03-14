@@ -2,11 +2,13 @@ import sys
 
 import os,sys
 
-from piInstructorInterface import run_steering_server, stop
+from piInstructor import run_steering_server, stop
 
 from flask import Flask, jsonify, render_template, request, Response
 
 from multiprocessing import Queue
+
+from manualInstructor import CarControllerManual as manual
 
 from io import BytesIO
 
@@ -40,7 +42,9 @@ app = Flask(__name__)
 
 outputQueue = Queue()
 
-my_stream = BytesIO()
+
+
+man = manual()
 
 @app.route('/_add_numbers')
 def add_numbers():
@@ -78,12 +82,8 @@ def video():
 
 def gen():
     print("gen")
-    # with PiCamera() as camera:
-    #     while True:
-    #         my_stream.seek(0)
-    #         camera.capture(my_stream, 'jpeg', use_video_port=True)
-    #         yield (b'--frame\r\n'
-    #             b'Content-Type: image/jpeg\r\n\r\n' + my_stream.getvalue() + b'\r\n')
+    yield (b'--frame\r\n'
+                    b'Content-Type: image/jpeg\r\n\r\n' + man.getImageStream() + b'\r\n')
 
 @app.route('/video_feed')
 def video_feed():

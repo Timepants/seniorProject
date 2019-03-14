@@ -30,10 +30,10 @@ import conf
 import throttle_manager
 from picamera import PiCamera
 
-from AccelInterface import AccelInterface as Accel
 import csv
 from multiprocessing.pool import ThreadPool
 from multiprocessing import Lock, Queue
+from piLogger import CarLogger
 
 inputQueueCamera = Queue()
 inputQueueMotor = Queue()
@@ -43,7 +43,7 @@ class CarControllerAI(object):
     def __init__(self):
         self.model = None
         self.MC = Motor()
-        self.AC = Accel()
+        self.logger = CarLogger()
         self.throttle_man = throttle_manager.ThrottleManager(idealSpeed = 10.)
 
         # for counting IPS
@@ -117,18 +117,10 @@ class CarControllerAI(object):
 
     def send_control(self, steering_angle, throttle):
         # TODO log this
-        print(self.AC.getAccelX()
-        ,self.AC.getAccelY()
-        ,self.AC.getAccelZ()
-        ,self.AC.getGyroX()
-        ,self.AC.getGyroY()
-        ,self.AC.getGyroZ()
-        ,self.AC.getXRotation()
-        ,self.AC.getYRotation())
 
         self.MC.setSteering(steering_angle)
         self.MC.setThrottle(throttle)
-
+        self.logger.printEm(self.MC.getSteering, self.MC.getThrottle)
     
 
     def telemetryLoop(self, outputQueue, lock, inputQueue):
