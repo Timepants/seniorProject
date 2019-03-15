@@ -17,15 +17,18 @@ class CarControllerAI(object):
             # print(steering_angle, throttle)
             print("its me, the pi instructor: ", self.lastCounter)
             outputQueue.put({"steering":random.randint(-1,1)
-                            , "throttle":random.randint(85,100)
-                            ,"accel":random.randrange(0,4)})
+                            , "throttle":random.randint(85,120)
+                            ,"accelx":random.randrange(0,8)
+                            ,"accely":random.randrange(0,8)
+                            ,"accelz":random.randrange(0,8)
+                            ,"proximity":random.randrange(4,20)})
             self.lastCounter += 1
 
 
     def telemetryLoop(self, outputQueue, lock, inputQueue):
         while inputQueue.get(): 
             print("Telem")
-            time.sleep(0.1)  
+            time.sleep(0.05)  
             data={
                     'steering_angle': 0,
                     'throttle': 90,
@@ -67,7 +70,7 @@ def run_steering_server(model_fnm, outputQueue):
     # ss.go(model_fnm ,outputQueue, lock, inputQueue)
 
     async_result = pool.apply_async(ss.go, (model_fnm ,outputQueue, lock, inputQueue)) # tuple of args for foo
-    # return_val = async_result.get()  # get the return value from your function.
+    return_val = async_result.get()  # get the return value from your function.
     print("gone")
     # print(return_val)
     # ss.go(model_fnm)

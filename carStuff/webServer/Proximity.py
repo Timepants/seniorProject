@@ -21,7 +21,7 @@ class ProximityInterface(object):
         # send the signal
         GPIO.output(trigger, GPIO.HIGH)
 
-        time.sleep(0.001)
+        time.sleep(0.00001)
 
         # stop sending
         GPIO.output(trigger, GPIO.LOW)

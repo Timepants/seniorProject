@@ -16,33 +16,44 @@
     <script src="{{ url_for('static', filename='chart/Chart.js') }}"></script>
     <script src="{{ url_for('static', filename='chart/utils.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/bootstrap.min.css') }}">
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>Hello, world!</title>
   </head>
   <body>
+      <button id="addDataAccel">Add Data</button>
       <div class="container-fluid">
         <!-- <div> -->
           <div class="row">
               <div class="col-md">
-            <h1>Hello, world!</h1>
+            <h1 class="white-text">Throttle</h1>
             <div style="width:75%;">
               <canvas id="canvasThrottle"></canvas>
             </div>
             <br>
             <br>
-            <button id="addDataThrottle">Add Data</button>
         </div>
 
         <div class="col-md">
+          <div class="row">
+            <div class="col-3">
+              <img id="left" src="{{ url_for('static', filename='img/icon/leftDisabled.png') }}">
+            </div>
+            <div class="col-3">
+              <img id="straight" src="{{ url_for('static', filename='img/icon/straightEnabled.png') }}">
+            </div>
+            <div class="col-3">
+                <img id="right" src="{{ url_for('static', filename='img/icon/rightDisabled.png') }}">
+            </div>
           </div>
+        </div>
           <div class="col-md">
-        <h1>Hello, world!</h1>
+        <h1 class="white-text">Accelorometer</h1>
         <div style="width:75%;">
           <canvas id="canvasAccel"></canvas>
         </div>
         <br>
         <br>
-        <button id="addDataAccel">Add Data</button>
+
         </div>
         </div>
         </div>
@@ -57,6 +68,7 @@
 
 
 <script>
+    var animationTime = 500;
         var configThrottle = {
         type: 'line',
         data: {
@@ -72,7 +84,7 @@
         },
         options: {
           animation: {
-            duration : 1000
+            duration : animationTime
           },
           elements: {
                     point:{
@@ -96,10 +108,18 @@
               }
             }],
             yAxes: [{
-              display: true,
-              scaleLabel: {
+              display: true
+
+              ,scaleLabel: {
                 display: false,
                 labelString: 'Value'
+              }
+              ,ticks: {
+                fontColor: window.chartColors.white,
+              }
+              ,gridLines: {
+                color: window.chartColors.green,
+                lineWidth: 0.5
               }
             }]
           }
@@ -116,60 +136,38 @@
       };
   
 
-      // document.getElementById('addDataThrottle').addEventListener('click', async function() {
-      //     // for (i = 0; i < 10; i++) { 
-      //   while (true){
-      //     await sleep(100);
-      //     $.getJSON("{{ url_for('add_numbers') }}", {
-      //       a: $('input[name="a"]').val(),
-      //       b: $('input[name="b"]').val()
-      //     }, function(data) {
-      //       if (configThrottle.data.datasets.length > 0) {
-      //         configThrottle.data.labels.push(data.result);
-
-      //         configThrottle.data.datasets.forEach(function(dataset) {
-      //           dataset.data.push(data.result);
-
-      //           if (dataset.data.length > 100){
-      //             configThrottle.data.labels.shift(); // remove the label first
-      //             dataset.data.shift()
-      //             // dataset.data.splice(0, 1);
-      //           }
-                
-      //         });
-      //         window.myLineThrottle.update();
-              
-      //       }
-      //       // dataset.data.push(data.result);
-      //     });
-      //   }
-      //   return false;
-      // });
-
   var configAccel = {
     type: 'line',
     data: {
-      // labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
       datasets: [{
-        backgroundColor: window.chartColors.blue,
-        borderColor: window.chartColors.blue,
+        backgroundColor: window.chartColors.white,
+        borderColor: window.chartColors.white,
         data: [
 
         ],
         fill: false,
-      },
-      {
-        backgroundColor: window.chartColors.green,
-        borderColor: window.chartColors.green,
+      }
+      ,{
+        backgroundColor: window.chartColors.red,
+        borderColor: window.chartColors.red,
         data: [
 
         ],
         fill: false,
-      }]
+      }
+      ,{
+        backgroundColor: window.chartColors.black,
+        borderColor: window.chartColors.black,
+        data: [
+
+        ],
+        fill: false,
+      }
+      ]
     },
     options: {
       animation: {
-        duration : 1000
+        duration : animationTime/3
       },
       elements: {
                 point:{
@@ -179,7 +177,7 @@
       responsive: true,
       title: {
         display: false,
-        text: 'Throttle'
+        text: 'Accel'
       },
       legend: {
         display: false
@@ -198,6 +196,13 @@
             display: false,
             labelString: 'Value'
           }
+          ,ticks: {
+                fontColor: window.chartColors.white,
+              }
+              ,gridLines: {
+                color: window.chartColors.white,
+                lineWidth: 0.5
+              }
         }]
       }
 
@@ -212,16 +217,16 @@
   document.getElementById('addDataAccel').addEventListener('click', async function() {
       // for (i = 0; i < 10; i++) { 
     while (true){
-      await sleep(100);
+      await sleep(150);
       $.getJSON("{{ url_for('add_numbers') }}", {
         a: $('input[name="a"]').val(),
         b: $('input[name="b"]').val()
       }, function(data) {
         if (configThrottle.data.datasets.length > 0) {
-              configThrottle.data.labels.push(data.result);
+              configThrottle.data.labels.push(data.throttle);
 
               configThrottle.data.datasets.forEach(function(dataset) {
-                dataset.data.push(data.result);
+                dataset.data.push(data.throttle);
 
                 if (dataset.data.length > 100){
                   configThrottle.data.labels.shift(); // remove the label first
@@ -233,21 +238,20 @@
               window.myLineThrottle.update();
               
             }
+        //Accel stuff
+        var rowsToShow= 30;
         if (configAccel.data.datasets.length > 0) {
-          if (configAccel.data.labels.length <= 100){
-            configAccel.data.labels.push(data.result);
+          if (configAccel.data.labels.length <= rowsToShow){
+            configAccel.data.labels.push(data.accel[0]);
           }
-          if (configAccel.data.datasets[0].data.length > 100){
+          if (configAccel.data.datasets[0].data.length > rowsToShow){
               configAccel.data.labels.shift(); // remove the label first
           }
+          var i = 0
           configAccel.data.datasets.forEach(function(dataset) {
-            if (dataset == configAccel.data.datasets[0]){
-              dataset.data.push(data.result);
-            } else {
-              dataset.data.push(-1*data.result + 180);
-            }
+              dataset.data.push(data.accel[i++]);
 
-            if (dataset.data.length > 100){
+            if (dataset.data.length > rowsToShow){
               dataset.data.shift()
             }
             
@@ -255,7 +259,10 @@
 
           window.myLineAccel.update();
         }
-        // dataset.data.push(data.result);
+       
+        // document.getElementById("MyElement").classList.add('MyClass');
+
+        // document.getElementById("MyElement").classList.remove('MyClass');
       });
     }
     return false;

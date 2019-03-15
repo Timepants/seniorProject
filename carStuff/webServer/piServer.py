@@ -2,13 +2,15 @@ import sys
 
 import os,sys
 
-from piInstructor import run_steering_server, stop
+from piInstructorInterface import run_steering_server, stop
+
+# from piInstructor import run_steering_server, stop
 
 from flask import Flask, jsonify, render_template, request, Response
 
 from multiprocessing import Queue
 
-from manualInstructor import CarControllerManual as manual
+# from manualInstructor import CarControllerManual as manual
 
 from io import BytesIO
 
@@ -16,7 +18,12 @@ class AppServer():
     def __init__(self):
         self.a = 0
         self.b = 0
-        self.value = 0
+        self.data = self.data = {
+                "throttle":0
+                ,"accel": [0
+                        , 1
+                        , 2]
+            } 
 
     def add_numbers(self, outputQueue):
         # a = request.args.get('a', 0, type=int)
@@ -25,10 +32,17 @@ class AppServer():
         self.b += 1
 
         while not outputQueue.empty():
-            self.value = outputQueue.get()["throttle"]
-            print(self.value)
+            self.data = {
+                "throttle":outputQueue.get()["throttle"]
+                ,"accel": [outputQueue.get()["accelx"]
+                        , outputQueue.get()["accely"]
+                        , outputQueue.get()["accelz"]]
+                ,"steering":outputQueue.get()["steering"]
+                ,"proximity":outputQueue.get()["proximity"]
+            } 
+            print(self.data)
 
-        return jsonify(result=float(self.value))
+        return jsonify(self.data)
         # return jsonify(result=self.a + self.b)
 
     def getModels(self):
@@ -36,15 +50,16 @@ class AppServer():
 
         return files
 
+    def stopAI(self):
+        stop()
+
 appServer = AppServer()
 
 app = Flask(__name__)
 
 outputQueue = Queue()
 
-
-
-man = manual()
+# man = manual()
 
 @app.route('/_add_numbers')
 def add_numbers():
