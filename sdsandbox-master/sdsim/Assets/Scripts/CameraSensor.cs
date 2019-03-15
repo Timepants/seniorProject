@@ -13,9 +13,9 @@ public class CameraSensor : MonoBehaviour {
 
 	void Awake()
 	{
-		//tex = new Texture2D(width, height, TextureFormat.RGB24, false);
-		//ren = new RenderTexture(width, height, 16, RenderTextureFormat.ARGB32);
-		//sensorCam.targetTexture = ren;
+		tex = new Texture2D(width, height, TextureFormat.RGB24, false);
+		ren = new RenderTexture(width, height, 16, RenderTextureFormat.ARGB32);
+		sensorCam.targetTexture = ren;
 	}
 
 	Texture2D RTImage(Camera cam) 

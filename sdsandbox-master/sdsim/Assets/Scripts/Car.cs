@@ -24,6 +24,7 @@ public class Car : MonoBehaviour, ICar
 
     public Vector3 startPos;
     public Quaternion startRot;
+    public PIDController pid;
 
     public float length = 1.7f;
 
@@ -43,6 +44,8 @@ public class Car : MonoBehaviour, ICar
     // Use this for initialization
     void Awake()
     {
+        Time.timeScale = pid.TimeScale;
+        print(pid.TimeScale);
         rb = GetComponent<Rigidbody>();
 
         if (rb && centrOfMass)

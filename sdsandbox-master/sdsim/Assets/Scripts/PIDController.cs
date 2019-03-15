@@ -236,6 +236,7 @@ public class PIDController : MonoBehaviour
 
         if (pid_steering != null)
             pid_steering.text = string.Format("PID: {0} {1}", steeringReq, steering);
+        print(car.GetThrottle());
         
 
         //accumulate total error
