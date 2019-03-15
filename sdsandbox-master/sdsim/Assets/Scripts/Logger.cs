@@ -11,6 +11,7 @@ public class Logger : MonoBehaviour {
 	public CameraSensor camSensor;
     public CameraSensor optionlB_CamSensor;
 	public Lidar lidar;
+    public PIDController PID;
 
 	//what's the current frame index
     public int frameCounter = 0;
@@ -39,7 +40,8 @@ public class Logger : MonoBehaviour {
 	void Awake()
 	{
 		car = carObj.GetComponent<ICar>();
-
+        Time.timeScale = PID.TimeScale;
+        print(PID.TimeScale);
 		imagesToSave = new List<ImageSaveJob>();
 	}
 

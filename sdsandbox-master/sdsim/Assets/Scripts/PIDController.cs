@@ -8,6 +8,9 @@ public class PIDController : MonoBehaviour
     public GameObject carObj;
     public ICar car;
     public PathManager pm;
+    public CarPath cp;
+    public GameObject prefab;
+    public bool StopOffRoad = true;
 
     float errA, errB;
     public float Kp = 10.0f;
@@ -41,6 +44,7 @@ public class PIDController : MonoBehaviour
 
     bool isDriving = false;
     public bool waitForStill = true;
+    public bool stopOffRoad = true;
 
     public bool startOnWake = false;
 
@@ -48,11 +52,14 @@ public class PIDController : MonoBehaviour
 
     public bool doDrive = true;
     public float maxSpeed = 5.0f;
+    public float TimeScale = 1f;
 
     public Text pid_steering;
+    
 
     void Awake()
     {
+        Time.timeScale = TimeScale;
         car = carObj.GetComponent<ICar>();
     }
 
@@ -131,6 +138,8 @@ public class PIDController : MonoBehaviour
 
         //set the activity from the path node.
         PathNode n = pm.path.GetActiveNode();
+        
+
 
         if (n != null && n.activity != null && n.activity.Length > 1)
         {
@@ -174,7 +183,8 @@ public class PIDController : MonoBehaviour
 
         diffErr = err - prevErr;
 
-       int steering = (int)System.Math.Round((-Kp * err) - (Kd * diffErr) - (Ki * totalError));
+        int steering = (int)System.Math.Round((-Kp * err) - (Kd * diffErr) - (Ki * totalError));
+       
 
         if (steering > steeringCompensationLevel)
         {
@@ -206,13 +216,30 @@ public class PIDController : MonoBehaviour
             //{
             //    //car.RequestFootBrake(0.0f);
             //}
-                    
+
+
+
+
+            int l = 1;
+            if (l == 1)
+            {
+                float dist = Vector3.Distance(car.GetTransform().position, n.pos);
+                //print(car.GetTransform().position + " ----- " + n.pos);
+                //print("Distance? -- " + dist);
+
+                if (dist > 3f)
+                {
+                    car.RequestThrottle(0.0f);
+                    car.RequestFootBrake(1f);
+
+                }
+            }
         }
 
         if (pid_steering != null)
-            pid_steering.text = string.Format("PID: {0} {1} {2}", steeringReq, car.GetAccel().z, car.GetThrottle());
+            pid_steering.text = string.Format("PID: {0} {1}", steeringReq, steering);
         print(car.GetThrottle());
-        //print(car.GetThrottle());
+        
 
         //accumulate total error
         totalError += err;
