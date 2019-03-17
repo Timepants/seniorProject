@@ -36,14 +36,20 @@
         <div class="col-md">
           <div class="row">
             <div class="col-3">
-              <img id="left" src="{{ url_for('static', filename='img/icon/leftDisabled.png') }}">
+              <img id="leftDisabled" style="display: inline;"src="{{ url_for('static', filename='img/icon/leftDisabled.png') }}">
+              <img id="leftEnabled" style="display: none;"src="{{ url_for('static', filename='img/icon/leftEnabled.png') }}">
             </div>
             <div class="col-3">
-              <img id="straight" src="{{ url_for('static', filename='img/icon/straightEnabled.png') }}">
+              <img id="straightDisabled" style="display: inline;"src="{{ url_for('static', filename='img/icon/straightDisabled.png') }}">
+              <img id="straightEnabled" style="display: none;"src="{{ url_for('static', filename='img/icon/straightEnabled.png') }}">
             </div>
             <div class="col-3">
-                <img id="right" src="{{ url_for('static', filename='img/icon/rightDisabled.png') }}">
+                <img id="rightDisabled" style="display: inline;" src="{{ url_for('static', filename='img/icon/rightDisabled.png') }}">
+                <img id="rightEnabled" style="display: none;" src="{{ url_for('static', filename='img/icon/rightEnabled.png') }}">
             </div>
+          </div>
+          <div class="row">
+            <span id="proximity">?</span> cm
           </div>
         </div>
           <div class="col-md">
@@ -217,7 +223,7 @@
   document.getElementById('addDataAccel').addEventListener('click', async function() {
       // for (i = 0; i < 10; i++) { 
     while (true){
-      await sleep(150);
+      await sleep(100);
       $.getJSON("{{ url_for('add_numbers') }}", {
         a: $('input[name="a"]').val(),
         b: $('input[name="b"]').val()
@@ -243,9 +249,8 @@
         if (configAccel.data.datasets.length > 0) {
           if (configAccel.data.labels.length <= rowsToShow){
             configAccel.data.labels.push(data.accel[0]);
-          }
-          if (configAccel.data.datasets[0].data.length > rowsToShow){
-              configAccel.data.labels.shift(); // remove the label first
+          } else {
+            configAccel.data.labels.shift(); // remove the label first
           }
           var i = 0
           configAccel.data.datasets.forEach(function(dataset) {
@@ -259,7 +264,30 @@
 
           window.myLineAccel.update();
         }
-       
+        $("#proximity").text(data.proximity);
+
+        if (data.steering < 0){
+          document.getElementById("leftEnabled").style.display = "inline";
+          document.getElementById("leftDisabled").style.display = "none";
+          document.getElementById("straightEnabled").style.display = "none";
+          document.getElementById("straightDisabled").style.display = "inline";
+          document.getElementById("rightEnabled").style.display = "none";
+          document.getElementById("rightDisabled").style.display = "inline";
+        } else if (data.steering > 0){
+          document.getElementById("leftEnabled").style.display = "none";
+          document.getElementById("leftDisabled").style.display = "inline";
+          document.getElementById("straightEnabled").style.display = "none";
+          document.getElementById("straightDisabled").style.display = "inline";
+          document.getElementById("rightEnabled").style.display = "inline";
+          document.getElementById("rightDisabled").style.display = "none";
+        } else {
+          document.getElementById("leftEnabled").style.display = "none";
+          document.getElementById("leftDisabled").style.display = "inline";
+          document.getElementById("straightEnabled").style.display = "inline";
+          document.getElementById("straightDisabled").style.display = "none";
+          document.getElementById("rightEnabled").style.display = "none";
+          document.getElementById("rightDisabled").style.display = "inline";
+        }
         // document.getElementById("MyElement").classList.add('MyClass');
 
         // document.getElementById("MyElement").classList.remove('MyClass');

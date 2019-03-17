@@ -37,6 +37,7 @@ from piLogger import CarLogger
 
 inputQueueCamera = Queue()
 inputQueueMotor = Queue()
+inputQueueLogger = Queue()
 continueRunningAI = True
 
 class CarControllerAI(object):
@@ -80,7 +81,7 @@ class CarControllerAI(object):
 
             return image_array
 
-    def telemetry(self, data, outputQueue, lock):
+    def telemetry(self, data, lock):
         if data:
             # The current steering angle of the car
             steering_angle = float(data["steering_angle"])
@@ -104,7 +105,6 @@ class CarControllerAI(object):
                 throttle, brake = self.throttle_man.get_throttle_brake(speed, steering_angle)
 
             print(steering_angle, throttle)
-            outputQueue.put([self.lastCounter, steering_angle,throttle])
             self.send_control(steering_angle, throttle)
             
             # for effciency counting
@@ -116,14 +116,11 @@ class CarControllerAI(object):
 
 
     def send_control(self, steering_angle, throttle):
-        # TODO log this
-
         self.MC.setSteering(steering_angle)
         self.MC.setThrottle(throttle)
-        self.logger.printEm(self.MC.getSteering, self.MC.getThrottle)
     
 
-    def telemetryLoop(self, outputQueue, lock, inputQueue):
+    def telemetryLoop(self lock, inputQueue):
         while continueRunningAI and inputQueue.get():
             data={
                     'steering_angle': self.MC.getSteering(),
@@ -131,24 +128,36 @@ class CarControllerAI(object):
                     'speed': self.MC.getThrottle()
                 }
             inputQueue.put(True)
-            self.telemetry(data, outputQueue, lock)   
+            self.telemetry(data, lock)   
 
-    def go(self, model_fnm, outputQueue, lock, inputQueue):
+    def go(self, model_fnm, lock, inputQueue):
         
         self.model = keras.models.load_model(model_fnm)
         global continueRunningAI
-        self.telemetryLoop(outputQueue, lock, inputQueue)
+        self.telemetryLoop(lock, inputQueue)
         keras.backend.clear_session()
 
+    def informationLog(self, inputQueue, outputQueue):
+        while inputQueue.get():
+            data = self.logger.write(self.MC.getSteering(), self.MC.getThrottle(), self.counter)
+            outputQueue.put(data)
+            inputQueue.put(True)
+
+def stopQueue(queue):
+    while not queue.empty():
+        queue.get() 
+    for i in range(20):
+        queue.put(False)
+
+def startQueue(queue):
+    while not queue.empty():
+        queue.get() 
+    queue.put(True)
+
 def stop():
-    while not inputQueueCamera.empty():
-        inputQueueCamera.get() 
-    for i in range(20):
-        inputQueueCamera.put(False)
-    while not inputQueueMotor.empty():
-        inputQueueMotor.get() 
-    for i in range(20):
-        inputQueueMotor.put(False)
+    stopQueue(inputQueueCamera)
+    stopQueue(inputQueueMotor)
+    stopQueue(inputQueueLogger)
 
 def run_steering_server(model_fnm, outputQueue):
 
@@ -157,18 +166,18 @@ def run_steering_server(model_fnm, outputQueue):
     lock = Lock()   
 
     ss = CarControllerAI()
-    while not inputQueueCamera.empty():
-        inputQueueCamera.get() 
-    inputQueueCamera.put(True)
-
-    while not inputQueueMotor.empty():
-        inputQueueMotor.get() 
-    inputQueueMotor.put(True)
+    startQueue(inputQueueCamera)
+    startQueue(inputQueueMotor)
+    startQueue(inputQueueLogger)
 
     cameraRelsult = pool.apply_async(ss.getCameraData, (lock, inputQueueCamera)) 
     time.sleep(0.01)
 
-    async_result = pool.apply_async(ss.go, (model_fnm,outputQueue, lock, inputQueueMotor)) 
+    async_result = pool.apply_async(ss.go, (model_fnm, lock, inputQueueMotor))
+    
+    time.sleep(0.01)
+
+    pool.apply_async(ss.informationLog, (inputQueueLogger, outputQueue)) 
 
 # ***** main loop *****
 if __name__ == "__main__":

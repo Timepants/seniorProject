@@ -32,10 +32,8 @@ class CarControllerManual(object):
                 self.imgCount += 1
 
     def informationLog(self, inputQueue, outputQueue):
-        print()
         while inputQueue.get():
             data = self.logger.write(self.MC.getSteering(), self.MC.getThrottle(), self.imgCount)
-            # print("boi")
             outputQueue.put(data)
             inputQueue.put(True)
 
