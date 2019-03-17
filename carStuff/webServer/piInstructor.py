@@ -43,7 +43,7 @@ class CarControllerAI(object):
     def __init__(self):
         self.model = None
         self.MC = Motor()
-        self.logger = CarLogger()
+        self.logger = CarLogger(True, "AI")
         self.throttle_man = throttle_manager.ThrottleManager(idealSpeed = 10.)
 
         # for counting IPS

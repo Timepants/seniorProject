@@ -12,6 +12,8 @@ from multiprocessing import Queue
 
 from io import BytesIO
 
+from picamera import PiCamera
+
 class AppServer():
     def __init__(self):
         self.a = 0
@@ -63,8 +65,6 @@ def index():
 
 @app.route('/start<model>')
 def startServer(model):
-    
-
     return index()
 
 @app.route('/stop')

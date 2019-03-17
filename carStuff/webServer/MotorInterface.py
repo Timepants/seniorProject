@@ -61,7 +61,7 @@ class MotorInterface(object):
         if self.MC.getThrottle() <= 11:
             return 0
         else:
-            return self.MC.getThrottle()
+            return self.MC.getThrottle() * self.getMovement()
 
     def getMovement(self):
         if self.MC.getMovement() == self.MC.FORWARD:

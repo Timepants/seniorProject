@@ -112,8 +112,8 @@ def runControllerLoop(MC):
             direction = 0
         
 
-        print("throttle",throttle)
-        print("direction",direction)
+        # print("throttle",throttle)
+        # print("direction",direction)
         MC.setThrottle(throttle)
         MC.setSteering(direction)
         # print(categorize(event))

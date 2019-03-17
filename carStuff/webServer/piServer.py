@@ -95,10 +95,14 @@ def boot():
 def video():
     return render_template('videoTest.html')
 
+
 def gen():
-    print("gen")
-    yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + man.getImageStream() + b'\r\n')
+    with PiCamera() as camera:
+        while True:
+            my_stream.seek(0)
+            camera.capture(my_stream, 'jpeg', use_video_port=True)
+            yield (b'--frame\r\n'
+                b'Content-Type: image/jpeg\r\n\r\n' + my_stream.getvalue() + b'\r\n')
 
 @app.route('/video_feed')
 def video_feed():
