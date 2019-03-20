@@ -45,7 +45,6 @@ class MotorContol(object):
         
 
     def setThrottle(self, throttle):
-        print("MORETEXT")
         self.ser.write('t'.encode())        
         if throttle > 255:
             self.throttle = 255

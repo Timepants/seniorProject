@@ -37,6 +37,7 @@ from piLogger import CarLogger
 
 inputQueueCamera = Queue()
 inputQueueMotor = Queue()
+outputQueueMotor = Queue()
 inputQueueLogger = Queue()
 continueRunningAI = True
 
@@ -45,7 +46,7 @@ class CarControllerAI(object):
         self.model = None
         self.MC = Motor()
         self.logger = CarLogger(True, "AI")
-        self.throttle_man = throttle_manager.ThrottleManager(idealSpeed = 10.)
+        self.throttle_man = throttle_manager.ThrottleManager(idealSpeed = 90.)
 
         # for counting IPS
         self.counter = 0
@@ -81,7 +82,7 @@ class CarControllerAI(object):
 
             return image_array
 
-    def telemetry(self, data, lock):
+    def telemetry(self, data, lock, outputQueueMotor):
         if data:
             # The current steering angle of the car
             steering_angle = float(data["steering_angle"])
@@ -105,6 +106,10 @@ class CarControllerAI(object):
                 throttle, brake = self.throttle_man.get_throttle_brake(speed, steering_angle)
 
             print(steering_angle, throttle)
+            outputQueueMotor.put({
+                "steering_angle":float(steering_angle)
+                ,"throttle":float(throttle)
+            })
             self.send_control(steering_angle, throttle)
             
             # for effciency counting
@@ -120,7 +125,7 @@ class CarControllerAI(object):
         self.MC.setThrottle(throttle)
     
 
-    def telemetryLoop(self lock, inputQueue):
+    def telemetryLoop(self, lock, inputQueue, outputQueueMotor):
         while continueRunningAI and inputQueue.get():
             data={
                     'steering_angle': self.MC.getSteering(),
@@ -128,19 +133,25 @@ class CarControllerAI(object):
                     'speed': self.MC.getThrottle()
                 }
             inputQueue.put(True)
-            self.telemetry(data, lock)   
+            self.telemetry(data, lock, outputQueueMotor)   
 
-    def go(self, model_fnm, lock, inputQueue):
+    def go(self, model_fnm, lock, inputQueue, outputQueueMotor):
         
         self.model = keras.models.load_model(model_fnm)
         global continueRunningAI
-        self.telemetryLoop(lock, inputQueue)
+        self.telemetryLoop(lock, inputQueue, outputQueueMotor)
         keras.backend.clear_session()
 
-    def informationLog(self, inputQueue, outputQueue):
+    def informationLog(self, inputQueue, outputQueue, outputQueueMotor):
+        print("immmma gonna logg")
         while inputQueue.get():
-            data = self.logger.write(self.MC.getSteering(), self.MC.getThrottle(), self.counter)
-            outputQueue.put(data)
+            time.sleep(0.05)
+            print("logger")
+            motorData = skipInQueue(outputQueueMotor)
+            if bool(motorData):
+                data = self.logger.write(motorData["steering_angle"], motorData["throttle"], self.counter)
+                # print(data)
+                outputQueue.put(data)
             inputQueue.put(True)
 
 def stopQueue(queue):
@@ -159,10 +170,16 @@ def stop():
     stopQueue(inputQueueMotor)
     stopQueue(inputQueueLogger)
 
+def skipInQueue(queue):
+    data = dict()
+    while not queue.empty():
+        data = queue.get()
+    return data
+
 def run_steering_server(model_fnm, outputQueue):
 
 
-    pool = ThreadPool(processes=2)
+    pool = ThreadPool(processes=3)
     lock = Lock()   
 
     ss = CarControllerAI()
@@ -170,14 +187,16 @@ def run_steering_server(model_fnm, outputQueue):
     startQueue(inputQueueMotor)
     startQueue(inputQueueLogger)
 
+    # ss.informationLog(inputQueueLogger, outputQueue)
+
     cameraRelsult = pool.apply_async(ss.getCameraData, (lock, inputQueueCamera)) 
     time.sleep(0.01)
 
-    async_result = pool.apply_async(ss.go, (model_fnm, lock, inputQueueMotor))
+    async_result = pool.apply_async(ss.go, (model_fnm, lock, inputQueueMotor, outputQueueMotor))
     
     time.sleep(0.01)
 
-    pool.apply_async(ss.informationLog, (inputQueueLogger, outputQueue)) 
+    result = pool.apply_async(ss.informationLog, (inputQueueLogger, outputQueue, outputQueueMotor)) 
 
 # ***** main loop *****
 if __name__ == "__main__":
@@ -203,4 +222,3 @@ if __name__ == "__main__":
             time.sleep(0.5)
             sys.exit(0)
 
-    

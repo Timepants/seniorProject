@@ -1,9 +1,21 @@
 from evdev import InputDevice, categorize, ecodes
 import os
 from MotorInterface import MotorInterface
-def runControllerLoop(MC):
+
+def stopQueue(queue):
+    while not queue.empty():
+        queue.get() 
+    for i in range(100):
+        queue.put(False)
+
+def startQueue(queue):
+    while not queue.empty():
+        queue.get() 
+    for i in range(100):
+        queue.put(True)
+
+def runControllerLoop(MC, output):
     #creates object 'gamepad' to store the data
-    #you can call it whatever you like
     gamepad = InputDevice('/dev/input/event0')
 
     MAX_VALUE_JOYSTICK = 65535
@@ -96,6 +108,11 @@ def runControllerLoop(MC):
                     reversePressed = False
                 if event.value == 1:
                     reversePressed = True
+            if event.code == BUTTON_LB:
+                if event.value == 0:
+                    stopQueue(output)
+                if event.value == 1:
+                    startQueue(output)
 
         if accelPressed:
             throttle = MIN_THROTTLE+leftTriggerThrottleAddition+rightTriggerThrottleAddition

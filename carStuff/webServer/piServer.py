@@ -2,15 +2,15 @@ import sys
 
 import os,sys
 
-from piInstructorInterface import run_steering_server, stop
+# from piInstructorInterface import run_steering_server, stop
 
-# from piInstructor import run_steering_server, stop
+from piInstructor import run_steering_server, stop
 
 from flask import Flask, jsonify, render_template, request, Response
 
 from multiprocessing import Queue
 
-# from manualInstructor import CarControllerManual as manual
+from manualInstructor import CarControllerManual as manual
 
 from io import BytesIO
 
@@ -25,7 +25,7 @@ class AppServer():
                         , 2]
             } 
 
-    def add_numbers(self, outputQueue):
+    def getOutputData(self, outputQueue):
         # a = request.args.get('a', 0, type=int)
         # b = request.args.get('b', 0, type=int)
         self.a += 1
@@ -34,10 +34,10 @@ class AppServer():
         while not outputQueue.empty():
             self.data = {
                 "throttle":outputQueue.get()["throttle"]
-                ,"accel": [outputQueue.get()["accelx"]
-                        , outputQueue.get()["accely"]
-                        , outputQueue.get()["accelz"]]
-                ,"steering":outputQueue.get()["steering"]
+                ,"accel": [outputQueue.get()["accel_x"]
+                        , outputQueue.get()["accel_y"]
+                        , outputQueue.get()["accel_z"]]
+                ,"steering":outputQueue.get()["steering_angle"]
                 ,"proximity":outputQueue.get()["proximity"]
             } 
             print(self.data)
@@ -61,9 +61,9 @@ outputQueue = Queue()
 
 # man = manual()
 
-@app.route('/_add_numbers')
-def add_numbers():
-    return appServer.add_numbers(outputQueue)
+@app.route('/_getOutputData')
+def getOutputData():
+    return appServer.getOutputData(outputQueue)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -76,11 +76,11 @@ def index():
             stop()
     return render_template('index.html', models = appServer.getModels())
 
-@app.route('/start<model>')
+@app.route('/start')
 def startServer(model):
     
 
-    return index()
+    return boot()
 
 @app.route('/stop')
 def stopServer():

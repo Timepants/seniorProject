@@ -90,12 +90,22 @@ def generator(samples, batch_size=32, perc_to_augment=0.5):
                     data = parse_img_filepath(fullpath)
                 
                     steering = data["steering"]
-                    if steering < -0.5:
-                        steering = -7.0
-                    elif steering > 0.5:
-                        steering = 7.0
-                    else:
-                        steering = 0.0
+
+                    # scale steering from three (TODO change to work with any number)
+                    if steering > 1 or steering < -1:
+                        OldMax = 3
+                        OldMin = -3
+                        NewMax = 1
+                        NewMin = -1
+                        OldRange = (OldMax - (OldMin))  
+                        NewRange = (NewMax - NewMin)  
+                        steering = (((steering - OldMin) * NewRange) / OldRange) + NewMin
+                    # if steering < -0.5:
+                    #     steering = -7.0
+                    # elif steering > 0.5:
+                    #     steering = 7.0
+                    # else:
+                    #     steering = 0.0
                     throttle = data["throttle"]
                     #TODO throttle seems to be mostly zero when generating training data, imma force it to be 120
                     #throttle = 90.0

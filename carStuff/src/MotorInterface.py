@@ -4,7 +4,7 @@ from MotorControl import MotorContol as Motor
 class MotorInterface(object):
     def __init__(self):
         self.MC = Motor()
-        self.TurningThreshold = 0.5
+        self.TurningThreshold = 0.001
 
     def setSteering(self, steering):
         if steering > self.TurningThreshold:
