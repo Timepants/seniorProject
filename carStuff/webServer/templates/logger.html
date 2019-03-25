@@ -1,0 +1,284 @@
+
+    <!-- <div> -->
+      <div class="row align-items-center">
+          <div class="col-lg-4">
+        <h1 class="white-text">Throttle</h1>
+          <canvas id="canvasThrottle"></canvas>
+        <br>
+        <br>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="row">
+        <div class="col-4">
+          <img id="leftDisabled" class="float-right"style="display: block;"src="{{ url_for('static', filename='img/icon/leftDisabled.png') }}">
+          <img id="leftEnabled" class="float-right" style="display: none;"src="{{ url_for('static', filename='img/icon/leftEnabled.png') }}">
+        </div>
+        <div class="col-4">
+          <img id="straightDisabled" class="mx-auto" style="display: block;"src="{{ url_for('static', filename='img/icon/straightDisabled.png') }}">
+          <img id="straightEnabled" class="mx-auto" style="display: none;"src="{{ url_for('static', filename='img/icon/straightEnabled.png') }}">
+        </div>
+        <div class="col-4">
+            <img id="rightDisabled" class="float-left" style="display: block;" src="{{ url_for('static', filename='img/icon/rightDisabled.png') }}">
+            <img id="rightEnabled" class="float-left" style="display: none;" src="{{ url_for('static', filename='img/icon/rightEnabled.png') }}">
+        </div>
+      </div>
+      <div class="row max-height-90">
+        <div class="mx-auto">
+          <span class="white-text" id="proximity">?</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="mx-auto">
+          <span id="px-unit" class="white-text">cm</span>
+        </div>
+      </div>
+    </div>
+      <div class="col-lg-4">
+    <h1 class="white-text">Accelerometer</h1>
+      <canvas id="canvasAccel"></canvas>
+    <br>
+    <br>
+
+    </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+<script>
+var animationTime = 500;
+    var configThrottle = {
+    type: 'line',
+    data: {
+        datasets: [{
+        // label: 'Throttle',
+        backgroundColor: window.chartColors.red,
+        borderColor: window.chartColors.red,
+        data: [
+
+        ],
+        fill: false,
+      }]
+    },
+    options: {
+      animation: {
+        duration : animationTime
+      },
+      elements: {
+                point:{
+                    radius: 0
+                }
+            },
+      responsive: true,
+      title: {
+        display: false,
+        text: 'Throttle'
+      },
+      legend: {
+        display: false
+      },
+      scales: {
+        xAxes: [{
+          display: false,
+          scaleLabel: {
+            display: true,
+            labelString: 'Time'
+          }
+        }],
+        yAxes: [{
+          display: true
+
+          ,scaleLabel: {
+            display: false,
+            labelString: 'Value'
+          }
+          ,ticks: {
+            fontColor: window.chartColors.black,
+          }
+          ,gridLines: {
+            color: window.chartColors.green,
+            lineWidth: 0.5
+          }
+        }]
+      }
+
+        
+    }
+  };
+
+  window.onload = function() {
+    var ctxThrottle = document.getElementById('canvasThrottle').getContext('2d');
+    window.myLineThrottle = new Chart(ctxThrottle, configThrottle);
+    var ctxAccel = document.getElementById('canvasAccel').getContext('2d');
+    window.myLineAccel = new Chart(ctxAccel, configAccel);
+    doStuff();
+  };
+
+
+var configAccel = {
+type: 'line',
+data: {
+  datasets: [{
+    backgroundColor: window.chartColors.blue,
+    borderColor: window.chartColors.blue,
+    data: [
+
+    ],
+    fill: false,
+  }
+  ,{
+    backgroundColor: window.chartColors.red,
+    borderColor: window.chartColors.red,
+    data: [
+
+    ],
+    fill: false,
+  }
+  ,{
+    backgroundColor: window.chartColors.black,
+    borderColor: window.chartColors.black,
+    data: [
+
+    ],
+    fill: false,
+  }
+  ]
+},
+options: {
+  animation: {
+    duration : animationTime/3
+  },
+  elements: {
+            point:{
+                radius: 0
+            }
+        },
+  responsive: true,
+  title: {
+    display: false,
+    text: 'Accel'
+  },
+  legend: {
+    display: false
+  },
+  scales: {
+    xAxes: [{
+      display: false,
+      scaleLabel: {
+        display: true,
+        labelString: 'Time'
+      }
+    }],
+    yAxes: [{
+      display: true,
+      scaleLabel: {
+        display: false,
+        labelString: 'Value'
+      }
+      ,ticks: {
+            fontColor: window.chartColors.black,
+          }
+          ,gridLines: {
+            color: window.chartColors.green,
+            lineWidth: 0.5
+          }
+    }]
+  }
+
+    
+}
+};
+var colorNames = Object.keys(window.chartColors);
+
+function sleep(ms) {
+return new Promise(resolve => setTimeout(resolve, ms));
+}
+document.getElementById('addDataAccel').addEventListener('click', async function() {
+doStuff();
+});
+async function doStuff() {
+  // for (i = 0; i < 10; i++) { 
+while (true){
+  await sleep(500);
+  $.getJSON("{{ url_for('getOutputData') }}", {
+    a: $('input[name="a"]').val(),
+    b: $('input[name="b"]').val()
+  }, function(data) {
+    if (data.showLogger == 1){
+      if (configThrottle.data.datasets.length > 0) {
+            configThrottle.data.labels.push(data.throttle);
+
+            configThrottle.data.datasets.forEach(function(dataset) {
+              dataset.data.push(data.throttle);
+
+              if (dataset.data.length > 100){
+                configThrottle.data.labels.shift(); // remove the label first
+                dataset.data.shift()
+                // dataset.data.splice(0, 1);
+              }
+              
+            });
+            window.myLineThrottle.update();
+            
+          }
+      //Accel stuff
+      var rowsToShow= 30;
+      if (configAccel.data.datasets.length > 0) {
+        if (configAccel.data.labels.length <= rowsToShow){
+          configAccel.data.labels.push(data.accel[0]);
+        } else {
+          configAccel.data.labels.shift(); // remove the label first
+        }
+        var i = 0
+        configAccel.data.datasets.forEach(function(dataset) {
+            dataset.data.push(data.accel[i++]);
+
+          if (dataset.data.length > rowsToShow){
+            dataset.data.shift()
+          }
+          
+        });
+
+        window.myLineAccel.update();
+      }
+      $("#proximity").text(data.proximity);
+
+      if (data.steering < -0.5){
+        document.getElementById("leftEnabled").style.display = "block";
+        document.getElementById("leftDisabled").style.display = "none";
+        document.getElementById("straightEnabled").style.display = "none";
+        document.getElementById("straightDisabled").style.display = "block";
+        document.getElementById("rightEnabled").style.display = "none";
+        document.getElementById("rightDisabled").style.display = "block";
+      } else if (data.steering > 0.5){
+        document.getElementById("leftEnabled").style.display = "none";
+        document.getElementById("leftDisabled").style.display = "block";
+        document.getElementById("straightEnabled").style.display = "none";
+        document.getElementById("straightDisabled").style.display = "block";
+        document.getElementById("rightEnabled").style.display = "block";
+        document.getElementById("rightDisabled").style.display = "none";
+      } else {
+        document.getElementById("leftEnabled").style.display = "none";
+        document.getElementById("leftDisabled").style.display = "block";
+        document.getElementById("straightEnabled").style.display = "block";
+        document.getElementById("straightDisabled").style.display = "none";
+        document.getElementById("rightEnabled").style.display = "none";
+        document.getElementById("rightDisabled").style.display = "block";
+      }
+      // document.getElementById("MyElement").classList.add('MyClass');
+
+      // document.getElementById("MyElement").classList.remove('MyClass');
+    }
+  });
+}
+return false;
+};
+
+</script>

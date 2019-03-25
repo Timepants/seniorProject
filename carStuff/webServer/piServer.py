@@ -10,9 +10,11 @@ from flask import Flask, jsonify, render_template, request, Response
 
 from multiprocessing import Queue
 
-from manualInstructor import CarControllerManual as manual
+from manualInstructor import runInstructor, stopMan
 
 from io import BytesIO
+
+from picamera import PiCamera
 
 class AppServer():
     def __init__(self):
@@ -23,7 +25,8 @@ class AppServer():
                 ,"accel": [0
                         , 1
                         , 2]
-            } 
+            }
+        self.started = False
 
     def getOutputData(self, outputQueue):
         # a = request.args.get('a', 0, type=int)
@@ -33,14 +36,16 @@ class AppServer():
 
         while not outputQueue.empty():
             self.data = {
-                "throttle":outputQueue.get()["throttle"]
-                ,"accel": [outputQueue.get()["accel_x"]
-                        , outputQueue.get()["accel_y"]
-                        , outputQueue.get()["accel_z"]]
+                "showLogger":self.showLogger()
+                ,"throttle":outputQueue.get()["throttle"]
+                ,"accel": [outputQueue.get()["accel_x_scaled"]
+                        , outputQueue.get()["accel_y_scaled"]
+                        , outputQueue.get()["accel_z_scaled"]]
                 ,"steering":outputQueue.get()["steering_angle"]
                 ,"proximity":outputQueue.get()["proximity"]
             } 
             print(self.data)
+
 
         return jsonify(self.data)
         # return jsonify(result=self.a + self.b)
@@ -50,8 +55,30 @@ class AppServer():
 
         return files
 
+    def showLogger(self):
+        if outputQueue.empty():
+            return 0
+        return 1
+
     def stopAI(self):
         stop()
+
+    def index(self, request):
+        if request.method == 'POST':
+            model = request.form.get('model', None)
+            if model is not None and not self.started:
+                run_steering_server("carModels/"+model, outputQueue)
+                self.started = True
+            manual = request.form.get('manual', None)
+            if manual is not None and not self.started:
+                runInstructor(outputQueue)
+                self.started = True
+            stopper = request.form.get('stop', None)
+            if stopper is not None:
+                self.started = False
+                stop()
+                stopMan()
+        return render_template('bootstrap.html', models = self.getModels(), isRunning = self.started)
 
 appServer = AppServer()
 
@@ -59,7 +86,7 @@ app = Flask(__name__)
 
 outputQueue = Queue()
 
-# man = manual()
+my_stream = BytesIO()
 
 @app.route('/_getOutputData')
 def getOutputData():
@@ -67,14 +94,7 @@ def getOutputData():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    if request.method == 'POST':
-        model = request.form.get('model', None)
-        if model is not None:
-            run_steering_server("carModels/"+model, outputQueue)
-        stopper = request.form.get('stop', None)
-        if stopper is not None:
-            stop()
-    return render_template('index.html', models = appServer.getModels())
+    return appServer.index(request)
 
 @app.route('/start')
 def startServer(model):

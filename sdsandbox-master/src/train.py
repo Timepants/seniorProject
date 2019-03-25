@@ -92,14 +92,14 @@ def generator(samples, batch_size=32, perc_to_augment=0.5):
                     steering = data["steering"]
 
                     # scale steering from three (TODO change to work with any number)
-                    if steering > 1 or steering < -1:
-                        OldMax = 3
-                        OldMin = -3
-                        NewMax = 1
-                        NewMin = -1
-                        OldRange = (OldMax - (OldMin))  
-                        NewRange = (NewMax - NewMin)  
-                        steering = (((steering - OldMin) * NewRange) / OldRange) + NewMin
+                    # if steering > 1 or steering < -1:
+                    #     OldMax = 3
+                    #     OldMin = -3
+                    #     NewMax = 1
+                    #     NewMin = -1
+                    #     OldRange = (OldMax - OldMin)  
+                    #     NewRange = (NewMax - NewMin)  
+                    #     steering = (((steering - OldMin) * NewRange) / OldRange) + NewMin
                     # if steering < -0.5:
                     #     steering = -7.0
                     # elif steering > 0.5:

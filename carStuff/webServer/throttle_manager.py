@@ -15,7 +15,7 @@ class ThrottleManager(object):
     compute throttle and brake values given the current
     velocity and steering
     '''
-    def __init__(self, idealSpeed = 150.0, 
+    def __init__(self, idealSpeed = 85.0, 
                         turnSlowFactor = 3.0,
                         brakeThresh = 255.0,
                         constThrottleReq = 150.0 ):
@@ -31,6 +31,8 @@ class ThrottleManager(object):
         #if we are below target speed, this is the throttle applied to increase speed
         self.constThrottleReq = constThrottleReq
 
+    def get_ideal_speed(self):
+        return self.idealSpeed
 
     def get_throttle_brake(self, car_vel_mag, car_steering):
         '''

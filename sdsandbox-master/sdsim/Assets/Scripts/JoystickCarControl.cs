@@ -23,9 +23,9 @@ public class JoystickCarControl : MonoBehaviour
         // pass the input to the car!
         float h = CrossPlatformInputManager.GetAxis("Horizontal") * MaximumSteerAngle;
         if (h > .5)
-            steer = 7;
+            steer = 5;
         else if (h < -.5)
-            steer = -7;
+            steer = -5;
         else
             steer = 0;
         // pass the input to the car!

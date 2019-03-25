@@ -16,12 +16,12 @@ class CarControllerAI(object):
         if data:
             # print(steering_angle, throttle)
             print("its me, the pi instructor: ", self.lastCounter)
-            outputQueue.put({"steering":random.randint(-1,1)
+            outputQueue.put({"steering_angle":random.randint(-1,1)
                             , "throttle":random.randint(85,120)
-                            ,"accelx":random.randrange(0,8)
-                            ,"accely":random.randrange(0,8)
-                            ,"accelz":random.randrange(0,8)
-                            ,"proximity":random.randrange(4,20)})
+                            ,"accel_x_scaled":random.randrange(0,8)
+                            ,"accel_y_scaled":random.randrange(0,8)
+                            ,"accel_z_scaled":random.randrange(0,8)
+                            ,"proximity":random.randrange(4,2000)})
             self.lastCounter += 1
 
 
@@ -52,9 +52,10 @@ def stop():
     inputQueue.put(False)
 
 
-def run_steering_server(model_fnm, outputQueue):
+def runInstructor(model_fnm, outputQueue):
     print("run")
-    pool = ThreadPool(processes=1)
+
+    pool = ThreadPool(processes=3)
 
     lock = Lock()   
     print("pool and lock")
@@ -68,9 +69,9 @@ def run_steering_server(model_fnm, outputQueue):
     inputQueue.put(True)
     print("inputQ")
     # ss.go(model_fnm ,outputQueue, lock, inputQueue)
-
+    print("wo")
     async_result = pool.apply_async(ss.go, (model_fnm ,outputQueue, lock, inputQueue)) # tuple of args for foo
-    return_val = async_result.get()  # get the return value from your function.
+    # return_val = async_result.get()  # get the return value from your function.
     print("gone")
     # print(return_val)
     # ss.go(model_fnm)
@@ -81,7 +82,7 @@ if __name__ == "__main__":
     outputQueue = Queue()
 
 
-    run_steering_server("boots", outputQueue)
+    runInstructor("boots", outputQueue)
     try:
         while True:
             time.sleep(0.1)

@@ -65,11 +65,11 @@ class CarControllerAI(object):
         with PiCamera() as camera:
             camera.resolution = (160, 128)
             camera.framerate = 60
-            
+            time.sleep(5)
             # global continueRunningAI
             while continueRunningAI and inputQueue.get():
             
-                time.sleep(0.005)
+                time.sleep(0.05)
                 # print("its me the camera")
 
                 camera.capture(self.my_stream, 'bgr', use_video_port=True)
@@ -103,9 +103,10 @@ class CarControllerAI(object):
                 throttle = outputs[0][1]
             else:
                 #set throttle value here
-                throttle, brake = self.throttle_man.get_throttle_brake(speed, steering_angle)
+                #throttle, brake = self.throttle_man.get_throttle_brake(speed, steering_angle)
+                throttle = conf.manual_speed
 
-            print(steering_angle, throttle)
+            # print(steering_angle, throttle)
             outputQueueMotor.put({
                 "steering_angle":float(steering_angle)
                 ,"throttle":float(throttle)
@@ -143,15 +144,17 @@ class CarControllerAI(object):
         keras.backend.clear_session()
 
     def informationLog(self, inputQueue, outputQueue, outputQueueMotor):
-        print("immmma gonna logg")
         while inputQueue.get():
             time.sleep(0.05)
-            print("logger")
             motorData = skipInQueue(outputQueueMotor)
-            if bool(motorData):
-                data = self.logger.write(motorData["steering_angle"], motorData["throttle"], self.counter)
-                # print(data)
-                outputQueue.put(data)
+            try:
+                if bool(motorData):
+                    data = self.logger.write(motorData["steering_angle"], motorData["throttle"], self.counter)
+                else:
+                    data = self.logger.write(0, 0, self.counter)
+            except:
+                print("An exception occurred")
+            outputQueue.put(data)
             inputQueue.put(True)
 
 def stopQueue(queue):
@@ -198,6 +201,7 @@ def run_steering_server(model_fnm, outputQueue):
 
     result = pool.apply_async(ss.informationLog, (inputQueueLogger, outputQueue, outputQueueMotor)) 
 
+    # ss.go(model_fnm, lock, inputQueueMotor, outputQueueMotor)
 # ***** main loop *****
 if __name__ == "__main__":
 

@@ -17,26 +17,29 @@ class ProximityInterface(object):
         GPIO.output(self.PIN_TRIGGER, GPIO.LOW)
 
     def getProximity(self, trigger, echo):
+        try:
+            # send the signal
+            GPIO.output(trigger, GPIO.HIGH)
 
-        # send the signal
-        GPIO.output(trigger, GPIO.HIGH)
+            time.sleep(0.00001)
 
-        time.sleep(0.00001)
+            # stop sending
+            GPIO.output(trigger, GPIO.LOW)
 
-        # stop sending
-        GPIO.output(trigger, GPIO.LOW)
+            # get the times from echo
+            while GPIO.input(echo)==0:
+                pulse_start_time = time.time()
 
-        # get the times from echo
-        while GPIO.input(echo)==0:
-            pulse_start_time = time.time()
-
-        while GPIO.input(echo)==1:
-            pulse_end_time = time.time()
+            while GPIO.input(echo)==1:
+                pulse_end_time = time.time()
 
 
-        pulse_duration = pulse_end_time - pulse_start_time
-        distance = round(pulse_duration * 17150, 2)
-        return distance
+            pulse_duration = pulse_end_time - pulse_start_time
+            distance = round(pulse_duration * 17150, 2)
+            return distance
+        except:
+            print("proximity error")
+            return -1
 
     def getForwardProximity(self):
         return self.getProximity(self.PIN_TRIGGER, self.PIN_ECHO)

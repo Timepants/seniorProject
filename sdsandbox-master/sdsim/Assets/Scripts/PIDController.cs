@@ -38,7 +38,7 @@ public class PIDController : MonoBehaviour
     public float steeringCompensationLevel = 0.5f;
     public delegate void OnEndOfPathCB();
 
-    public int maxSteeringAngle = 7;
+    public int maxSteeringAngle = 1;
 
     public OnEndOfPathCB endOfPathCB;
 

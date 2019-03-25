@@ -100,10 +100,7 @@ def key(event, e):
 
 def main():
     print("Connecting to Arduino")
-    
-    
 
-    
     isMoving = False
     isMovingForward = False
     frame = Text(root, width=10, height=1)

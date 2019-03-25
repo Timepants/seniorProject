@@ -58,7 +58,7 @@ class SteeringServer(object):
         if data:
             # The current steering angle of the car
             steering_angle = float(data["steering_angle"])
-            print("steering angle:", float(data["steering_angle"]))
+            # print("steering angle:", float(data["steering_angle"]))
             # The current throttle of the car
             throttle = float(data["throttle"])
             # The current speed of the car
@@ -84,7 +84,17 @@ class SteeringServer(object):
                 #set throttle value here
                 throttle, brake = self.throttle_man.get_throttle_brake(speed, steering_angle)
 
-            #print(steering_angle, throttle)
+
+            # OldMax = 1
+            # OldMin = -1
+            # NewMax = 15
+            # NewMin = -15
+            # OldRange = (OldMax - OldMin)  
+            # NewRange = (NewMax - NewMin) 
+            # print(steering_angle)
+            # steering_angle = (((steering_angle - OldMin) * NewRange) / OldRange) + NewMin
+
+            print(steering_angle, throttle)
             self.send_control(steering_angle, throttle)
 
             # save frame

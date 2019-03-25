@@ -58,6 +58,12 @@ class CarLogger(object):
         ,throttle)
 
     def getData(self, steering_angle, throttle, count):
+
+        try:
+            prox = self.PX.getForwardProximity()
+        except:
+            print("proximity exception")
+            prox = -1
         data = {
             "time":datetime.datetime.now()
             ,"accel_x":self.AC.getAccelX()
@@ -74,7 +80,7 @@ class CarLogger(object):
             ,"gyro_z_scaled":self.AC.getGyroZScaled()
             ,"x_rotation":self.AC.getXRotation()
             ,"y_rotation":self.AC.getYRotation()
-            ,"proximity":self.PX.getForwardProximity()
+            ,"proximity":prox
             ,"steering_angle":steering_angle
             ,"throttle":throttle
             ,"count":count

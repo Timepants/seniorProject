@@ -19,7 +19,11 @@ col = image_width
 ch = image_depth
 
 #when we wish to try training for steering and throttle:
-num_outputs = 2
+# num_outputs = 2
 
 #when steering alone:
-# num_outputs = 1
+num_outputs = 1
+
+manual_speed = 85
+
+steering_threshold = 0.2

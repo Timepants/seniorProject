@@ -59,7 +59,7 @@ def stopQueue(queue):
     for i in range(20):
         queue.put(False)
 
-def stop():
+def stopMan():
     stopQueue(inputQueueController)
     stopQueue(inputQueueImage)
     stopQueue(inputQueueLogger)
@@ -72,6 +72,7 @@ def startQueue(queue):
 pool = ThreadPool(processes=3)
 
 def runInstructor(outputQueue):
+    
     lock = Lock()   
 
     control = CarControllerManual()
@@ -80,7 +81,7 @@ def runInstructor(outputQueue):
     startQueue(inputQueueLogger)
     startQueue(inputQueueImage)
 
-    # print("whats the deal")
+    print("whats the deal")
 
     # control.informationLog(inputQueueLogger, outputQueue)
 
@@ -115,7 +116,7 @@ if __name__ == "__main__":
                 
     except KeyboardInterrupt:
             # print ('Interrupted - closing')
-            stop()
+            stopMan()
             time.sleep(0.5)
             sys.exit(0)
 
