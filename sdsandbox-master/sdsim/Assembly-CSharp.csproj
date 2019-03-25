@@ -60,6 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Anim\AnimGif.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\CameraHelper.cs" />
     <Compile Include="Assets\Scripts\CameraSensor.cs" />
@@ -172,6 +173,7 @@
     <Compile Include="Assets\Scripts\Twiddle.cs" />
     <Compile Include="Assets\Scripts\TwiddlePID.cs" />
     <Compile Include="Assets\Scripts\UnityStandardCarAdapter.cs" />
+    <Compile Include="Assets\Scripts\UVAnimation.cs" />
     <Compile Include="Assets\TerrainToolkit\TerrainToolkit.cs" />
     <None Include="Assets\Resources\warehouse.txt" />
     <None Include="Assets\Scripts\SocketIO\Readme.txt" />

@@ -16,6 +16,7 @@ public class PIDController : MonoBehaviour
     public float Kp = 10.0f;
     public float Kd = 10.0f;
     public float Ki = 0.1f;
+   
 
     //Ks is the proportion of the current vel that
     //we use to sample ahead of the vehicles actual position.
@@ -49,6 +50,8 @@ public class PIDController : MonoBehaviour
     public bool brakeOnEnd = true;
 
     public bool doDrive = true;
+    public bool UseCameraView;
+    public RenderTexture CameraView;
     public float maxSpeed = 5.0f;
     public float TimeScale = 1f;
 

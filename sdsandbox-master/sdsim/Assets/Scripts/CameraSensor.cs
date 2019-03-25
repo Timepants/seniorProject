@@ -7,15 +7,24 @@ public class CameraSensor : MonoBehaviour {
 	public Camera sensorCam;
 	public int width = 256;
 	public int height = 256;
+    public PIDController pid;
+    
 
 	Texture2D tex;
 	RenderTexture ren;
 
 	void Awake()
 	{
-		tex = new Texture2D(width, height, TextureFormat.RGB24, false);
-		ren = new RenderTexture(width, height, 16, RenderTextureFormat.ARGB32);
-		sensorCam.targetTexture = ren;
+        if (pid.UseCameraView)
+        {
+            sensorCam.targetTexture = pid.CameraView;
+        }
+        else
+        {
+            tex = new Texture2D(width, height, TextureFormat.RGB24, false);
+            ren = new RenderTexture(width, height, 16, RenderTextureFormat.ARGB32);
+            sensorCam.targetTexture = ren;
+        }
 	}
 
 	Texture2D RTImage(Camera cam) 
@@ -28,6 +37,8 @@ public class CameraSensor : MonoBehaviour {
 		RenderTexture.active = currentRT;
 		return tex;
 	}
+
+   
 
 	public Texture2D GetImage()
 	{
