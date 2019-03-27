@@ -2,7 +2,6 @@
 *.h5
 sdsim/Library
 sdsim/log/*
-sdsim/obj
 sdsim/*.sln
 sdsim/*.userprefs
 sdsim/Temp
