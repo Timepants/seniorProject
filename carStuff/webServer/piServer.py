@@ -1,7 +1,5 @@
-import sys
-
-import os,sys
-
+import os,sys, time
+from stat import S_ISREG, ST_CTIME, ST_MODE
 # from piInstructorInterface import run_steering_server, stop
 
 from piInstructor import run_steering_server, stop
@@ -51,8 +49,28 @@ class AppServer():
         # return jsonify(result=self.a + self.b)
 
     def getModels(self):
-        files = os.listdir("carModels/")
+        files = list()
+        #Relative or absolute path to the directory
+        dir_path = "carModels/"
 
+        #all entries in the directory w/ stats
+        data = (os.path.join(dir_path, fn) for fn in os.listdir(dir_path))
+        data = ((os.stat(path), path) for path in data)
+
+
+        # regular files, insert creation date
+        data = ((stat[ST_CTIME], path)
+                for stat, path in data if S_ISREG(stat[ST_MODE]))
+
+
+        for cdate, path in sorted(data):
+            print(time.ctime(cdate), os.path.basename(path))
+            files.append({
+                "date":time.ctime(cdate)
+                ,"file_name":os.path.basename(path)
+            })
+
+        
         return files
 
     def showLogger(self):

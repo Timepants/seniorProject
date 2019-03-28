@@ -19,7 +19,7 @@ canvas{
 }
 
 .top-padding{
-    padding-top: 30px;
+    padding-top: 20px;
 }
 
 html, body{
@@ -28,7 +28,9 @@ html, body{
 .white-text{
     color: var(--white);
 }
-
+.svg-color{
+    fill: var(--white);
+}
 #proximity {
     font-size: 5em;
 }
@@ -39,7 +41,14 @@ html, body{
 .max-height-90 {
     max-height: 90px;
 }
+.max-height-110 {
+    max-height: 110px;
+}
 
 .btn-danger{
     background-color: var(--red);
+}
+.btn-primary{
+    background-color: var(--green);
+    border-color: var(--green);
 }
