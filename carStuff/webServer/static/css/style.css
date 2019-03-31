@@ -1,15 +1,16 @@
 :root {
     --blue:#4b88a2;
-    --white: #eaeaea; 
+    --white: #eaeaea;
     --red: #bb0a21; 
     --black: #101111; 
-    --green: #21897e; 
+    --green: #23867c;
+    --light-green: #279b8f; 
     --light-gray: #B0B0B0;
     --dark-gray: #606060;
   }
 
 canvas{
-    background-color: var(--white);
+    background-color: var(--blue);
     padding: 15px;
     /* padding-top: 15px;
     padding-bottom: 15px;
@@ -22,11 +23,57 @@ canvas{
     padding-top: 20px;
 }
 
-html, body{
+html{
+    background-image: url("../img/curiopo-background.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+
+    background-color: var(--white);
+}
+html:after{
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    z-index: -1;
+    background: radial-gradient(transparent 50%, var(--blue) 150%);
+
+}
+body{
+    background-color: #00000000
+}
+.background-color-green{
+    background-color: var(--green);
+}
+.background-color-green:hover{
+    background-color: var(--light-green);
+}
+.background-color-light-gray{
+    background-color: var(--light-gray);
+}
+.background-color-dark-gray{
+    background-color: var(--dark-gray);
+}
+.background-color-dark-gray:hover{
+    background-color: var(--light-gray);
+}
+.background-color-white{
+    background-color: var(--white);
+}
+.background-color-white:hover{
+    background-color: var(--green);
+}
+.background-color-red{
+    background-color: var(--red);
+}
+.background-color-blue{
     background-color: var(--blue);
 }
 .white-text{
     color: var(--white);
+}
+.black-text{
+    color: var(--black);
 }
 .svg-color{
     fill: var(--white);
@@ -44,11 +91,18 @@ html, body{
 .max-height-110 {
     max-height: 110px;
 }
-
+.card{
+    width: 250px;
+    margin: 10px;
+}
 .btn-danger{
     background-color: var(--red);
 }
 .btn-primary{
     background-color: var(--green);
     border-color: var(--green);
+}
+.btn-secondary{
+    background-color: var(--blue);
+    border-color: var(--blue);
 }

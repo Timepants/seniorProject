@@ -2,7 +2,7 @@
     <!-- <div> -->
       <div class="row align-items-center">
           <div class="col-lg-4">
-        <h1 class="white-text">Throttle</h1>
+        <h1 class="black-text">Throttle</h1>
           <canvas id="canvasThrottle"></canvas>
         <br>
         <br>
@@ -25,17 +25,17 @@
       </div>
       <div class="row max-height-90">
         <div class="mx-auto">
-          <span class="white-text" id="proximity">?</span>
+          <span class="black-text" id="proximity">?</span>
         </div>
       </div>
       <div class="row">
         <div class="mx-auto">
-          <span id="px-unit" class="white-text">Distance (cm)</span>
+          <span id="px-unit" class="black-text">Distance (cm)</span>
         </div>
       </div>
     </div>
       <div class="col-lg-4">
-    <h1 class="white-text">Accelerometer</h1>
+    <h1 class="black-text">Accelerometer</h1>
       <canvas id="canvasAccel"></canvas>
     <br>
     <br>
@@ -100,10 +100,10 @@ var animationTime = 500;
             labelString: 'Value'
           }
           ,ticks: {
-            fontColor: window.chartColors.black,
+            fontColor: window.chartColors.white,
           }
           ,gridLines: {
-            color: window.chartColors.green,
+            color: window.chartColors.white,
             lineWidth: 0.5
           }
         }]
@@ -126,8 +126,8 @@ var configAccel = {
 type: 'line',
 data: {
   datasets: [{
-    backgroundColor: window.chartColors.blue,
-    borderColor: window.chartColors.blue,
+    backgroundColor: window.chartColors.white,
+    borderColor: window.chartColors.white,
     data: [
 
     ],
@@ -183,10 +183,10 @@ options: {
         labelString: 'Value'
       }
       ,ticks: {
-            fontColor: window.chartColors.black,
+            fontColor: window.chartColors.white,
           }
           ,gridLines: {
-            color: window.chartColors.green,
+            color: window.chartColors.white,
             lineWidth: 0.5
           }
     }]
