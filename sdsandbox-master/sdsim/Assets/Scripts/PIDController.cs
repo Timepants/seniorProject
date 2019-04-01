@@ -43,7 +43,7 @@ public class PIDController : MonoBehaviour
 
     bool isDriving = false;
     public bool waitForStill = true;
-    public bool stopOffRoad = true;
+    //public bool stopOffRoad = true;
 
     public bool startOnWake = false;
 
@@ -221,20 +221,20 @@ public class PIDController : MonoBehaviour
 
 
 
-            int l = 1;
-            if (l == 1)
-            {
-                float dist = Vector3.Distance(car.GetTransform().position, n.pos);
-                //print(car.GetTransform().position + " ----- " + n.pos);
-                //print("Distance? -- " + dist);
+            //int l = 1;
+            //if (l == 1)
+            //{
+            //    float dist = Vector3.Distance(car.GetTransform().position, n.pos);
+            //    //print(car.GetTransform().position + " ----- " + n.pos);
+            //    //print("Distance? -- " + dist);
 
-                if (dist > 3f)
-                {
-                    car.RequestThrottle(0.0f);
-                    car.RequestFootBrake(1f);
+            //    if (dist > 3f)
+            //    {
+            //        car.RequestThrottle(0.0f);
+            //        car.RequestFootBrake(1f);
 
-                }
-            }
+            //    }
+            //}
         }
 
         if (pid_steering != null)

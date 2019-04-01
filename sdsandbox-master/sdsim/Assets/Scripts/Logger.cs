@@ -99,12 +99,14 @@ public class Logger : MonoBehaviour {
 
         if (optionlB_CamSensor != null)
         {
+            print("BCAM");
             SaveCamSensor(camSensor, activity, "_a");
             SaveCamSensor(optionlB_CamSensor, activity, "_b");
         }
         else
         {
-            SaveCamSensor(camSensor, activity, "");
+            print("NOT BCAM");
+            SaveCamSensor(camSensor, activity, "??????");
         }
 
         if (maxFramesToLog != -1 && frameCounter >= maxFramesToLog)
@@ -125,7 +127,7 @@ public class Logger : MonoBehaviour {
     }
 
     //Save the camera sensor to an image. Use the suffix to distinguish between cameras.
-    void SaveCamSensor(CameraSensor cs, string prefix, string suffix)
+    void SaveCamSensor(CameraSensor cs,  string prefix, string suffix)
     {
         if (cs != null)
         {
@@ -159,7 +161,7 @@ public class Logger : MonoBehaviour {
 			{
 				ImageSaveJob ij = imagesToSave[0];
 
-                //Debug.Log("saving: " + ij.filename);
+                Debug.Log("saving: " + ij.filename);
 
                 File.WriteAllBytes(ij.filename, ij.bytes);
 
