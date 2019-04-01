@@ -17,7 +17,7 @@
     <script src="{{ url_for('static', filename='chart/utils.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <title>Hello, world!</title>
+    <title>Curiopo!</title>
   </head>
   <body>
 
@@ -51,20 +51,24 @@
 
   <h1>Upload AI model</h1>
   <form method=post action="{{ url_for('upload_file') }}" enctype=multipart/form-data>
-    <div style="width: inherit" class="custom-file">
-      <input name="file" type="file" class="custom-file-input" id="customFile">
+    <div class="form-row align-items-center">
+
+    <div class="custom-file col-sm-9" style="margin-right: 10px;">
+      <input required name="file" type="file" class="custom-file-input" id="customFile">
       <label class="custom-file-label" for="customFile">Choose file</label>
     </div>
-    
-    <input class="btn btn-secondary" type=submit value=Upload>
+    <button class="btn btn-secondary col-auto" type=submit value=Upload>
+        <svg class="svg-color" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>  
+      </button>
+  </div>
+
   </form>
   <br>
   <h1>Manual Training</h1>
   <!-- <h5>Launch manual training</h5> -->
   <form method="POST">
-      <button id="steering-wheel" class='btn btn-primary d-block mx-auto' type="submit" name="manual" value=manual>
-      <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"width="140" height="140" viewBox="0 0 32 32" 
-      class="svg-color" xml:space="preserve">
+      <button id="steering-wheel" class='btn btn-info d-block mx-auto' type="submit" name="manual" value=manual>
+      <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"width="140" height="140" viewBox="0 0 32 32"  xml:space="preserve">
         <g>
           <g id="steering_x5F_wheel">
             <path  d="M16,0C7.164,0,0,7.164,0,16s7.164,16,16,16s16-7.164,16-16S24.836,0,16,0z M16,4
@@ -79,7 +83,9 @@
   <br>
   {% if hasManualData %}
   <h5>Download manual training data</h5>
-  <a class='btn btn-secondary' href="{{ url_for('return_training_files') }}" target="blank">Download!</a>
+  <a class='btn btn-secondary' href="{{ url_for('return_training_files') }}" target="blank">
+    <svg class="svg-color" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+  </a>
   {% endif %}
 </div>
 <div class="col-md-9">

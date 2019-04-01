@@ -7,8 +7,9 @@
     --green: #23867c;
     --light-green: #279b8f; 
     --light-gray: #B0B0B0;
-    --dark-gray: #606060;
+    --dark-gray: #414141;
   }
+
 
 canvas{
     background-color: var(--blue);
@@ -95,6 +96,9 @@ body{
     padding: 2px;
     border-radius: 50%;
 }
+#steering-wheel svg{
+    fill: var(--red)
+}
 .max-height-90 {
     max-height: 90px;
 }
@@ -103,7 +107,11 @@ body{
 }
 .card{
     width: 250px;
-    margin: 10px;
+    /* margin: 10px; */
+
+    margin: 0 auto; /* Added */
+    float: none; /* Added */
+    margin-bottom: 10px; /* Added */
 }
 .btn-danger{
     background-color: var(--red);
@@ -133,4 +141,17 @@ body{
 .btn-secondary:not(:disabled):not(.disabled).active, .btn-secondary:not(:disabled):not(.disabled):active, .show>.btn-secondary.dropdown-toggle {
     background-color: var(--blue);
     border-color: var(--blue);
+}
+
+.btn-info{
+    background-color: var(--black);
+    border-color: var(--black);
+}
+.btn-info:hover{
+    background-color: var(--dark-gray);
+    border-color: var(--dark-gray);
+}
+.btn-info:not(:disabled):not(.disabled).active, .btn-info:not(:disabled):not(.disabled):active, .show>.btn-info.dropdown-toggle {
+    background-color: var(--black);
+    border-color: var(--black);
 }
