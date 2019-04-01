@@ -2,7 +2,7 @@ import os,sys, time
 from stat import S_ISREG, ST_CTIME, ST_MODE
 from piInstructorInterface import runInstructor, stop
 from datetime import datetime
-from zipLog import zipper, clearPrevious
+from zipLog import zipper, clearPrevious, hasManualData, hasPackagedData, getZipFileName
 # from piInstructor import run_steering_server, stop
 
 from flask import Flask, jsonify, render_template, request, Response, send_file, flash, redirect, url_for, send_from_directory
@@ -17,6 +17,8 @@ from io import BytesIO
 class AppServer():
     def __init__(self):
         self.started = False
+        self.paused = False
+        self.model = "none"
         self.data = self.data = {
                 "throttle":0
                 ,"accel": [0
@@ -85,7 +87,8 @@ class AppServer():
 
             model = request.form.get('model', None)
             if model is not None and not self.started:
-                runInstructor("carModels/"+model, outputQueue)
+                self.model = model
+                runInstructor("carModels/"+self.model, outputQueue)
                 self.started = True
 
             delete = request.form.get('delete', None)
@@ -100,8 +103,24 @@ class AppServer():
             stopper = request.form.get('stop', None)
             if stopper is not None:
                 self.started = False
+                self.paused = False
                 stop()
-        return render_template('bootstrap.html', models = self.getModels(), isRunning = self.started)
+
+            pause = request.form.get('pause', None)
+            if pause is not None:
+                self.paused = True
+                stop()
+
+            play = request.form.get('play', None)
+            if play is not None:
+                self.paused = False
+                runInstructor("carModels/"+self.model, outputQueue)
+
+        return render_template('bootstrap.html'
+                    , models = self.getModels()
+                    , isRunning = self.started
+                    , isPaused = self.paused
+                    , hasManualData = (hasManualData() or hasPackagedData()))
 appServer = AppServer()
 
 UPLOAD_FOLDER = 'carModels/'
@@ -142,8 +161,11 @@ def video_feed():
 @app.route('/return-training-files/')
 def return_training_files():
     try:
-        clearPrevious()
-        fileName = zipper()
+        if (not hasPackagedData() and not hasManualData()):
+            clearPrevious()
+            fileName = zipper()
+        else:
+            fileName = getZipFileName()
         return send_file(fileName, as_attachment=True, attachment_filename="training_img.zip")
     except Exception as e:
 	    return str(e)

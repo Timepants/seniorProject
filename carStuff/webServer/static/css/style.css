@@ -1,5 +1,6 @@
 :root {
     --blue:#4b88a2;
+    --light-blue:#5396b3;
     --white: #eaeaea;
     --red: #bb0a21; 
     --black: #101111; 
@@ -18,7 +19,11 @@ canvas{
     border-radius: 15px;
 
 }
-
+.right-border{
+    border-style: solid;
+    border-width: 0px 1px 0px 0px;
+    border-color: var(--black)
+}
 .top-padding{
     padding-top: 20px;
 }
@@ -28,16 +33,15 @@ html{
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
-
+    background-size: 75%;
     background-color: var(--white);
 }
 html:after{
     content: '';
-    position: absolute;
+    position: fixed;
     top: 0; left: 0; bottom: 0; right: 0;
     z-index: -1;
     background: radial-gradient(transparent 50%, var(--blue) 150%);
-
 }
 body{
     background-color: #00000000
@@ -69,6 +73,9 @@ body{
 .background-color-blue{
     background-color: var(--blue);
 }
+.background-color-blue:hover{
+    background-color: var(--light-blue);
+}
 .white-text{
     color: var(--white);
 }
@@ -84,7 +91,10 @@ body{
 #px-unit {
     font-size: 2em;
 }
-
+#steering-wheel{
+    padding: 2px;
+    border-radius: 50%;
+}
 .max-height-90 {
     max-height: 90px;
 }
@@ -97,12 +107,30 @@ body{
 }
 .btn-danger{
     background-color: var(--red);
+    border-color: var(--red);
 }
 .btn-primary{
     background-color: var(--green);
     border-color: var(--green);
 }
+.btn-primary:hover{
+    background-color: var(--light-green);
+    border-color: var(--light-green);
+}
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
+    background-color: var(--green);
+    border-color: var(--green);
+}
+
 .btn-secondary{
+    background-color: var(--blue);
+    border-color: var(--blue);
+}
+.btn-secondary:hover{
+    background-color: var(--light-blue);
+    border-color: var(--light-blue);
+}
+.btn-secondary:not(:disabled):not(.disabled).active, .btn-secondary:not(:disabled):not(.disabled):active, .show>.btn-secondary.dropdown-toggle {
     background-color: var(--blue);
     border-color: var(--blue);
 }

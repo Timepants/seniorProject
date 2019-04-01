@@ -20,6 +20,7 @@
     <title>Hello, world!</title>
   </head>
   <body>
+
 <div class="container-fluid top-padding">
   <img class="img-fluid mx-auto d-block max-height-110" src="{{ url_for('static', filename='img/curiopo.png') }}">
 {% if isRunning %}
@@ -28,25 +29,60 @@
   <div class="d-flex justify-content-center">
     <div class="p-2">
       <form method="POST">
+        {% if isPaused %}
+        <button type="submit" class="btn btn-primary" name="play" value=play>
+            <svg class="svg-color" xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+        </button>
+        {% else %}
+        <button type="submit" class="btn btn-primary" name="pause" value=pause>
+            <svg class="svg-color" xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+        </button>
+        {% endif %}
         <button id="btn-stop"type="submit" class="btn btn-danger" name="stop" value=stop>
-            <img src="{{ url_for('static', filename='img/icon/stop.png') }}">
+            <!-- <img src="{{ url_for('static', filename='img/icon/stop.png') }}"> -->
+            <svg class="svg-color" xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M6 6h12v12H6z"/></svg>
         </button>
       </form>
     </div>
   </div>
 {% else %}
 <div class="row">
-  <div class="col-3">
-  <form method="POST">
-      <input class='btn btn-primary' type="submit" name="manual" value=manual>
-    </form>
-  <a class='btn btn-primary' href="{{ url_for('return_training_files') }}" target="blank">Download!</a>
+  <div class="col-md-3 right-border">
+
+  <h1>Upload AI model</h1>
   <form method=post action="{{ url_for('upload_file') }}" enctype=multipart/form-data>
-    <input type=file name=file>
-    <input type=submit value=Upload>
+    <div style="width: inherit" class="custom-file">
+      <input name="file" type="file" class="custom-file-input" id="customFile">
+      <label class="custom-file-label" for="customFile">Choose file</label>
+    </div>
+    
+    <input class="btn btn-secondary" type=submit value=Upload>
   </form>
+  <br>
+  <h1>Manual Training</h1>
+  <!-- <h5>Launch manual training</h5> -->
+  <form method="POST">
+      <button id="steering-wheel" class='btn btn-primary d-block mx-auto' type="submit" name="manual" value=manual>
+      <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"width="140" height="140" viewBox="0 0 32 32" 
+      class="svg-color" xml:space="preserve">
+        <g>
+          <g id="steering_x5F_wheel">
+            <path  d="M16,0C7.164,0,0,7.164,0,16s7.164,16,16,16s16-7.164,16-16S24.836,0,16,0z M16,4
+              c5.207,0,9.605,3.354,11.266,8H4.734C6.395,7.354,10.793,4,16,4z M16,18c-1.105,0-2-0.895-2-2s0.895-2,2-2s2,0.895,2,2
+              S17.105,18,16,18z M4,16c5.465,0,9.891,5.266,9.984,11.797C8.328,26.828,4,21.926,4,16z M18.016,27.797
+              C18.109,21.266,22.535,16,28,16C28,21.926,23.672,26.828,18.016,27.797z"/>
+          </g>
+        </g>
+      </svg>
+      </button>
+    </form>
+  <br>
+  {% if hasManualData %}
+  <h5>Download manual training data</h5>
+  <a class='btn btn-secondary' href="{{ url_for('return_training_files') }}" target="blank">Download!</a>
+  {% endif %}
 </div>
-<div class="col-9">
+<div class="col-md-9">
     <h1 class="black-text">Brains</h1>
     <div class="row">
 
@@ -115,5 +151,12 @@
     <script src="{{ url_for('static', filename='jquery/jquery-3.3.1.min.js') }}"></script>
     <script src="{{ url_for('static', filename='popper/popper.min.js') }}"></script>
     <script src="{{ url_for('static', filename='bootstrap/bootstrap.min.js') }}"></script>
+    <script>
+        // Add the following code if you want the name of the file appear on select
+        $(".custom-file-input").on("change", function() {
+          var fileName = $(this).val().split("\\").pop();
+          $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+        </script>
   </body>
 </html>
