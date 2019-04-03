@@ -107,10 +107,10 @@ public class SocketIODriveClient : MonoBehaviour {
 
         if (steeringnum < -0.2f)
         {
-            steering = -5.0f;
+            steering = -7.0f;
         } else if (steeringnum > 0.2f)
         {
-            steering = 5.0f;
+            steering = 7.0f;
         } else
         {
             steering = 0.0f;

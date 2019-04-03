@@ -163,15 +163,17 @@ public class PIDController : MonoBehaviour
         {
             if (brakeOnEnd)
             {
-                car.RequestFootBrake(1.0f);
 
-                if (car.GetAccel().magnitude < 0.01f)
-                {
+                car.RequestFootBrake(1.0f);
+                car.RequestThrottle(0.0f);
+              
+                //if (car.GetAccel().magnitude < 3f)
+                //{
                     isDriving = false;
 
                     if (endOfPathCB != null)
                         endOfPathCB.Invoke();
-                }
+                //}
             }
             else
             {
@@ -205,16 +207,16 @@ public class PIDController : MonoBehaviour
 
         if (doDrive)
         {
-            if (car.GetVelocity().magnitude < car.GetSpeed())
+            //if (car.GetVelocity().magnitude < car.GetSpeed())
                 car.RequestThrottle(throttleVal);
-            else
-                car.RequestThrottle(0.0f);
+            //else
+            //    car.RequestThrottle(0.0f);
 
-            if (car.GetAccel().magnitude > 4f)
-            {
-                car.RequestThrottle(0.0f);
-                car.RequestFootBrake(1.0f);
-            }
+            //if (car.GetAccel().magnitude > 4f)
+            //{
+            //    car.RequestThrottle(0.0f);
+            //    car.RequestFootBrake(1.0f);
+            //}
             //} else
             //{
             //    //car.RequestFootBrake(0.0f);
@@ -228,13 +230,24 @@ public class PIDController : MonoBehaviour
             {
                 float dist = Vector3.Distance(car.GetTransform().position, n.pos);
                 //print(car.GetTransform().position + " ----- " + n.pos);
-                //print("Distance? -- " + dist);
+                print("Distance? -- " + dist);
 
-                if (dist > 3f)
+                if (dist > 2.2f)
                 {
+                    car.RequestFootBrake(1.0f);
                     car.RequestThrottle(0.0f);
-                    car.RequestFootBrake(1f);
 
+                    if (dist > 2.2f)
+                    {
+                        isDriving = false;
+
+                        if (endOfPathCB != null)
+                            endOfPathCB.Invoke();
+                    }
+                }
+                else
+                {
+                    car.RequestFootBrake(0.0f);
                 }
             }
         }
@@ -242,7 +255,7 @@ public class PIDController : MonoBehaviour
         if (pid_steering != null)
             pid_steering.text = string.Format("PID: {0} {1}", steeringReq, steering);
         print(car.GetThrottle());
-        
+        print("mag:" + car.GetAccel().magnitude);
 
         //accumulate total error
         totalError += err;
