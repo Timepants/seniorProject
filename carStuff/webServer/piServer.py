@@ -60,7 +60,7 @@ class AppServer():
                 for stat, path in data if S_ISREG(stat[ST_MODE]))
 
 
-        for cdate, path in sorted(data):
+        for cdate, path in sorted(data, reverse=True):
             ts = int(cdate)
             files.append({
                 "date":datetime.utcfromtimestamp(ts).strftime("%-m/%-d/%y, %-I:%M")
