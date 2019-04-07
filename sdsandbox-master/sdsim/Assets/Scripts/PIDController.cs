@@ -242,7 +242,7 @@ public class PIDController : MonoBehaviour
                     car.RequestFootBrake(1.0f);
                     
 
-                    if (dist > 2.4f)
+                    if (dist > 3f)
                     {
                         isDriving = false;
 
