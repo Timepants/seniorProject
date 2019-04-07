@@ -130,11 +130,11 @@ public class SocketIODriveClient : MonoBehaviour {
         else
             car.RequestThrottle(0.0f);
 
-        if (car.GetAccel().magnitude > 4f)
-        {
-            car.RequestThrottle(0.0f);
-            car.RequestFootBrake(1.0f);
-        }
+        // if (car.GetAccel().magnitude > 4f)
+        // {
+        //     car.RequestThrottle(0.0f);
+        //     car.RequestFootBrake(1.0f);
+        // }
 
         if (ai_steering != null)
 			ai_steering.text = string.Format("NN: {0} {1}", steering, throttle);
