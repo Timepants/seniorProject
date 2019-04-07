@@ -163,17 +163,17 @@ public class PIDController : MonoBehaviour
         {
             if (brakeOnEnd)
             {
-
-                car.RequestFootBrake(1.0f);
                 car.RequestThrottle(0.0f);
+                car.RequestFootBrake(1.0f);
+               
               
-                //if (car.GetAccel().magnitude < 3f)
-                //{
+                if (car.GetAccel().magnitude < 3f)
+                {
                     isDriving = false;
 
                     if (endOfPathCB != null)
                         endOfPathCB.Invoke();
-                //}
+                }
             }
             else
             {
@@ -207,7 +207,7 @@ public class PIDController : MonoBehaviour
 
         if (doDrive)
         {
-            //if (car.GetVelocity().magnitude < car.GetSpeed())
+            if (car.GetVelocity().magnitude < car.GetSpeed())
                 car.RequestThrottle(throttleVal);
             //else
             //    car.RequestThrottle(0.0f);
@@ -234,10 +234,11 @@ public class PIDController : MonoBehaviour
 
                 if (dist > 2.2f)
                 {
-                    car.RequestFootBrake(1.0f);
                     car.RequestThrottle(0.0f);
+                    car.RequestFootBrake(1.0f);
+                    
 
-                    if (dist > 2.2f)
+                    if (dist > 2.4f)
                     {
                         isDriving = false;
 
