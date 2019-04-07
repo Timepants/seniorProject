@@ -14,6 +14,7 @@ public class SocketIODriveClient : MonoBehaviour {
     private SocketIOComponent _socket;
     bool collectData = false;
 
+    public PIDController PID;
     public Text ai_steering;
 
     bool runThread = false;
@@ -104,10 +105,10 @@ public class SocketIODriveClient : MonoBehaviour {
 		float throttle = float.Parse(jsonObject.GetField("throttle").str);
         print(throttle);
 
-        if (steeringnum < -1.0f)
+        if (steeringnum < -0.2f)
         {
             steering = -7.0f;
-        } else if (steeringnum > 1.0f)
+        } else if (steeringnum > 0.2f)
         {
             steering = 7.0f;
         } else
@@ -115,12 +116,27 @@ public class SocketIODriveClient : MonoBehaviour {
             steering = 0.0f;
         }
 
+        
+
         car.RequestSteering(steering);
 		car.RequestThrottle(throttle);
 		car.RequestFootBrake(0.0f);
 		car.RequestHandBrake(0.0f);
 
-        if(ai_steering != null)
+
+
+        if (car.GetVelocity().magnitude < car.GetSpeed())
+            car.RequestThrottle(throttle);
+        else
+            car.RequestThrottle(0.0f);
+
+        // if (car.GetAccel().magnitude > 4f)
+        // {
+        //     car.RequestThrottle(0.0f);
+        //     car.RequestFootBrake(1.0f);
+        // }
+
+        if (ai_steering != null)
 			ai_steering.text = string.Format("NN: {0} {1}", steering, throttle);
 
         EmitTelemetry(obj);

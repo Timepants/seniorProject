@@ -16,3 +16,5 @@ sdsandbox-master/sdsim/log/
 carStuff/src/img/
 
 carStuff/src/__pycache__/
+
+carStuff/webServer/training_img/

@@ -9,7 +9,7 @@ public class JoystickCarControl : MonoBehaviour
 	private ICar car;
 
 	public float MaximumSteerAngle = 1.0f; //has to be kept in sync with the car, as that's a private var.
-	
+    public int steeringSetting = 7;
 	void Awake()
 	{
 		if(carObj != null)
@@ -23,9 +23,9 @@ public class JoystickCarControl : MonoBehaviour
         // pass the input to the car!
         float h = CrossPlatformInputManager.GetAxis("Horizontal") * MaximumSteerAngle;
         if (h > .5)
-            steer = 7;
+            steer = steeringSetting;
         else if (h < -.5)
-            steer = -7;
+            steer = -1 * steeringSetting;
         else
             steer = 0;
         // pass the input to the car!

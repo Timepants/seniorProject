@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <style>
+      canvas{
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+      }
+      </style>
+    <!-- Bootstrap CSS -->
+    <script src="{{ url_for('static', filename='chart/Chart.js') }}"></script>
+    <script src="{{ url_for('static', filename='chart/utils.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Hello, world!</title>
+  </head>
+  <body>
+<div class="container-fluid top-padding">
+{% if isRunning %}
+
+  {% include 'logger.html' %}
+  <div class="d-flex justify-content-center">
+    <div class="p-2">
+      <form method="POST">
+        <button id="btn-stop"type="submit" class="btn btn-danger" name="stop" value=stop>
+            <img src="{{ url_for('static', filename='img/icon/stop.png') }}">
+        </button>
+      </form>
+    </div>
+  </div>
+{% else %}
+  {% for model in models %}
+    <form method="POST">
+        <input type="submit" class="btn btn-primary" name="model" value="{{ model }}">
+    </form>
+
+    <!-- <li><h2>{{ entry }}</h2>{{ entry | safe }} -->
+  {% else %}
+
+    <li><em>Unbelievable.  No entries here so far</em>
+  {% endfor %}
+  <!-- <img id="video" src="{{ url_for('video_feed') }}"> -->
+
+  <form method="POST">
+    <input type="submit" name="manual" value=manual>
+  </form>
+
+{% endif %}
+</div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="{{ url_for('static', filename='jquery/jquery-3.3.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='popper/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap/bootstrap.min.js') }}"></script>
+  </body>
+</html>

@@ -53,12 +53,19 @@ class SteeringServer(object):
         self.throttle_man = throttle_manager.ThrottleManager(idealSpeed = 10.)
         self.image_cb = image_cb
         self.image_folder = image_folder
-
+        self.counter = 0
+        self.counter2 = 0
+        self.start = time.time()
+        self.start2 = time.time()
+        self.start3 = time.time()
+        self.responseTime= 0
+        self.lastCounter = 0
     def telemetry(self, sid, data):
         if data:
+            print("__________________"+str(self.lastCounter)+"__________________")
             # The current steering angle of the car
             steering_angle = float(data["steering_angle"])
-            print("steering angle:", float(data["steering_angle"]))
+            # print("steering angle:", float(data["steering_angle"]))
             # The current throttle of the car
             throttle = float(data["throttle"])
             # The current speed of the car
@@ -84,9 +91,25 @@ class SteeringServer(object):
                 #set throttle value here
                 throttle, brake = self.throttle_man.get_throttle_brake(speed, steering_angle)
 
-            #print(steering_angle, throttle)
-            self.send_control(steering_angle, throttle)
 
+            # OldMax = 1
+            # OldMin = -1
+            # NewMax = 15
+            # NewMin = -15
+            # OldRange = (OldMax - OldMin)  
+            # NewRange = (NewMax - NewMin) 
+            # print(steering_angle)
+            # steering_angle = (((steering_angle - OldMin) * NewRange) / OldRange) + NewMin
+
+            self.counter += 1
+            if time.time() - self.start2 > 10:
+                self.lastCounter = self.counter
+                self.start2 = time.time()
+                self.counter = 0
+
+            print(steering_angle, throttle)
+            self.send_control(steering_angle, throttle)
+            time.sleep(.07)
             # save frame
             if self.image_folder is not None:
                 timestamp = datetime.utcnow().strftime('%Y_%m_%d_%H_%M_%S_%f')[:-3]
@@ -97,6 +120,7 @@ class SteeringServer(object):
             self.sio.emit('manual', data={}, skip_sid=True)
 
         self.timer.on_frame()
+
 
     def connect(self, sid, environ):
         print("connect ", sid)

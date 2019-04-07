@@ -1,0 +1,165 @@
+:root {
+    --blue:#4b88a2;
+    --light-blue:#5396b3;
+    --white: #eaeaea;
+    --red: #bb0a21; 
+    --black: #101111; 
+    --green: #23867c;
+    --light-green: #279b8f; 
+    --light-gray: #B0B0B0;
+    --dark-gray: #414141;
+  }
+
+
+canvas{
+    background-color: var(--blue);
+    padding: 15px;
+    /* padding-top: 15px;
+    padding-bottom: 15px;
+    padding-right: 5px; */
+    border-radius: 15px;
+
+}
+.right-border{
+    border-style: solid;
+    border-width: 0px 1px 0px 0px;
+    border-color: var(--black)
+}
+.top-padding{
+    padding-top: 20px;
+}
+
+html{
+    background-image: url("../img/curiopo-background.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: 75%;
+    background-color: var(--white);
+}
+html:after{
+    content: '';
+    position: fixed;
+    top: 0; left: 0; bottom: 0; right: 0;
+    z-index: -1;
+    background: radial-gradient(transparent 50%, var(--blue) 150%);
+}
+body{
+    background-color: #00000000
+}
+.background-color-green{
+    background-color: var(--green);
+}
+.background-color-green:hover{
+    background-color: var(--light-green);
+}
+.background-color-light-gray{
+    background-color: var(--light-gray);
+}
+.background-color-dark-gray{
+    background-color: var(--dark-gray);
+}
+.background-color-dark-gray:hover{
+    background-color: var(--light-gray);
+}
+.background-color-white{
+    background-color: var(--white);
+}
+.background-color-white:hover{
+    background-color: var(--green);
+}
+.background-color-red{
+    background-color: var(--red);
+}
+.background-color-blue{
+    background-color: var(--blue);
+}
+.background-color-blue:hover{
+    background-color: var(--light-blue);
+}
+.white-text{
+    color: var(--white);
+}
+.black-text{
+    color: var(--black);
+}
+.svg-color{
+    fill: var(--white);
+}
+#proximity {
+    font-size: 5em;
+}
+#px-unit {
+    font-size: 2em;
+}
+#steering-wheel{
+    padding: 2px;
+    border-radius: 50%;
+}
+#steering-wheel svg{
+    fill: var(--red)
+}
+.max-height-90 {
+    max-height: 90px;
+}
+.max-height-110 {
+    max-height: 110px;
+}
+.card{
+    width: 250px;
+    margin: 10px;
+
+}
+.btn-danger{
+    background-color: var(--red);
+    border-color: var(--red);
+}
+.btn-primary{
+    background-color: var(--green);
+    border-color: var(--green);
+}
+.btn-primary:hover{
+    background-color: var(--light-green);
+    border-color: var(--light-green);
+}
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
+    background-color: var(--green);
+    border-color: var(--green);
+}
+
+.btn-secondary{
+    background-color: var(--blue);
+    border-color: var(--blue);
+}
+.btn-secondary:hover{
+    background-color: var(--light-blue);
+    border-color: var(--light-blue);
+}
+.btn-secondary:not(:disabled):not(.disabled).active, .btn-secondary:not(:disabled):not(.disabled):active, .show>.btn-secondary.dropdown-toggle {
+    background-color: var(--blue);
+    border-color: var(--blue);
+}
+
+.btn-info{
+    background-color: var(--black);
+    border-color: var(--black);
+}
+.btn-info:hover{
+    background-color: var(--dark-gray);
+    border-color: var(--dark-gray);
+}
+.btn-info:not(:disabled):not(.disabled).active, .btn-info:not(:disabled):not(.disabled):active, .show>.btn-info.dropdown-toggle {
+    background-color: var(--black);
+    border-color: var(--black);
+}
+
+@media (max-width:992px){
+    .card{
+        width: 250px;
+        /* margin: 10px; */
+    
+        margin: 0 auto; /* Added */
+        float: none; /* Added */
+        margin-bottom: 10px; /* Added */
+    }s
+  }
