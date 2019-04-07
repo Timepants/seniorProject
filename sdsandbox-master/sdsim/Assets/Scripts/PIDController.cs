@@ -56,10 +56,14 @@ public class PIDController : MonoBehaviour
     public float TimeScale = 1f;
 
     public Text pid_steering;
-    
+    public int targetFrameRate = 12;
+
+
 
     void Awake()
     {
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = targetFrameRate;
         Time.timeScale = TimeScale;
         car = carObj.GetComponent<ICar>();
     }
