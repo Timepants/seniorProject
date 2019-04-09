@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+
+    
     public void TestData()
     {
         SceneManager.LoadScene(1);
@@ -55,9 +58,10 @@ public class MainMenu : MonoBehaviour
 
     public void OnTrain()
     {
+        print(Directory.GetCurrentDirectory());
         string title = "Train";
         string message = "type in model name";
-        string model = EditorUtility.SaveFilePanel("Save Your model", "../../carStuff/src/carModels/", "Test_Model", "h5");
+        string model = EditorUtility.SaveFilePanel("Save Your model","", "Test_Model", "h5");
         print(model);
         if (!string.IsNullOrEmpty(model))
         {
