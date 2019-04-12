@@ -26,30 +26,32 @@ start = time.time()
 accumTotal = 0
 
 for q in range(1):
-    for i in range(1000):
+    for i in range(1):
         # sleep(0.5)
         
 
         start2 = time.time()
         camera.capture(my_stream, 'bgr', use_video_port=True)
 
-        f = BytesIO()
-        np.savez_compressed(f,frame=my_stream)
-        f.seek(0)
-        out = f.read()
-        os.system('cls' if os.name == 'nt' else 'clear')
-        accumTotal +=time.time() - start2
-        print(str(time.time() - start2)+" take a picture bgr")
-        start2 = time.time()
-        time.sleep(0.008)
 
-        start2 = time.time()
-        camera.capture(my_stream2, 'jpeg', use_video_port=True)
-        accumTotal -=time.time() - start2
-        print(str(time.time() - start2)+" take a picture jpeg")
-        start2 = time.time()
+        print(my_stream)
+        # f = BytesIO()
+        # np.savez_compressed(f,frame=my_stream)
+        # f.seek(0)
+        # out = f.read()
+        # os.system('cls' if os.name == 'nt' else 'clear')
+        # accumTotal +=time.time() - start2
+        # print(str(time.time() - start2)+" take a picture bgr")
+        # start2 = time.time()
+        # time.sleep(0.008)
 
-        print(str(accumTotal))
+        # start2 = time.time()
+        # camera.capture(my_stream2, 'jpeg', use_video_port=True)
+        # accumTotal -=time.time() - start2
+        # print(str(time.time() - start2)+" take a picture jpeg")
+        # start2 = time.time()
+
+        # print(str(accumTotal))
 
         # if time.time() - start > 10:
         #     print("help-"+str(i))
