@@ -27,3 +27,7 @@ num_outputs = 1
 manual_speed = 100
 
 steering_threshold = 0.2
+
+proximity_stop = 20
+
+slow_manual_speed = 60

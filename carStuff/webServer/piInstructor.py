@@ -65,6 +65,7 @@ class CarControllerAI(object):
         with PiCamera() as camera:
             camera.resolution = (160, 128)
             camera.framerate = 60
+            camera.rotation = 180
             time.sleep(5)
             # global continueRunningAI
             while continueRunningAI and inputQueue.get():

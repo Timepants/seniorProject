@@ -17,10 +17,14 @@
     <script src="{{ url_for('static', filename='chart/utils.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/icon/favicon.ico') }}">
     <title>Curiopo!</title>
   </head>
   <body>
-
+<div id="loading"class="loading" style="display:none;">
+  <div id="loadImg">
+  </div>
+</div>
 <div class="container-fluid top-padding">
   <img class="img-fluid mx-auto d-block max-height-110" src="{{ url_for('static', filename='img/curiopo.png') }}">
 {% if isRunning %}
@@ -50,14 +54,14 @@
   <div class="col-md-3 right-border">
 
   <h1>Upload AI model</h1>
-  <form method=post action="{{ url_for('upload_file') }}" enctype=multipart/form-data>
+  <form onsubmit="test()" method=post action="{{ url_for('upload_file') }}" enctype=multipart/form-data>
     <div class="form-row align-items-center">
 
     <div class="custom-file col-sm-9" style="margin-right: 10px;">
       <input required name="file" type="file" class="custom-file-input" id="customFile">
       <label class="custom-file-label" for="customFile">Choose file</label>
     </div>
-    <button class="btn btn-secondary col-auto" type=submit value=Upload>
+    <button id="upload"class="btn btn-secondary col-auto" type=submit value=Upload>
         <svg class="svg-color" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>  
       </button>
   </div>
@@ -163,6 +167,10 @@
           var fileName = $(this).val().split("\\").pop();
           $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
         });
+
+  test = function(){
+    document.getElementById("loading").style.display = "block";
+  }
         </script>
   </body>
 </html>

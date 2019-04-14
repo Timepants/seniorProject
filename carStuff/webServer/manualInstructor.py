@@ -28,6 +28,7 @@ class CarControllerManual(object):
                 self.imgCount = int(p[1])+1
                 print(int(p[1]))
         with PiCamera() as camera:
+            camera.rotation = 180
             camera.resolution = (160, 120)
             camera.framerate = 60
             while inputQueue.get(): 

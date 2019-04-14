@@ -16,7 +16,7 @@ class CarControllerAI(object):
         if data:
             # print(steering_angle, throttle)
             print("its me, the pi instructor: ", self.lastCounter)
-            outputQueue.put({"steering_angle":random.randint(-1,1)
+            outputQueue.put({"steering_angle":random.randint(-100,1)
                             , "throttle":random.randint(85,120)
                             ,"accel_x_scaled":random.randrange(0,8)
                             ,"accel_y_scaled":random.randrange(0,8)

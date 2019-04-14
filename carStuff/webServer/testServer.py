@@ -160,15 +160,15 @@ def video_feed():
 
 @app.route('/return-training-files/')
 def return_training_files():
-    try:
-        if (not hasPackagedData() and not hasManualData()):
-            clearPrevious()
-            fileName = zipper()
-        else:
-            fileName = getZipFileName()
-        return send_file(fileName, as_attachment=True, attachment_filename="training_img.zip")
-    except Exception as e:
-	    return str(e)
+    # try:
+    if (not hasPackagedData() or hasManualData()):
+        clearPrevious()
+        fileName = zipper()
+    else:
+        fileName = getZipFileName()
+    return send_file(fileName, as_attachment=True, attachment_filename="training_img.zip")
+    # except Exception as e:
+	#     return str(e)
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
@@ -187,15 +187,7 @@ def upload_file():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('index'))
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    '''
+    return redirect(url_for('index'))
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):

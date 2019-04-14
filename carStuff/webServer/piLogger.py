@@ -5,6 +5,7 @@ import csv
 import datetime
 from multiprocessing.pool import ThreadPool
 from multiprocessing import Lock, Queue
+import conf
 
 class CarLogger(object):
     def __init__(self, putToLog, header):
@@ -84,6 +85,8 @@ class CarLogger(object):
             ,"steering_angle":steering_angle
             ,"throttle":throttle
             ,"count":count
+            ,"stop_proximity": True if conf.proximity_stop >= prox and prox != -1 else False
+            ,"stop_accel": True if False else False
         }
         return data
 

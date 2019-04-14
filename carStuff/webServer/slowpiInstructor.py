@@ -66,6 +66,7 @@ class CarControllerAI(object):
         with PiCamera() as camera:
             camera.resolution = (160, 128)
             camera.framerate = 60
+            camera.rotation =180
             time.sleep(5)
             # global continueRunningAI
             while continueRunningAI and inputQueue.get():
@@ -133,7 +134,7 @@ class CarControllerAI(object):
         self.MC.setSteering(steering_angle)
         self.MC.setThrottle(throttle)
         time.sleep(self.pulseInterval)
-        self.MC.setThrottle(60)
+        self.MC.setThrottle(conf.slow_manual_speed)
     
 
     def telemetryLoop(self, lock, inputQueue, outputQueueMotor):
@@ -144,7 +145,10 @@ class CarControllerAI(object):
                     'speed': self.MC.getThrottle()
                 }
             inputQueue.put(True)
-            self.telemetry(data, lock, outputQueueMotor)   
+            self.telemetry(data, lock, outputQueueMotor)
+        else:
+            self.MC.setThrottle(0)
+        
 
     def go(self, model_fnm, lock, inputQueue, outputQueueMotor):
         
@@ -154,19 +158,26 @@ class CarControllerAI(object):
         keras.backend.clear_session()
 
     def informationLog(self, inputQueue, outputQueue, outputQueueMotor):
+        lastSteering = -999
+        lastThrottle = -999
         while inputQueue.get():
             time.sleep(0.5)
-            print("Logger here")
+            # print("Logger here")
             motorData = skipInQueue(outputQueueMotor)
             try:
                 if bool(motorData):
                     data = self.logger.write(motorData["steering_angle"], motorData["throttle"], self.counter)
+                    lastSteering = motorData["steering_angle"]
+                    lastThrottle = motorData["throttle"]
                 else:
-                    data = self.logger.write(0, 0, self.counter)
+                    data = self.logger.write(lastSteering, lastThrottle, self.counter)
             except:
                 print("An exception occurred")
+            # print(data)
             outputQueue.put(data)
             inputQueue.put(True)
+            if(data["stop_proximity"] or data["stop_accel"]):
+                stop()
 
 def stopQueue(queue):
     while not queue.empty():

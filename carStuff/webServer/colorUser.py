@@ -48,6 +48,7 @@ class CarControllerAI(object):
         self.camera = PiCamera()
         self.camera.resolution = (160, 128)
         self.camera.framerate = 60
+        self.camera.rotation =180
         self.my_stream = BytesIO()
         self.showTime = True
         time.sleep(1.5)

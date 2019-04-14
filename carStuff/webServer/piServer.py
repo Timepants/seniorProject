@@ -3,7 +3,7 @@ from stat import S_ISREG, ST_CTIME, ST_MODE
 # from piInstructorInterface import run_steering_server, stop
 from datetime import datetime
 from zipLog import zipper, clearPrevious, hasManualData, hasPackagedData, getZipFileName
-from piInstructor import run_steering_server, stop
+from slowpiInstructor import run_steering_server, stop
 
 from flask import Flask, jsonify, render_template, request, Response, send_file, flash, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
@@ -30,17 +30,23 @@ class AppServer():
 
     def getOutputData(self, outputQueue):
         while not outputQueue.empty():
+            temp = outputQueue.get()
             self.data = {
                 "showLogger":self.showLogger()
-                ,"throttle":outputQueue.get()["throttle"]
-                ,"accel": [outputQueue.get()["accel_x_scaled"]
-                        , outputQueue.get()["accel_y_scaled"]
-                        , outputQueue.get()["accel_z_scaled"]]
-                ,"steering":outputQueue.get()["steering_angle"]
-                ,"proximity":outputQueue.get()["proximity"]
+                ,"throttle":temp["throttle"]
+                ,"accel": [temp["accel_x_scaled"]
+                        , temp["accel_y_scaled"]
+                        , temp["accel_z_scaled"]]
+                ,"steering":temp["steering_angle"]
+                ,"proximity":temp["proximity"]
+                ,"stopAccel":temp["stop_accel"]
+                ,"stopProximity":temp["stop_proximity"]
             } 
             print(self.data)
-
+            if (temp["stop_accel"] or temp["stop_proximity"]):
+                self.started = False
+                stop()
+                stopMan()
 
         return jsonify(self.data)
         # return jsonify(result=self.a + self.b)
@@ -170,6 +176,7 @@ def video():
 
 def gen():
     with PiCamera() as camera:
+        camera.rotation = 180
         while True:
             my_stream.seek(0)
             camera.capture(my_stream, 'jpeg', use_video_port=True)
@@ -183,7 +190,7 @@ def video_feed():
 @app.route('/return-training-files/')
 def return_training_files():
     try:
-        if (not hasPackagedData() and not hasManualData()):
+        if (not hasPackagedData() or hasManualData()):
             clearPrevious()
             fileName = zipper()
         else:
@@ -209,15 +216,16 @@ def upload_file():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('index'))
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    '''
+    return redirect(url_for('index'))
+    # '''
+    # <!doctype html>
+    # <title>Upload new File</title>
+    # <h1>Upload new File</h1>
+    # <form method=post enctype=multipart/form-data>
+    #   <input type=file name=file>
+    #   <input type=submit value=Upload>
+    # </form>
+    # '''
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):

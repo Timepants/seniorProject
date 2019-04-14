@@ -53,6 +53,8 @@
 
 
 <script>
+// document.getElementById("loading").style.display = "block";
+
 var animationTime = 500;
     var configThrottle = {
     type: 'line',
@@ -200,9 +202,9 @@ var colorNames = Object.keys(window.chartColors);
 function sleep(ms) {
 return new Promise(resolve => setTimeout(resolve, ms));
 }
-document.getElementById('addDataAccel').addEventListener('click', async function() {
-doStuff();
-});
+// document.getElementById('addDataAccel').addEventListener('click', async function() {
+// doStuff();
+// });
 async function doStuff() {
   // for (i = 0; i < 10; i++) { 
 while (true){
@@ -211,8 +213,15 @@ while (true){
     a: $('input[name="a"]').val(),
     b: $('input[name="b"]').val()
   }, function(data) {
-    if (data.showLogger == 1){
-      if (configThrottle.data.datasets.length > 0) {
+    console.log(data)
+    // if (data.showLogger == 1){
+      if(data.throttle < -500 || data.steering < -500){
+        
+        document.getElementById("loading").style.display = "block";
+      }
+      else {
+        document.getElementById("loading").style.display = "none";
+        if (configThrottle.data.datasets.length > 0) {
             configThrottle.data.labels.push(data.throttle);
 
             configThrottle.data.datasets.forEach(function(dataset) {
@@ -276,6 +285,7 @@ while (true){
 
       // document.getElementById("MyElement").classList.remove('MyClass');
     }
+    // }
   });
 }
 return false;
