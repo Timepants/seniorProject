@@ -1,5 +1,27 @@
 
     <!-- <div> -->
+        <div class="modal fade" id="stopModal" tabindex="-1" role="dialog" aria-labelledby="stopModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="stopModalLabel">The car has stopped</h5>
+                  <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button> -->
+                </div>
+                <div class="modal-body">
+                  <span id="stopMessage"></span>
+                </div>
+                <div class="modal-footer">
+                  <form method="POST">
+                    <button type="submit" class="btn btn-primary" name="stop" value=stop>
+                      Return
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
       <div class="row align-items-center">
           <div class="col-lg-4">
         <h1 class="black-text">Throttle</h1>
@@ -215,7 +237,15 @@ while (true){
   }, function(data) {
     console.log(data)
     // if (data.showLogger == 1){
-      if(data.throttle < -500 || data.steering < -500){
+      if (data.stopAccel || data.stopProximity){
+        $("#stopModal").modal();
+        if (data.stopAccel){
+          $("#stopMessage").text("The accelerometer detected a sharp change in acceleration, so the car has stopped.");
+        } else {
+          $("#stopMessage").text("The proximity sensor detected an object close, so the car has stopped.");
+        }
+      }
+      else if(data.throttle < -500 || data.steering < -500){
         
         document.getElementById("loading").style.display = "block";
       }

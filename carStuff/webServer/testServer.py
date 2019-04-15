@@ -28,14 +28,17 @@ class AppServer():
 
     def getOutputData(self, outputQueue):
         while not outputQueue.empty():
+            temp = outputQueue.get()
             self.data = {
                 "showLogger":self.showLogger()
-                ,"throttle":outputQueue.get()["throttle"]
-                ,"accel": [outputQueue.get()["accel_x_scaled"]
-                        , outputQueue.get()["accel_y_scaled"]
-                        , outputQueue.get()["accel_z_scaled"]]
-                ,"steering":outputQueue.get()["steering_angle"]
-                ,"proximity":outputQueue.get()["proximity"]
+                ,"throttle":temp["throttle"]
+                ,"accel": [temp["accel_x_scaled"]
+                        , temp["accel_y_scaled"]
+                        , temp["accel_z_scaled"]]
+                ,"steering":temp["steering_angle"]
+                ,"proximity":temp["proximity"]
+                ,"stopAccel":True
+                ,"stopProximity":False
             } 
             print(self.data)
 
@@ -62,7 +65,7 @@ class AppServer():
         for cdate, path in sorted(data):
             ts = int(cdate)
             files.append({
-                "date":datetime.utcfromtimestamp(ts).strftime("%-m/%-d/%y, %-I:%M")
+                "date":datetime.utcfromtimestamp(ts).strftime("%m/%m/%y, %I:%M")
                 ,"file_name":os.path.basename(path)
                 ,"name":os.path.splitext(os.path.basename(path))[0]
             })
