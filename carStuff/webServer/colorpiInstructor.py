@@ -52,7 +52,7 @@ class CarControllerAI(object):
         self.start2 = time.time()
         self.lastCounter = 0
         #set up camera stuff
-
+        self.lastDir = 0
 
         self.pulseInterval = .05
         self.my_stream = BytesIO()
@@ -98,7 +98,8 @@ class CarControllerAI(object):
 
             self.start3 = time.time()
 
-            steering_angle += getDirectionFromImage(im)
+            steering_angle += getDirectionFromImage(im, self.lastDir)
+            self.lastDir = steering_angle
             print("process", time.time()-self.start3)
 
             self.my_stream.seek(0)
@@ -106,6 +107,10 @@ class CarControllerAI(object):
 
         steering_angle = steering_angle / iterations
 
+        outputQueueMotor.put({
+            "steering_angle":float(steering_angle)
+            ,"throttle":float(conf.manual_speed)
+        })
         self.send_control(steering_angle, conf.manual_speed)
         # for effciency counting
         self.counter += 1

@@ -45,7 +45,7 @@ class CarControllerAI(object):
     def __init__(self):
         self.model = None
         self.MC = Motor()
-        self.logger = CarLogger(True, "AI")
+        self.logger = CarLogger(False, "AI")
         self.throttle_man = throttle_manager.ThrottleManager(idealSpeed = 90.)
 
         # for counting IPS
@@ -161,7 +161,7 @@ class CarControllerAI(object):
         lastSteering = -999
         lastThrottle = -999
         while inputQueue.get():
-            time.sleep(0.5)
+            time.sleep(0.1)
             # print("Logger here")
             motorData = skipInQueue(outputQueueMotor)
             try:

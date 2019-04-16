@@ -150,14 +150,6 @@ var configAccel = {
 type: 'line',
 data: {
   datasets: [{
-    backgroundColor: window.chartColors.white,
-    borderColor: window.chartColors.white,
-    data: [
-
-    ],
-    fill: false,
-  }
-  ,{
     backgroundColor: window.chartColors.red,
     borderColor: window.chartColors.red,
     data: [
@@ -165,14 +157,22 @@ data: {
     ],
     fill: false,
   }
-  ,{
-    backgroundColor: window.chartColors.black,
-    borderColor: window.chartColors.black,
-    data: [
+  // ,{
+  //   backgroundColor: window.chartColors.red,
+  //   borderColor: window.chartColors.red,
+  //   data: [
 
-    ],
-    fill: false,
-  }
+  //   ],
+  //   fill: false,
+  // }
+  // ,{
+  //   backgroundColor: window.chartColors.black,
+  //   borderColor: window.chartColors.black,
+  //   data: [
+
+  //   ],
+  //   fill: false,
+  // }
   ]
 },
 options: {
@@ -230,7 +230,7 @@ return new Promise(resolve => setTimeout(resolve, ms));
 async function doStuff() {
   // for (i = 0; i < 10; i++) { 
 while (true){
-  await sleep(500);
+  await sleep(50);
   $.getJSON("{{ url_for('getOutputData') }}", {
     a: $('input[name="a"]').val(),
     b: $('input[name="b"]').val()
@@ -238,6 +238,7 @@ while (true){
     console.log(data)
     // if (data.showLogger == 1){
       if (data.stopAccel || data.stopProximity){
+        document.getElementById("loading").style.display = "none";
         $("#stopModal").modal();
         if (data.stopAccel){
           $("#stopMessage").text("The accelerometer detected a sharp change in acceleration, so the car has stopped.");
@@ -277,7 +278,8 @@ while (true){
         }
         var i = 0
         configAccel.data.datasets.forEach(function(dataset) {
-            dataset.data.push(data.accel[i++]);
+            // dataset.data.push(data.accel[i++]);
+            dataset.data.push(data.magnitude);
 
           if (dataset.data.length > rowsToShow){
             dataset.data.shift()

@@ -30,4 +30,6 @@ steering_threshold = 0.2
 
 proximity_stop = 20
 
+accel_stop = .9
+
 slow_manual_speed = 60

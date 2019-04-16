@@ -3,8 +3,8 @@ from stat import S_ISREG, ST_CTIME, ST_MODE
 # from piInstructorInterface import run_steering_server, stop
 from datetime import datetime
 from zipLog import zipper, clearPrevious, hasManualData, hasPackagedData, getZipFileName
-from slowpiInstructor import run_steering_server, stop
-
+import slowpiInstructor 
+import colorpiInstructor
 from flask import Flask, jsonify, render_template, request, Response, send_file, flash, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 from multiprocessing import Queue
@@ -27,6 +27,7 @@ class AppServer():
         self.paused = False
         self.isManual = False
         self.model = "none"
+        self.useColor = False
 
     def getOutputData(self, outputQueue):
         while not outputQueue.empty():
@@ -37,15 +38,16 @@ class AppServer():
                 ,"accel": [temp["accel_x_scaled"]
                         , temp["accel_y_scaled"]
                         , temp["accel_z_scaled"]]
+                ,"magnitude":temp["magnitude"]
                 ,"steering":temp["steering_angle"]
                 ,"proximity":temp["proximity"]
-                ,"stopAccel":temp["stop_accel"]
-                ,"stopProximity":temp["stop_proximity"]
+                ,"stopAccel":temp["stop_accel"] if not self.isManual else False
+                ,"stopProximity":temp["stop_proximity"] if not self.isManual else False
             } 
             print(self.data)
             if (temp["stop_accel"] or temp["stop_proximity"]):
                 self.started = False
-                stop()
+                self.stopAI()
                 stopMan()
 
         return jsonify(self.data)
@@ -87,17 +89,27 @@ class AppServer():
             filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
     def stopAI(self):
-        stop()
+        if (self.useColor):
+            colorpiInstructor.stop()
+        else:
+            slowpiInstructor.stop()
 
     def index(self, request):
         if request.method == 'POST':
+            color = request.form.get('colorPicker', None)
+            if color is not None and not self.started:
+                colorpiInstructor.run_steering_server(outputQueue)
+                self.started = True
+                self.isManual = False
+                self.useColor = True
 
             model = request.form.get('model', None)
             if model is not None and not self.started:
-                run_steering_server("carModels/"+model, outputQueue)
+                slowpiInstructor.run_steering_server("carModels/"+model, outputQueue)
                 self.started = True
                 self.isManual = False
                 self.model = model
+                self.useColor = False
 
             delete = request.form.get('delete', None)
             if delete is not None and not self.started:
@@ -112,13 +124,13 @@ class AppServer():
             stopper = request.form.get('stop', None)
             if stopper is not None:
                 self.started = False
-                stop()
+                self.stopAI()
                 stopMan()
 
             pause = request.form.get('pause', None)
             if pause is not None:
                 self.paused = True
-                stop()
+                self.stopAI()
                 stopMan()
 
             play = request.form.get('play', None)
@@ -127,7 +139,10 @@ class AppServer():
                 if self.isManual:
                     runInstructor(outputQueue)
                 else:
-                    run_steering_server("carModels/"+self.model, outputQueue)
+                    if (self.useColor):
+                        colorpiInstructor.run_steering_server(outputQueue)
+                    else:
+                        slowpiInstructor.run_steering_server("carModels/"+self.model, outputQueue)
         return render_template('bootstrap.html'
                     , models = self.getModels()
                     , isRunning = self.started
@@ -153,26 +168,6 @@ def getOutputData():
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return appServer.index(request)
-
-@app.route('/start')
-def startServer(model):
-    
-
-    return boot()
-
-@app.route('/stop')
-def stopServer():
-    stop()
-    return index()
-
-@app.route('/boot')
-def boot():
-    return render_template('bootstrap.html')
-
-@app.route('/video')
-def video():
-    return render_template('videoTest.html')
-
 
 def gen():
     with PiCamera() as camera:

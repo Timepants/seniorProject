@@ -149,10 +149,28 @@
         </div>
       </div>
     </div>
-  {% else %}
-
-    <li><em>Unbelievable.  No entries here so far</em>
   {% endfor %}
+  <div class="card background-color-blue">
+    <div class="card-body">
+      <h5 class="card-title white-text">Color picker</h5>
+      <p class="card-text white-text">uses color</p>
+
+      <form method="POST">
+          <button type="submit" class="btn btn-primary float-right" name="colorPicker" value="colorPicker">
+            <svg class="svg-color" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>  
+          </button>
+      </form>
+
+                    
+
+    <!-- </div> -->
+  </div>
+
+
+
+</div>
+<!-- Modal -->
+
   <!-- <img id="video" src="{{ url_for('video_feed') }}"> -->
 </div>
 </div>

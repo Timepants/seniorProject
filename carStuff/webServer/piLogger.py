@@ -6,12 +6,14 @@ import datetime
 from multiprocessing.pool import ThreadPool
 from multiprocessing import Lock, Queue
 import conf
+import math
 
 class CarLogger(object):
     def __init__(self, putToLog, header):
         self.AC = Accel()
         self.PX = Proximity()
         self.putToLog = putToLog
+        self.oldMagnitude = 0
         #set up datafile and data writer
         if self.putToLog:
             self.dataFile = open('log_'+header+'/-'+str(datetime.datetime.now())+'.csv', mode='w')
@@ -65,6 +67,8 @@ class CarLogger(object):
         except:
             print("proximity exception")
             prox = -1
+        magnitude = math.sqrt(self.AC.getAccelXScaled()**2+self.AC.getAccelYScaled()**2)
+
         data = {
             "time":datetime.datetime.now()
             ,"accel_x":self.AC.getAccelX()
@@ -73,6 +77,7 @@ class CarLogger(object):
             ,"accel_x_scaled":self.AC.getAccelXScaled()
             ,"accel_y_scaled":self.AC.getAccelYScaled()
             ,"accel_z_scaled":self.AC.getAccelZScaled()
+            ,"magnitude":magnitude
             ,"gyro_x":self.AC.getGyroX()
             ,"gyro_y":self.AC.getGyroY()
             ,"gyro_z":self.AC.getGyroZ()
@@ -86,8 +91,9 @@ class CarLogger(object):
             ,"throttle":throttle
             ,"count":count
             ,"stop_proximity": True if conf.proximity_stop >= prox and prox != -1 else False
-            ,"stop_accel": True if False else False
+            ,"stop_accel": True if conf.accel_stop <= self.oldMagnitude - magnitude else False
         }
+        self.oldMagnitude = magnitude
         return data
 
     def write(self, steering_angle, throttle, count):
