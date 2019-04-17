@@ -61,6 +61,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Standard Assets\Editor\CrossPlatformInput\CrossPlatformInputInitialize.cs" />
+    <Reference Include="Unity.VectorGraphics">
+      <HintPath>F:/Unity/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.VectorGraphics.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.InternalAPIEditorBridge.003">
+      <HintPath>F:/Unity/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.InternalAPIEditorBridge.003.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>F:/Unity/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
@@ -69,6 +75,9 @@
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
       <HintPath>F:/Unity/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VectorGraphics.Editor">
+      <HintPath>F:/Unity/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.VectorGraphics.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>F:/Unity/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
