@@ -1,6 +1,5 @@
 import os,sys, time
 from stat import S_ISREG, ST_CTIME, ST_MODE
-# from piInstructorInterface import run_steering_server, stop
 from datetime import datetime
 from zipLog import zipper, clearPrevious, hasManualData, hasPackagedData, getZipFileName
 import slowpiInstructor 
@@ -98,14 +97,14 @@ class AppServer():
         if request.method == 'POST':
             color = request.form.get('colorPicker', None)
             if color is not None and not self.started:
-                colorpiInstructor.run_steering_server(outputQueue)
+                colorpiInstructor.run_color_AI(outputQueue)
                 self.started = True
                 self.isManual = False
                 self.useColor = True
 
             model = request.form.get('model', None)
             if model is not None and not self.started:
-                slowpiInstructor.run_steering_server("carModels/"+model, outputQueue)
+                slowpiInstructor.run_nn_AI("carModels/"+model, outputQueue)
                 self.started = True
                 self.isManual = False
                 self.model = model
@@ -140,13 +139,14 @@ class AppServer():
                     runInstructor(outputQueue)
                 else:
                     if (self.useColor):
-                        colorpiInstructor.run_steering_server(outputQueue)
+                        colorpiInstructor.run_color_AI(outputQueue)
                     else:
-                        slowpiInstructor.run_steering_server("carModels/"+self.model, outputQueue)
+                        slowpiInstructor.run_nn_AI("carModels/"+self.model, outputQueue)
         return render_template('bootstrap.html'
                     , models = self.getModels()
                     , isRunning = self.started
                     , isPaused = self.paused
+                    , isManual = self.isManual
                     , hasManualData = (hasManualData() or hasPackagedData()))
     
 appServer = AppServer()
@@ -212,28 +212,10 @@ def upload_file():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('index'))
     return redirect(url_for('index'))
-    # '''
-    # <!doctype html>
-    # <title>Upload new File</title>
-    # <h1>Upload new File</h1>
-    # <form method=post enctype=multipart/form-data>
-    #   <input type=file name=file>
-    #   <input type=submit value=Upload>
-    # </form>
-    # '''
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)
 if __name__ == '__main__':
-    # if __package__ is None:
-    #     print ("no package")
-    #     import sys
-    #     from os import path
-    #     sys.path.append( path.dirname( path.dirname( path.abspath(__file__) ) ) )
-    #     from src.piInstructor import run_steering_server, stop
-    # else:
-    #     from ..src.piInstructor import run_steering_server, stop
-
     app.run(debug=True, host='0.0.0.0')

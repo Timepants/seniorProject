@@ -35,9 +35,10 @@ class AppServer():
                 ,"accel": [temp["accel_x_scaled"]
                         , temp["accel_y_scaled"]
                         , temp["accel_z_scaled"]]
+                ,"magnitude":temp["accel_z_scaled"]
                 ,"steering":temp["steering_angle"]
                 ,"proximity":temp["proximity"]
-                ,"stopAccel":True
+                ,"stopAccel":False
                 ,"stopProximity":False
             } 
             print(self.data)

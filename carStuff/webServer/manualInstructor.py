@@ -26,7 +26,7 @@ class CarControllerManual(object):
             p = f.split("_")
             if int(p[1]) >= self.imgCount:
                 self.imgCount = int(p[1])+1
-                print(int(p[1]))
+                # print(int(p[1]))
         with PiCamera() as camera:
             camera.rotation = 180
             camera.resolution = (160, 120)
@@ -81,8 +81,6 @@ def runInstructor(outputQueue):
     stopQueue(inputQueueController)
     startQueue(inputQueueLogger)
     startQueue(inputQueueImage)
-
-    print("whats the deal")
 
     # control.informationLog(inputQueueLogger, outputQueue)
 

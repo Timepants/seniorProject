@@ -1,10 +1,3 @@
-#!/usr/bin/env python
-'''
-Predict Server
-Create a server to accept image inputs and run them against a trained neural network.
-This then sends the steering output back to the client.
-Author: Tawn Kramer
-'''
 from __future__ import print_function
 import os
 import argparse
@@ -15,11 +8,7 @@ import shutil
 import base64
 
 import numpy as np
-import socketio
-import eventlet
-import eventlet.wsgi
 from PIL import Image
-from flask import Flask
 from io import BytesIO
 from io import StringIO
 import keras
@@ -30,7 +19,6 @@ import conf
 import throttle_manager
 from picamera import PiCamera
 
-import csv
 from multiprocessing.pool import ThreadPool
 from multiprocessing import Lock, Queue
 from piLogger import CarLogger
@@ -201,7 +189,7 @@ def skipInQueue(queue):
         data = queue.get()
     return data
 
-def run_steering_server(model_fnm, outputQueue):
+def run_nn_AI(model_fnm, outputQueue):
 
 
     pool = ThreadPool(processes=3)
@@ -234,7 +222,7 @@ if __name__ == "__main__":
     outputQueue = Queue()
 
     model_fnm = args.model
-    run_steering_server(model_fnm, outputQueue)
+    run_nn_AI(model_fnm, outputQueue)
     try:
         while True:
             time.sleep(0.1)

@@ -28,8 +28,19 @@
   <div id="loadImg">
   </div>
 </div>
+<div class="row">
+    <div class="col-md-5 custom-nav">
+        <!-- <div class="road-line"></div> -->
+    </div>
+    <div class="top-padding col-md-2">
+      <img class="img-fluid mx-auto d-block max-height-110" src="{{ url_for('static', filename='img/curiopo.png') }}">
+    </div>
+    <div class="col-md-5 custom-nav">
+      <!-- <div class="road-line"></div> -->
+    </div>
+</div>
 <div class="container-fluid top-padding">
-  <img class="img-fluid mx-auto d-block max-height-110" src="{{ url_for('static', filename='img/curiopo.png') }}">
+
 {% if isRunning %}
 
   {% include 'logger.html' %}
@@ -89,14 +100,14 @@
     </form>
   <br>
   {% if hasManualData %}
-  <h5>Download manual training data</h5>
+  <span>Download manual training data:</span>
   <a class='btn btn-secondary' href="{{ url_for('return_training_files') }}" target="blank">
     <svg class="svg-color" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
   </a>
   {% endif %}
 </div>
 <div class="col-md-9">
-    <h1 class="black-text">Brains</h1>
+    <h1 class="black-text">Models</h1>
     <div class="row">
 
       

@@ -232,12 +232,10 @@ async function doStuff() {
 while (true){
   await sleep(50);
   $.getJSON("{{ url_for('getOutputData') }}", {
-    a: $('input[name="a"]').val(),
-    b: $('input[name="b"]').val()
   }, function(data) {
     console.log(data)
     // if (data.showLogger == 1){
-      if (data.stopAccel || data.stopProximity){
+      if ((data.stopAccel || data.stopProximity) && !data.isManual){
         document.getElementById("loading").style.display = "none";
         $("#stopModal").modal();
         if (data.stopAccel){
@@ -269,7 +267,7 @@ while (true){
             
           }
       //Accel stuff
-      var rowsToShow= 30;
+      var rowsToShow= 100;
       if (configAccel.data.datasets.length > 0) {
         if (configAccel.data.labels.length <= rowsToShow){
           configAccel.data.labels.push(data.accel[0]);

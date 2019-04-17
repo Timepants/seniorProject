@@ -16,14 +16,14 @@ def getDirectionFromImage(image, lastDir):
             green = pix[x,y][1]
             blue = pix[x,y][2]
             if red < 80 and green < 80 and blue > 80:
-                if y < half_height:
-                    bonus = bonus_val
-                else:
-                    bonus = 0
+                # if y < half_height:
+                #     bonus = half_height - y
+                # else:
+                #     bonus = 0
                 if x < half_width:
-                    left += 1 + bonus
+                    left += 1 + (height - y)
                 else:
-                    right += 1 + bonus
+                    right += 1 + (height - y)
 
     print(right)
     print(left)

@@ -14,12 +14,7 @@ from datetime import datetime
 import shutil
 import base64
 
-import numpy as np
-import socketio
-import eventlet
-import eventlet.wsgi
 from PIL import Image
-from flask import Flask
 from io import BytesIO
 from io import StringIO
 
@@ -59,31 +54,6 @@ class CarControllerAI(object):
         
         #show debug text?
         self.showTime = True
-
-    def getCameraData(self, lock, inputQueue):
-        global image_array
-        with PiCamera() as camera:
-            camera.resolution = (160, 128)
-            camera.framerate = 60
-            camera.rotation =180
-            time.sleep(5)
-            # global continueRunningAI
-            while continueRunningAI and inputQueue.get():
-            
-                time.sleep(0.05)
-                print("its me the camera")
-                self.my_stream.seek(0)
-                self.my_stream.truncate()
-
-                camera.capture(self.my_stream, 'jpeg', use_video_port=True)
-                lock.acquire()
-                image_array = self.my_stream
-                lock.release()
-
-                inputQueue.put(True)
-
-
-            return image_array
 
     def telemetry(self, data, lock, outputQueueMotor, camera):
         iterations = 1
@@ -194,46 +164,31 @@ def skipInQueue(queue):
         data = queue.get()
     return data
 
-def run_steering_server(outputQueue):
-
-
-    pool = ThreadPool(processes=3)
+def run_color_AI(outputQueue):
+    pool = ThreadPool(processes=2)
     lock = Lock()   
 
     ss = CarControllerAI()
     startQueue(inputQueueCamera)
     startQueue(inputQueueMotor)
     startQueue(inputQueueLogger)
-
-    # ss.informationLog(inputQueueLogger, outputQueue)
-    # ss.getCameraData(lock, inputQueueCamera)
-    # cameraRelsult = pool.apply_async(ss.getCameraData, (lock, inputQueueCamera)) 
-    # time.sleep(5)
-    # ss.go(lock, inputQueueMotor, outputQueueMotor)
-    async_result = pool.apply_async(ss.go, (lock, inputQueueMotor, outputQueueMotor))
+    
+    pool.apply_async(ss.go, (lock, inputQueueMotor, outputQueueMotor))
     
     time.sleep(0.01)
 
     result = pool.apply_async(ss.informationLog, (inputQueueLogger, outputQueue, outputQueueMotor)) 
 
-    # ss.go(model_fnm, lock, inputQueueMotor, outputQueueMotor)
 # ***** main loop *****
 if __name__ == "__main__":
-
-    # parser = argparse.ArgumentParser(description='prediction server')
-    # parser.add_argument('model', type=str, help='model name')
-
-    # args = parser.parse_args()
     outputQueue = Queue()
 
-    # model_fnm = args.model
-    run_steering_server(outputQueue)
+    run_color_AI(outputQueue)
     try:
         while True:
             time.sleep(1)
-            # os.system('cls' if os.name == 'nt' else 'clear')
+            os.system('cls' if os.name == 'nt' else 'clear')
             print(outputQueue.get())
-
                 
     except KeyboardInterrupt:
             print ('Interrupted - closing')
