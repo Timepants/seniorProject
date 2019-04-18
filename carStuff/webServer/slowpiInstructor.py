@@ -182,6 +182,7 @@ def stop():
     stopQueue(inputQueueCamera)
     stopQueue(inputQueueMotor)
     stopQueue(inputQueueLogger)
+    skipInQueue(outputQueueMotor)
 
 def skipInQueue(queue):
     data = dict()

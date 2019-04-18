@@ -82,16 +82,19 @@ public class RoadBuilder : MonoBehaviour {
 		mr.material.mainTextureScale = ms;
 	}
 
-	public Color startColor = Color.white;
+	public Color[] startColors;
+
 	public float rChange;
 	public float gChange;
 	public float bChange;
 	public void InitRoad(CarPath path)
 	{
-		Color newColor = Color.white;
-		newColor.r = Random.Range(-1*rChange,rChange) + startColor.r;
-		newColor.g = Random.Range(-1*gChange,gChange) + startColor.g;
-		newColor.b = Random.Range(-1*bChange,bChange) + startColor.b;
+		Color newColor = startColors[Random.Range(0,startColors.Length)];
+
+
+		newColor.r = Random.Range(-1*rChange,rChange) + newColor.r;
+		newColor.g = Random.Range(-1*gChange,gChange) + newColor.g;
+		newColor.b = Random.Range(-1*bChange,bChange) + newColor.b;
 		print(newColor);
 		ground.GetComponent<Renderer>().material.color = newColor;
 		if(terToolkit != null && doFlattenAtStart)
