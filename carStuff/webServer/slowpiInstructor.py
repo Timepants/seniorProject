@@ -166,6 +166,8 @@ class CarControllerAI(object):
             inputQueue.put(True)
             if(data["stop_proximity"] or data["stop_accel"]):
                 stop()
+        else:
+            skipInQueue(outputQueue)
 
 def stopQueue(queue):
     while not queue.empty():
