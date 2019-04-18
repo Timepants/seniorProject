@@ -11,7 +11,7 @@ public class MenuHandler : MonoBehaviour {
 	public GameObject Logger;
 	public GameObject NetworkSteering;
 	public GameObject menuPanel;
-    public GameObject PID btn;
+    public GameObject PID_btn;
 	public GameObject stopPanel;
     public GameObject carJSControl;
 
@@ -74,8 +74,9 @@ public class MenuHandler : MonoBehaviour {
 
 
 
-		//menuPanel.SetActive(false);
+        //menuPanel.SetActive(false);
         //stopPanel.SetActive(true);
+        //PID_btn.SetActive(false);
         
     }
 
@@ -127,8 +128,8 @@ public class MenuHandler : MonoBehaviour {
         NetworkSteering.SetActive(false);
 
 
-        menuPanel.SetActive(true);
-        stopPanel.SetActive(false);
+        //menuPanel.SetActive(true);
+        //stopPanel.SetActive(false);
     }
 
 }
