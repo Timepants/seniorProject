@@ -11,6 +11,7 @@ public class MenuHandler : MonoBehaviour {
 	public GameObject Logger;
 	public GameObject NetworkSteering;
 	public GameObject menuPanel;
+    public GameObject PID btn;
 	public GameObject stopPanel;
     public GameObject carJSControl;
 
@@ -71,8 +72,11 @@ public class MenuHandler : MonoBehaviour {
 		if(carJSControl != null)
 			carJSControl.SetActive(false);
 
-		menuPanel.SetActive(false);
-        stopPanel.SetActive(true);
+
+
+		//menuPanel.SetActive(false);
+        //stopPanel.SetActive(true);
+        
     }
 
 	public void OnManualDrive()

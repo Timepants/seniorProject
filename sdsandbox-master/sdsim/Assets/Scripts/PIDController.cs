@@ -64,8 +64,8 @@ public class PIDController : MonoBehaviour
 
     void Awake()
     {
-        QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = targetFrameRate;
+        //QualitySettings.vSyncCount = 0;
+       // Application.targetFrameRate = targetFrameRate;
         Time.timeScale = TimeScale;
         car = carObj.GetComponent<ICar>();
     }
