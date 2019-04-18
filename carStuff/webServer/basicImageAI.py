@@ -1,5 +1,5 @@
 from PIL import Image
-bonus_val = 200
+bonus_val = 2
 def getDirectionFromImage(image, lastDir):
     im = image
     pix = im.load()
@@ -15,15 +15,15 @@ def getDirectionFromImage(image, lastDir):
             red = pix[x,y][0]
             green = pix[x,y][1]
             blue = pix[x,y][2]
-            if red < 80 and green < 80 and blue > 80:
+            if red < 80 and green < 80 and blue > 100:
                 # if y < half_height:
                 #     bonus = half_height - y
                 # else:
                 #     bonus = 0
                 if x < half_width:
-                    left += 1 + (height - y)
+                    left += 1 + (height*bonus_val - y*bonus_val)
                 else:
-                    right += 1 + (height - y)
+                    right += 1 + (height*bonus_val - y*bonus_val)
 
     print(right)
     print(left)

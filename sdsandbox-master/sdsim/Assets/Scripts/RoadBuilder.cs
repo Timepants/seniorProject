@@ -28,6 +28,7 @@ public class RoadBuilder : MonoBehaviour {
 
 	GameObject createdRoad;
 
+	public GameObject ground; 
 	void Start()
 	{
 		if(terToolkit != null && doErodeTerrain)
@@ -37,6 +38,9 @@ public class RoadBuilder : MonoBehaviour {
 			//terToolkit.FullHydraulicErosion(1, 10.0f, 1.0f, .3f, 2.0f);
 			terToolkit.SmoothTerrain(10, 1.0f);
 		}
+		// GroundColorChange Ground = (GroundColorChange) go.GetComponent(typeof(GroundColorChange));
+
+		// Ground.setColor(Color.black);
 	}
 
 	public void DestroyRoad()
@@ -78,8 +82,18 @@ public class RoadBuilder : MonoBehaviour {
 		mr.material.mainTextureScale = ms;
 	}
 
+	public Color startColor = Color.white;
+	public float rChange;
+	public float gChange;
+	public float bChange;
 	public void InitRoad(CarPath path)
 	{
+		Color newColor = Color.white;
+		newColor.r = Random.Range(-1*rChange,rChange) + startColor.r;
+		newColor.g = Random.Range(-1*gChange,gChange) + startColor.g;
+		newColor.b = Random.Range(-1*bChange,bChange) + startColor.b;
+		print(newColor);
+		ground.GetComponent<Renderer>().material.color = newColor;
 		if(terToolkit != null && doFlattenAtStart)
 		{
 			terToolkit.Flatten();

@@ -45,7 +45,10 @@ class CarControllerManual(object):
                 inputQueue.put(True)
 
     def informationLog(self, inputQueue, outputQueue):
+        lastSteering = -999
+        lastThrottle = -999
         while inputQueue.get():
+            time.sleep(0.1)
             data = self.logger.write(self.MC.getSteering(), self.MC.getThrottle(), self.imgCount)
             outputQueue.put(data)
             inputQueue.put(True)

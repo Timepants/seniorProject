@@ -68,7 +68,7 @@ class CarLogger(object):
             print("proximity exception")
             prox = -1
         magnitude = math.sqrt(self.AC.getAccelXScaled()**2+self.AC.getAccelYScaled()**2)
-
+        
         data = {
             "time":datetime.datetime.now()
             ,"accel_x":self.AC.getAccelX()

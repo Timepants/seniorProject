@@ -235,7 +235,7 @@ while (true){
   }, function(data) {
     console.log(data)
     // if (data.showLogger == 1){
-      if ((data.stopAccel || data.stopProximity) && !data.isManual){
+      if ((data.stopAccel || data.stopProximity) && "{{ isManual }}"=="False"){
         document.getElementById("loading").style.display = "none";
         $("#stopModal").modal();
         if (data.stopAccel){
