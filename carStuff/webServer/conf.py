@@ -22,7 +22,7 @@ ch = image_depth
 # num_outputs = 2
 
 #when steering alone:
-num_outputs = 1
+num_outputs = 2
 
 manual_speed = 100
 
@@ -32,4 +32,4 @@ proximity_stop = 20
 
 accel_stop = .9
 
-slow_manual_speed = 60
+slow_manual_speed = 50
