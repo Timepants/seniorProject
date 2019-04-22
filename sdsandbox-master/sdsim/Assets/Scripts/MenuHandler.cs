@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityStandardAssets.Vehicles.Car;
@@ -26,6 +27,26 @@ public class MenuHandler : MonoBehaviour {
         Application.targetFrameRate = 60;
 
         stopPanel.SetActive(false);
+        Thread.Sleep(100);
+        trainingManager.OnMenuNextTrack();
+    }
+
+    public void OnBackFromTrain()
+    {
+        SceneManager.LoadScene(0);
+        DataManager.BackFromTrain = true;
+        print("Goind BACK!!");
+        
+    }
+    public void OnBackFromNN()
+    {
+        foreach (var process in Process.GetProcessesByName("Python"))
+        {
+            process.Kill();
+        }
+        SceneManager.LoadScene(0);
+        DataManager.BackFromNN = true;
+        
     }
 
 	public void OnPidGenerateTrainingData()
@@ -37,8 +58,8 @@ public class MenuHandler : MonoBehaviour {
 			carJSControl.SetActive(false);
 	
 		Logger.SetActive(true);
-		menuPanel.SetActive(false);
-        stopPanel.SetActive(true);
+		//menuPanel.SetActive(false);
+        //stopPanel.SetActive(true);
     }
 
 	public void OnManualGenerateTrainingData()
@@ -50,8 +71,8 @@ public class MenuHandler : MonoBehaviour {
 			carJSControl.SetActive(true);
 	
 		Logger.SetActive(true);
-		menuPanel.SetActive(false);
-        stopPanel.SetActive(true);
+		//menuPanel.SetActive(false);
+        //stopPanel.SetActive(true);
     }
 
 	public void OnUseNNNetworkSteering()
@@ -61,7 +82,7 @@ public class MenuHandler : MonoBehaviour {
 		
 		NetworkSteering.SetActive(true);
 		menuPanel.SetActive(false);
-        stopPanel.SetActive(true);
+       // stopPanel.SetActive(true);
     }
 
 	public void OnPidDrive()
@@ -111,10 +132,8 @@ public class MenuHandler : MonoBehaviour {
 
     }
 
-    public void OnBackClick()
-    {
-        SceneManager.LoadScene(0);
-    }
+   
+   
 
     public void OnStop()
     {

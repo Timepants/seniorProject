@@ -44,8 +44,7 @@ public class Car : MonoBehaviour, ICar
     // Use this for initialization
     void Awake()
     {
-        Time.timeScale = pid.TimeScale;
-        print(pid.TimeScale);
+        Time.timeScale = DataManager.TrainingSpeed;
         rb = GetComponent<Rigidbody>();
 
         if (rb && centrOfMass)

@@ -40,8 +40,8 @@ public class Logger : MonoBehaviour {
 	void Awake()
 	{
 		car = carObj.GetComponent<ICar>();
-        Time.timeScale = PID.TimeScale;
-        print(PID.TimeScale);
+        Time.timeScale = DataManager.TrainingSpeed;
+        //print(PID.TimeScale);
 		imagesToSave = new List<ImageSaveJob>();
 	}
 
@@ -109,7 +109,7 @@ public class Logger : MonoBehaviour {
         else
         {
             print("NOT BCAM");
-            SaveCamSensor(camSensor, activity, "??????");
+            SaveCamSensor(camSensor, activity,"");
         }
 
         if (maxFramesToLog != -1 && frameCounter >= maxFramesToLog)

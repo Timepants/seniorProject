@@ -69,6 +69,8 @@
     <Compile Include="Assets\Scripts\CarPath.cs" />
     <Compile Include="Assets\Scripts\CarPusher.cs" />
     <Compile Include="Assets\Scripts\CollisionSensor.cs" />
+    <Compile Include="Assets\Scripts\DataManager.cs" />
+    <Compile Include="Assets\Scripts\EditorGUI.cs" />
     <Compile Include="Assets\Scripts\GenPathFromDriving.cs" />
     <Compile Include="Assets\Scripts\HUDFPS.cs" />
     <Compile Include="Assets\Scripts\ICar.cs" />
@@ -84,6 +86,7 @@
     <Compile Include="Assets\Scripts\MenuHandler.cs" />
     <Compile Include="Assets\Scripts\PathManager.cs" />
     <Compile Include="Assets\Scripts\PIDController.cs" />
+    <Compile Include="Assets\Scripts\ProjectManagerCreateProject.cs" />
     <Compile Include="Assets\Scripts\RoadBuilder.cs" />
     <Compile Include="Assets\Scripts\ScreenSaver.cs" />
     <Compile Include="Assets\Scripts\SocketIO\JSONObject\JSONObject.cs" />
@@ -167,6 +170,7 @@
     <Compile Include="Assets\Scripts\SocketIO\WebsocketSharp\WebSocketState.cs" />
     <Compile Include="Assets\Scripts\SocketIO\WebsocketSharp\WebSocketStream.cs" />
     <Compile Include="Assets\Scripts\SocketIODriveClient.cs" />
+    <Compile Include="Assets\Scripts\StartNN.cs" />
     <Compile Include="Assets\Scripts\ThrottleManager.cs" />
     <Compile Include="Assets\Scripts\TrackScript.cs" />
     <Compile Include="Assets\Scripts\TrainingManager.cs" />
@@ -194,33 +198,34 @@
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF.shader" />
+    <None Include="Assets\SkySerie Freebie\Hdri setup.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Sprite.shader" />
     <None Include="Assets\TerrainToolkit\Read me.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface.shader" />
-    <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>C:/Users/shayden/Documents/repos/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.PackageManagerUI.Editor">
-      <HintPath>C:/Users/shayden/Documents/repos/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>C:/Users/shayden/Documents/repos/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>C:/Users/shayden/Documents/repos/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Analytics.DataPrivacy">
-      <HintPath>C:/Users/shayden/Documents/repos/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.VectorGraphics">
-      <HintPath>C:/Users/shayden/Documents/repos/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.VectorGraphics.dll</HintPath>
+      <HintPath>F:/Unity/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.VectorGraphics.dll</HintPath>
     </Reference>
     <Reference Include="Unity.InternalAPIEditorBridge.003">
-      <HintPath>C:/Users/shayden/Documents/repos/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.InternalAPIEditorBridge.003.dll</HintPath>
+      <HintPath>F:/Unity/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.InternalAPIEditorBridge.003.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro.Editor">
+      <HintPath>F:/Unity/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.PackageManagerUI.Editor">
+      <HintPath>F:/Unity/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.CollabProxy.Editor">
+      <HintPath>F:/Unity/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VectorGraphics.Editor">
-      <HintPath>C:/Users/shayden/Documents/repos/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.VectorGraphics.Editor.dll</HintPath>
+      <HintPath>F:/Unity/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.VectorGraphics.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>F:/Unity/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Analytics.DataPrivacy">
+      <HintPath>F:/Unity/seniorProject/sdsandbox-master/sdsim/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -424,13 +429,13 @@
       <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Editor">
-      <HintPath>C:/Users/shayden/Documents/repos/seniorProject/sdsandbox-master/sdsim/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
+      <HintPath>F:/Unity/seniorProject/sdsandbox-master/sdsim/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.StandardEvents">
-      <HintPath>C:/Users/shayden/Documents/repos/seniorProject/sdsandbox-master/sdsim/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.StandardEvents.dll</HintPath>
+      <HintPath>F:/Unity/seniorProject/sdsandbox-master/sdsim/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
-      <HintPath>C:/Users/shayden/Documents/repos/seniorProject/sdsandbox-master/sdsim/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
+      <HintPath>F:/Unity/seniorProject/sdsandbox-master/sdsim/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:/Program Files/Unity/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>

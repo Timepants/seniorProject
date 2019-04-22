@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class RoadBuilder : MonoBehaviour {
@@ -20,7 +21,7 @@ public class RoadBuilder : MonoBehaviour {
 	public TerrainToolkit terToolkit;
 
 	public int iRoadTexture = 0;
-	public Texture2D[] roadTextures;
+    private Texture2D[] roadTextures = new Texture2D[1];
 	public float[] roadOffsets;
 	public float[] roadWidths;
 
@@ -30,6 +31,14 @@ public class RoadBuilder : MonoBehaviour {
 
 	void Start()
 	{
+        byte[] fileData = File.ReadAllBytes(DataManager.Road);
+        Texture2D tex = new Texture2D(2, 2);
+        tex.LoadImage(fileData); //..this will auto-resize the texture dimensions
+
+        print("HIT ME -----  " + DataManager.Road);
+        roadTextures[0] = tex;
+        print(roadTextures.GetValue(0));
+        print(roadTextures[0].ToString());
 		if(terToolkit != null && doErodeTerrain)
 		{
 			//terToolkit.FastThermalErosion(20, 0.0f, 0.0f); //creates pits
@@ -154,7 +163,7 @@ public class RoadBuilder : MonoBehaviour {
 
 				if(terToolkit != null && doFlattenArroundRoad  && (iVert % 10) == 0)
 				{
-					terToolkit.FlattenArround(posA + vWidth.normalized * roadOffsetW, 10.0f, 30.0f);
+					terToolkit.FlattenArround(posA + vWidth.normalized * roadOffsetW, 10.0f, 15.0f);
 				}
 
 				if(doLiftRoadToTerrain)
