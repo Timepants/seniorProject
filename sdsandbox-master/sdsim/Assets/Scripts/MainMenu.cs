@@ -1,11 +1,15 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Timers;
+
 using UnityEditor;
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -24,6 +28,8 @@ public class MainMenu : MonoBehaviour
     public RawImage RoadImage;
     public InputField SpeedInputField;
     private string BasePath = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
+    AsyncOperation asyncLoadLevel;
+
 
 
     public void Awake()
@@ -139,7 +145,7 @@ public class MainMenu : MonoBehaviour
         if (!string.IsNullOrEmpty(model))
         {
             OnPrepareData();
-            //Timer t = new Timer
+            Thread.Sleep(2000);
             TrainModel(model);
             
         }
@@ -162,7 +168,7 @@ public class MainMenu : MonoBehaviour
         //startInfo.Arguments = "/c \"python " + path + "\\train.py\" " + modelToSave;
 
         startInfo.FileName = DataManager.AnacondaLocation;
-        startInfo.Arguments = " & python ..\\src\\train.py " + modelToSave + " && exit";
+        startInfo.Arguments = " & python " + BasePath + "\\src\\train.py " + modelToSave + " && exit";
         p.StartInfo = startInfo;
         p.Start();
 
@@ -178,7 +184,7 @@ public class MainMenu : MonoBehaviour
         //tartInfo.FileName = "cmd.exe";
         //startInfo.Arguments = "/c \"python " + path + "\\prepare_data.py\"";
         startInfo.FileName = DataManager.AnacondaLocation;
-        startInfo.Arguments = " & python ..\\src\\prepare_data.py & exit";
+        startInfo.Arguments = " & python " + BasePath + "\\src\\prepare_data.py & exit";
         p.StartInfo = startInfo;
         p.Start();
         //OnTrain();
@@ -265,12 +271,12 @@ public class MainMenu : MonoBehaviour
             
             startInfo.FileName = DataManager.AnacondaLocation;
 
-            startInfo.Arguments = " & python ..\\src\\predict_server.py " + modelPath + " & exit";
-            
+            startInfo.Arguments = " & python " + BasePath + "\\src\\predict_server.py " + modelPath + " & exit";
+            p.StartInfo.CreateNoWindow = true;
             p.StartInfo = startInfo;
             //print(p.ProcessName);
             p.Start();
-            print(p.ProcessName);
+            
         }
         else
         {
@@ -287,8 +293,11 @@ public class MainMenu : MonoBehaviour
     {
         if (DataManager.Env_Name != null && DataManager.Road != null && DataManager.TrainingSpeed != 0)
         {
+
             string SceneToLoad = "Scenes/TrainingScenes/" + DataManager.Env_Name;
-            SceneManager.LoadScene(SceneToLoad);
+            //LoadLevel(SceneToLoad);
+            SceneManager.LoadSceneAsync(SceneToLoad, LoadSceneMode.Single);
+
             print("Non error");
         } else
         {
@@ -296,6 +305,17 @@ public class MainMenu : MonoBehaviour
         }
 
 
+    }
+
+    public IEnumerator LoadLevel(string LevelToLoad)
+    {
+        print("HIT ME DAD");
+        asyncLoadLevel = SceneManager.LoadSceneAsync(LevelToLoad, LoadSceneMode.Single);
+        while (!asyncLoadLevel.isDone)
+        {
+            print("Loading the Scene");
+            yield return null;
+        }
     }
 
 
@@ -390,3 +410,4 @@ public class MainMenu : MonoBehaviour
         print(Path.GetExtension(anaconda));
     }
 }
+#endif

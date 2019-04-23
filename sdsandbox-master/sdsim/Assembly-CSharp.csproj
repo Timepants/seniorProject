@@ -60,7 +60,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Anim\AnimGif.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\CameraHelper.cs" />
     <Compile Include="Assets\Scripts\CameraSensor.cs" />
@@ -70,12 +69,12 @@
     <Compile Include="Assets\Scripts\CarPusher.cs" />
     <Compile Include="Assets\Scripts\CollisionSensor.cs" />
     <Compile Include="Assets\Scripts\DataManager.cs" />
-    <Compile Include="Assets\Scripts\EditorGUI.cs" />
     <Compile Include="Assets\Scripts\GenPathFromDriving.cs" />
     <Compile Include="Assets\Scripts\HUDFPS.cs" />
     <Compile Include="Assets\Scripts\ICar.cs" />
     <Compile Include="Assets\Scripts\JoystickCarControl.cs" />
     <Compile Include="Assets\Scripts\LaneChangeTrainer.cs" />
+    <Compile Include="Assets\Scripts\LevelChanger.cs" />
     <Compile Include="Assets\Scripts\Lidar.cs" />
     <Compile Include="Assets\Scripts\Lines.cs" />
     <Compile Include="Assets\Scripts\Localizer.cs" />
@@ -86,7 +85,6 @@
     <Compile Include="Assets\Scripts\MenuHandler.cs" />
     <Compile Include="Assets\Scripts\PathManager.cs" />
     <Compile Include="Assets\Scripts\PIDController.cs" />
-    <Compile Include="Assets\Scripts\ProjectManagerCreateProject.cs" />
     <Compile Include="Assets\Scripts\RoadBuilder.cs" />
     <Compile Include="Assets\Scripts\ScreenSaver.cs" />
     <Compile Include="Assets\Scripts\SocketIO\JSONObject\JSONObject.cs" />
