@@ -238,5 +238,16 @@ body{
         margin: 0 auto; /* Added */
         float: none; /* Added */
         margin-bottom: 10px; /* Added */
-    }s
+    }
+    #loadImg {
+
+        background-size: 15%; 
+
+    }
+    .right-border{
+
+        border-width: 0px 0px 0px 0px;
+
+    }
+    
   }
