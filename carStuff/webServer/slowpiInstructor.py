@@ -167,7 +167,9 @@ class CarControllerAI(object):
             if(data["stop_proximity"] or data["stop_accel"]):
                 stop()
         else:
+            print("-------------------------------LOGGING DONE------------------------------")
             skipInQueue(outputQueue)
+            skipInQueue(outputQueueMotor)
 
 def stopQueue(queue):
     while not queue.empty():
@@ -202,17 +204,21 @@ def run_nn_AI(model_fnm, outputQueue):
     startQueue(inputQueueCamera)
     startQueue(inputQueueMotor)
     startQueue(inputQueueLogger)
+    skipInQueue(outputQueueMotor)
 
     # ss.informationLog(inputQueueLogger, outputQueue)
 
     cameraRelsult = pool.apply_async(ss.getCameraData, (lock, inputQueueCamera)) 
+
+
+    time.sleep(0.01)
+    result = pool.apply_async(ss.informationLog, (inputQueueLogger, outputQueue, outputQueueMotor)) 
     time.sleep(0.01)
 
     async_result = pool.apply_async(ss.go, (model_fnm, lock, inputQueueMotor, outputQueueMotor))
     
-    time.sleep(0.01)
 
-    result = pool.apply_async(ss.informationLog, (inputQueueLogger, outputQueue, outputQueueMotor)) 
+
 
     # ss.go(model_fnm, lock, inputQueueMotor, outputQueueMotor)
 # ***** main loop *****

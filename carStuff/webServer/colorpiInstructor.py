@@ -143,6 +143,7 @@ class CarControllerAI(object):
                 stop()
         else:
             skipInQueue(outputQueue)
+            skipInQueue(outputQueueMotor)
             
 def stopQueue(queue):
     while not queue.empty():
@@ -175,7 +176,7 @@ def run_color_AI(outputQueue):
     startQueue(inputQueueCamera)
     startQueue(inputQueueMotor)
     startQueue(inputQueueLogger)
-    
+    skipInQueue(outputQueueMotor)
     pool.apply_async(ss.go, (lock, inputQueueMotor, outputQueueMotor))
     
     time.sleep(0.01)

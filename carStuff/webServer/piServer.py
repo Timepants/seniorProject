@@ -43,12 +43,12 @@ class AppServer():
                 ,"stopAccel":temp["stop_accel"] if not self.isManual else False
                 ,"stopProximity":temp["stop_proximity"] if not self.isManual else False
             } 
-            print(self.data)
+            
             if (temp["stop_accel"] or temp["stop_proximity"]):
                 if not self.isManual:
                     self.started = False
                     self.stopAI()
-
+        print(self.data)
         return jsonify(self.data)
         # return jsonify(result=self.a + self.b)
 

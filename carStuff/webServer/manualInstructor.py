@@ -14,7 +14,7 @@ class CarControllerManual(object):
     def __init__(self):
         self.MC = Motor()
         self.imgCount = 0
-        self.logger = CarLogger(True, "manual")
+        self.logger = CarLogger(False, "manual")
 
     def useController(self, inputQueue):
         print("wo")
@@ -87,11 +87,12 @@ def runInstructor(outputQueue):
 
     # control.informationLog(inputQueueLogger, outputQueue)
 
-    pool.apply_async(control.useController, (inputQueueController, )) 
-    time.sleep(0.01)
 
     pool.apply_async(control.informationLog, (inputQueueLogger, outputQueue)) 
 
+    time.sleep(0.01)
+
+    pool.apply_async(control.useController, (inputQueueController, )) 
     time.sleep(0.01)
 
     pool.apply_async(control.logPhotos, (inputQueueImage, inputQueueController)) 
