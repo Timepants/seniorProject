@@ -8,8 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{74C0DD75-453B-E432-C590-F288B3448C04}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -67,9 +66,7 @@
     <Compile Include="Assets\Scenes\TrainingScenes\Plugins\crosstales\Common\Scripts\Util\BaseConstants.cs" />
     <Compile Include="Assets\Scenes\TrainingScenes\Plugins\crosstales\Common\Scripts\Util\BaseHelper.cs" />
     <Compile Include="Assets\Scenes\TrainingScenes\Plugins\crosstales\Common\Scripts\Util\CTPlayerPrefs.cs" />
-    <Compile Include="Assets\Scenes\TrainingScenes\Plugins\crosstales\Common\Scripts\Util\CTWebClient.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Assets\Scenes\TrainingScenes\Plugins\crosstales\Common\Scripts\Util\CTWebClient.cs" />
     <Compile Include="Assets\Scenes\TrainingScenes\Plugins\crosstales\Common\Scripts\Util\PlatformController.cs" />
     <Compile Include="Assets\Scenes\TrainingScenes\Plugins\crosstales\Common\Scripts\Util\RandomColor.cs" />
     <Compile Include="Assets\Scenes\TrainingScenes\Plugins\crosstales\Common\Scripts\Util\RandomRotator.cs" />
