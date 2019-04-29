@@ -59,15 +59,19 @@ public class PIDController : MonoBehaviour
 
     public Text pid_steering;
     public int targetFrameRate = 12;
+    public MenuHandler mHandler;
 
 
 
     void Awake()
     {
         //QualitySettings.vSyncCount = 0;
-       // Application.targetFrameRate = targetFrameRate;
+        // Application.targetFrameRate = targetFrameRate;
+        print(TimeScale);
         Time.timeScale = TimeScale;
         car = carObj.GetComponent<ICar>();
+        //mHandler.OnNextTrack();
+        
     }
 
     private void OnEnable()

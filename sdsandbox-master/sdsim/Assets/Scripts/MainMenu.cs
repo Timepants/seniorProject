@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+﻿
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +14,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Crosstales.FB;
 
 public class MainMenu : MonoBehaviour
 {
@@ -29,6 +30,10 @@ public class MainMenu : MonoBehaviour
     public InputField SpeedInputField;
     private string BasePath = Directory.GetParent(Directory.GetCurrentDirectory()).ToString();
     AsyncOperation asyncLoadLevel;
+    string[] imagesToFind = {"jpg", "png"};
+    private string roadImageString;
+    
+    
 
 
 
@@ -140,7 +145,8 @@ public class MainMenu : MonoBehaviour
     {
         //print(Directory.GetCurrentDirectory());
         string directory = BasePath + "\\src\\models\\";
-        string model = EditorUtility.SaveFilePanel("Save Your model", directory, "Test_Model", "h5");
+        //string model = EditorUtility.SaveFilePanel("Save Your model", directory, "Test_Model", "h5");
+        string model = FileBrowser.SaveFile("Save your model", directory, "TestModel", "h5");
        // print(model);
         if (!string.IsNullOrEmpty(model))
         {
@@ -151,7 +157,7 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            EditorUtility.DisplayDialog("Error!", "Please enter something in the correct format", "Ok");
+            //EditorUtility.DisplayDialog("Error!", "Please enter something in the correct format", "Ok");
             
         }
 
@@ -195,7 +201,7 @@ public class MainMenu : MonoBehaviour
         var SSID = GetSSID();
         if (SSID == "Curiopo")
         {
-            EditorUtility.DisplayDialog("Error!", "You have to be on the \"Curiopo\" Network", "Ok");
+            //EditorUtility.DisplayDialog("Error!", "You have to be on the \"Curiopo\" Network", "Ok");
         } else
         {
             OpenURL();
@@ -242,8 +248,9 @@ public class MainMenu : MonoBehaviour
         string modelFolder =  BasePath + "\\src\\models\\";
         //modelFolder = modelFolder.Replace(@"/", @"\");
         //print(modelFolder);
-        string modelpath = EditorUtility.OpenFilePanel("Choose model?? to deploy", modelFolder, "h5");
-       // print("Modelpath here " + modelpath.ToString());
+        //string modelpath = EditorUtility.OpenFilePanel("Choose model?? to deploy", modelFolder, "h5");
+        string modelpath = FileBrowser.OpenSingleFile("Choose model to deploy", modelFolder, "h5");
+        // print("Modelpath here " + modelpath.ToString());
         if (modelpath.ToString() != null && modelpath != modelFolder && modelpath != "")
         {
 
@@ -254,7 +261,7 @@ public class MainMenu : MonoBehaviour
             SceneManager.LoadScene(2);
         } else
         {
-            EditorUtility.DisplayDialog("Error", "Please choose a proper file type!", "Ok", "No");
+            //EditorUtility.DisplayDialog("Error", "Please choose a proper file type!", "Ok", "No");
         }
         EventSystem.current.SetSelectedGameObject(null);
     }
@@ -280,7 +287,7 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            EditorUtility.DisplayDialog("Error", "Please choose a proper file type!","Ok", "No");
+            //EditorUtility.DisplayDialog("Error", "Please choose a proper file type!","Ok", "No");
         }
          EventSystem.current.SetSelectedGameObject(null);
     }
@@ -326,7 +333,8 @@ public class MainMenu : MonoBehaviour
         string modelFolder = BasePath + "\\sdsim\\Assets\\Scenes\\TrainingScenes";
         //modelFolder = modelFolder.Replace(@"/", @"\");
         //print(modelFolder);
-        string modelpath = EditorUtility.OpenFilePanel("Choose Scene to Use", modelFolder, "unity");
+        //string modelpath = EditorUtility.OpenFilePanel("Choose Scene to Use", modelFolder, "unity");
+        string modelpath = FileBrowser.OpenSingleFile("Choose Scene to Use", modelFolder, "unity");
 
         if (modelpath != null)
         {
@@ -338,7 +346,7 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            EditorUtility.DisplayDialog("Error", "Please choose a proper file type!", "Ok", "No");
+            //EditorUtility.DisplayDialog("Error", "Please choose a proper file type!", "Ok", "No");
         }
 
 
@@ -352,9 +360,10 @@ public class MainMenu : MonoBehaviour
         string modelFolder = BasePath + "\\sdsim\\Assets\\Textures\\roads";
         //print(modelFolder);
         //modelFolder = modelFolder.Replace(@"/", @"\");
-        string modelpath = EditorUtility.OpenFilePanel("Choose Scene to Use", modelFolder, "jpg,png");
-
-        if (modelpath != null)
+        //string modelpath = EditorUtility.OpenFilePanel("Choose Scene to Use", modelFolder, "jpg,png");
+        string modelpath = FileBrowser.OpenSingleFile("Choose Scene to Use", modelFolder, imagesToFind);
+        print(modelpath);
+        if (modelpath != null && modelpath != "")
         {
             DataManager.Road = modelpath;
             RoadImage.enabled = true;
@@ -363,18 +372,25 @@ public class MainMenu : MonoBehaviour
             tex.LoadImage(fileData); //..this will auto-resize the texture dimensions
             DataManager.RoadTexture = tex;
             RoadImage.texture = tex;
+            roadImageString = modelpath;
+            
 
+
+        } else if (roadImageString != null)
+        {
 
         }
         else
         {
-            EditorUtility.DisplayDialog("Error", "Please choose a proper file type!", "Ok", "No");
+            //EditorUtility.DisplayDialog("Error", "Please choose a proper file type!", "Ok", "No");
+            RoadImage.enabled = false;
         }
         EventSystem.current.SetSelectedGameObject(null);
     }
 
     public void ChooseSpeed()
     {
+        print("Y U no worky");
         SpdInput.SetActive (true);
         EventSystem.current.SetSelectedGameObject(null);
 
@@ -384,21 +400,23 @@ public class MainMenu : MonoBehaviour
         string speed = SpeedInputField.text;
         int.TryParse(speed, out int Spd);
         //print("Speed-- " + Spd);
-        if (Spd > 5)
+        if (Spd > 3)
         {
-            Spd = 5;
+            Spd = 3;
         }
         else if (Spd < 1)
         {
             Spd = 1;
         }
         DataManager.TrainingSpeed = Spd;
+        print(DataManager.TrainingSpeed);
        // print(DataManager.TrainingSpeed);
     }
 
     public void ChooseAnacondaEnv()
     {
-        string anaconda = EditorUtility.OpenFilePanel("Choose Anaconda Shortcut", "C:\\", "lnk");
+        string anaconda = FileBrowser.OpenSingleFile("Choose Anaconda Shortcut", "C:\\", "lnk");
+        //string anaconda = EditorUtility.OpenFilePanel("Choose Anaconda Shortcut", "C:\\", "lnk");
         if (Path.GetExtension(anaconda) != ".lnk")
         {
             print("hullo");
@@ -410,4 +428,3 @@ public class MainMenu : MonoBehaviour
         print(Path.GetExtension(anaconda));
     }
 }
-#endif

@@ -27,7 +27,13 @@ public class MenuHandler : MonoBehaviour {
         Application.targetFrameRate = 60;
 
         stopPanel.SetActive(false);
-        Thread.Sleep(100);
+       // Thread.Sleep(100000);
+        
+    }
+
+    public void Start()
+    {
+        print("I sleep dad");
         trainingManager.OnMenuNextTrack();
     }
 
