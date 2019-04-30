@@ -9,7 +9,7 @@ public class Logger : MonoBehaviour {
 	public GameObject carObj;
 	public ICar car;
 	public CameraSensor camSensor;
-    public CameraSensor optionlB_CamSensor;
+    public CameraSensor optionalB_CamSensor;
 	public Lidar lidar;
     public PIDController PID;
 
@@ -40,8 +40,8 @@ public class Logger : MonoBehaviour {
 	void Awake()
 	{
 		car = carObj.GetComponent<ICar>();
-        Time.timeScale = PID.TimeScale;
-        print(PID.TimeScale);
+        Time.timeScale = DataManager.TrainingSpeed;
+        //print(PID.TimeScale);
 		imagesToSave = new List<ImageSaveJob>();
 	}
 
@@ -92,19 +92,24 @@ public class Logger : MonoBehaviour {
 				string json = JsonUtility.ToJson(pa);
 				var filename = string.Format("/../log/lidar_{0}_{1}.txt", frameCounter.ToString(), activity);
 				var f = File.CreateText(Application.dataPath + filename);
+                Debug.Log(json);
+                print("LIdarrrrr");
 				f.Write(json);
 				f.Close();
 			}
 		}
 
-        if (optionlB_CamSensor != null)
+        if (optionalB_CamSensor != null)
         {
+            //print("BCAM");
             SaveCamSensor(camSensor, activity, "_a");
-            SaveCamSensor(optionlB_CamSensor, activity, "_b");
+            SaveCamSensor(optionalB_CamSensor, activity, "_b");
+            //print("Activity " + activity);
         }
         else
         {
-            SaveCamSensor(camSensor, activity, "");
+            print("NOT BCAM");
+            SaveCamSensor(camSensor, activity,"");
         }
 
         if (maxFramesToLog != -1 && frameCounter >= maxFramesToLog)
@@ -120,12 +125,12 @@ public class Logger : MonoBehaviour {
     {
         float steering = car.GetSteering();
         float throttle = car.GetThrottle();
-        return Application.dataPath + string.Format("/../log/frame_{0,6:D6}_st_{1}_th_{2}.jpg", 
+        return Application.dataPath + string.Format("/../log/frame_{0,6:D6}_st_{1}_th_{2}", 
             frameCounter, steering, throttle);
     }
 
     //Save the camera sensor to an image. Use the suffix to distinguish between cameras.
-    void SaveCamSensor(CameraSensor cs, string prefix, string suffix)
+    void SaveCamSensor(CameraSensor cs,  string prefix, string suffix)
     {
         if (cs != null)
         {
@@ -133,7 +138,7 @@ public class Logger : MonoBehaviour {
 
             ImageSaveJob ij = new ImageSaveJob();
         
-            ij.filename = GetImageFileName();
+            ij.filename = GetImageFileName()+suffix+".jpg";
 
             ij.bytes = image.EncodeToJPG();
         

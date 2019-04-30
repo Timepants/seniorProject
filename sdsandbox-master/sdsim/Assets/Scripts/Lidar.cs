@@ -66,8 +66,7 @@ public class Lidar : MonoBehaviour {
 
 	void Awake()
 	{
-        Time.timeScale = pid.TimeScale;
-        print("Lidar-- " + pid.TimeScale);
+        Time.timeScale = DataManager.TrainingSpeed;
 		pointArr = new LidarPointArray();
 		pointArr.Init(360 / degPerSweepInc * numSweepsLevels);
 	}

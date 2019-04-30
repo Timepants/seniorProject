@@ -20,7 +20,7 @@ public class TrainingManager : MonoBehaviour {
 
 	void Awake()
 	{
-        Time.timeScale = controller.TimeScale;
+        Time.timeScale = DataManager.TrainingSpeed;
 		car = carObj.GetComponent<ICar>();
 	}
 

@@ -39,13 +39,13 @@ public class PIDController : MonoBehaviour
     public float steeringCompensationLevel = 0.5f;
     public delegate void OnEndOfPathCB();
 
-    public int maxSteeringAngle = 1;
+    public int maxSteeringAngle = 7;
 
     public OnEndOfPathCB endOfPathCB;
 
     bool isDriving = false;
     public bool waitForStill = true;
-    public bool stopOffRoad = true;
+    //public bool stopOffRoad = true;
 
     public bool startOnWake = false;
 
@@ -55,15 +55,23 @@ public class PIDController : MonoBehaviour
     public bool UseCameraView;
     public RenderTexture CameraView;
     public float maxSpeed = 5.0f;
-    public float TimeScale = 1f;
+    private float TimeScale = DataManager.TrainingSpeed;
 
     public Text pid_steering;
-    
+    public int targetFrameRate = 12;
+    public MenuHandler mHandler;
+
+
 
     void Awake()
     {
+        //QualitySettings.vSyncCount = 0;
+        // Application.targetFrameRate = targetFrameRate;
+        print(TimeScale);
         Time.timeScale = TimeScale;
         car = carObj.GetComponent<ICar>();
+        //mHandler.OnNextTrack();
+        
     }
 
     private void OnEnable()
@@ -189,19 +197,19 @@ public class PIDController : MonoBehaviour
         diffErr = err - prevErr;
 
         int steering = (int)System.Math.Round((-Kp * err) - (Kd * diffErr) - (Ki * totalError));
-       
 
+        print("MaxAngle-- " + maxSteeringAngle);
         if (steering > steeringCompensationLevel)
         {
             steeringReq = maxSteeringAngle;
-        } else if (steering < steeringCompensationLevel * -1)
+        } else if (steering < -steeringCompensationLevel)
         {
-            steeringReq = maxSteeringAngle *-1;
+            steeringReq = -maxSteeringAngle;
         } else
         {
             steeringReq = 0;
         }
-
+        print(steeringReq);
         if (doDrive)
             car.RequestSteering(steeringReq);
 
@@ -209,18 +217,7 @@ public class PIDController : MonoBehaviour
         {
             if (car.GetVelocity().magnitude < car.GetSpeed())
                 car.RequestThrottle(throttleVal);
-            //else
-            //    car.RequestThrottle(0.0f);
-
-            //if (car.GetAccel().magnitude > 4f)
-            //{
-            //    car.RequestThrottle(0.0f);
-            //    car.RequestFootBrake(1.0f);
-            //}
-            //} else
-            //{
-            //    //car.RequestFootBrake(0.0f);
-            //}
+            
 
 
 
@@ -230,7 +227,7 @@ public class PIDController : MonoBehaviour
             {
                 float dist = Vector3.Distance(car.GetTransform().position, n.pos);
                 //print(car.GetTransform().position + " ----- " + n.pos);
-                print("Distance? -- " + dist);
+               // print("Distance? -- " + dist);
 
                 if (dist > 2.2f)
                 {
@@ -238,7 +235,7 @@ public class PIDController : MonoBehaviour
                     car.RequestFootBrake(1.0f);
                     
 
-                    if (dist > 2.4f)
+                    if (dist > 2.7f)
                     {
                         isDriving = false;
 
@@ -255,8 +252,8 @@ public class PIDController : MonoBehaviour
 
         if (pid_steering != null)
             pid_steering.text = string.Format("PID: {0} {1}", steeringReq, steering);
-        print(car.GetThrottle());
-        print("mag:" + car.GetAccel().magnitude);
+       // print(car.GetThrottle());
+        //print("mag:" + car.GetAccel().magnitude);
 
         //accumulate total error
         totalError += err;
