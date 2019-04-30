@@ -19,6 +19,7 @@ using Crosstales.FB;
 public class MainMenu : MonoBehaviour
 {
     private bool inAnim = false;
+    public GameObject ColorChooserPanel;
     public GameObject Main;
     public GameObject ScriptMenu;
     public GameObject ModelMenu;
@@ -44,6 +45,8 @@ public class MainMenu : MonoBehaviour
 
         //Set desired frame rate as high as possible.
         Application.targetFrameRate = 60;
+        ColorChooserPanel.SetActive(false);
+        DataManager.Env_Name = "FlatTrain";
         if (!DataManager.BackFromTrain && !DataManager.BackFromNN)
         {
             Main.SetActive(true);
@@ -109,6 +112,12 @@ public class MainMenu : MonoBehaviour
 
     }
 
+    public void ColorChooser(Text btnText)
+    {
+        DataManager.GroundColor = btnText.text;
+        print(DataManager.GroundColor);
+        ColorChooserPanel.SetActive(false);
+    }
 
     public void TestData()
     {

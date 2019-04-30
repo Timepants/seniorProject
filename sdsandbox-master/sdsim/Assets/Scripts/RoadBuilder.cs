@@ -28,6 +28,7 @@ public class RoadBuilder : MonoBehaviour {
 	Texture2D customRoadTexure;
 
 	GameObject createdRoad;
+    public GameObject ground;
 
 	void Start()
 	{
@@ -87,8 +88,46 @@ public class RoadBuilder : MonoBehaviour {
 		mr.material.mainTextureScale = ms;
 	}
 
+
+    public Color[] startColors;
+    private float r;
+    private float g;
+    private float b;
+    private Random rnd = new Random();
 	public void InitRoad(CarPath path)
 	{
+        
+        if(DataManager.Env_Name != "OutdoorTrain")
+        {
+            if (DataManager.GroundColor == "Red")
+            {
+                ground.GetComponent<Renderer>().material.color = Color.red;
+            } else if (DataManager.GroundColor == "Blue")
+            {
+                ground.GetComponent<Renderer>().material.color = Color.blue;
+            }
+            else if (DataManager.GroundColor == "Green")
+            {
+                ground.GetComponent<Renderer>().material.color = Color.green;
+            }
+            else if (DataManager.GroundColor == "Gray")
+            {
+                ground.GetComponent<Renderer>().material.color = Color.gray;
+            }
+            else if (DataManager.GroundColor == "???")
+            {
+                Color nColor = new Color();
+                nColor.r = Random.Range(-1, 1) + nColor.r;
+                nColor.g = Random.Range(-1, 1) + nColor.g;
+                nColor.b = Random.Range(-1, 1) + nColor.b;
+                print("THIS -- " + nColor);
+                ground.GetComponent<Renderer>().material.color = nColor;
+
+            }
+        }
+
+
+
 		if(terToolkit != null && doFlattenAtStart)
 		{
 			terToolkit.Flatten();

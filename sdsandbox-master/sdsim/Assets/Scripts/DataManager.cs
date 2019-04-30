@@ -6,8 +6,9 @@ using UnityEngine;
 public class DataManager : MonoBehaviour
 {
     static public string ModelToRun;
+    static public string GroundColor;
     static public int TrainingSpeed = 1;
-    static public string Env_Name;
+    static public string Env_Name = "FlatTrain";
     static public string Road = Directory.GetCurrentDirectory() + "\\Assets\\Textures\\roads\\road1.png";
     static public Texture2D RoadTexture;
     public static DataManager instance;
