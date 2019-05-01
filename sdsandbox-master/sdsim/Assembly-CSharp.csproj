@@ -60,6 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\ColorChange.cs" />
     <Compile Include="Assets\Scenes\TrainingScenes\Plugins\crosstales\Common\Scripts\ExtensionMethods.cs" />
     <Compile Include="Assets\Scenes\TrainingScenes\Plugins\crosstales\Common\Scripts\Model\Enum\Platform.cs" />
     <Compile Include="Assets\Scenes\TrainingScenes\Plugins\crosstales\Common\Scripts\Tool\TakeScreenshot.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Assets\Scripts\CollisionSensor.cs" />
     <Compile Include="Assets\Scripts\DataManager.cs" />
     <Compile Include="Assets\Scripts\GenPathFromDriving.cs" />
+    <Compile Include="Assets\Scripts\GroundColorChange.cs" />
     <Compile Include="Assets\Scripts\HUDFPS.cs" />
     <Compile Include="Assets\Scripts\ICar.cs" />
     <Compile Include="Assets\Scripts\JoystickCarControl.cs" />

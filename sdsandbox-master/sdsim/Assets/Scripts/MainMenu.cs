@@ -160,8 +160,8 @@ public class MainMenu : MonoBehaviour
         if (!string.IsNullOrEmpty(model))
         {
             OnPrepareData();
-            Thread.Sleep(2000);
-            TrainModel(model);
+            //Thread.Sleep(2000);
+            //TrainModel(model);
             
         }
         else
