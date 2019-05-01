@@ -160,8 +160,8 @@ public class MainMenu : MonoBehaviour
         if (!string.IsNullOrEmpty(model))
         {
             OnPrepareData();
-            //Thread.Sleep(2000);
-            //TrainModel(model);
+            Thread.Sleep(4000);
+            TrainModel(model);
             
         }
         else
@@ -195,7 +195,8 @@ public class MainMenu : MonoBehaviour
         string path = BasePath + "\\src\\prepare_data.py";
         Process p = new Process();
         ProcessStartInfo startInfo = new ProcessStartInfo();
-
+        
+        startInfo.WorkingDirectory = BasePath + "\\src";
         //tartInfo.FileName = "cmd.exe";
         //startInfo.Arguments = "/c \"python " + path + "\\prepare_data.py\"";
         startInfo.FileName = DataManager.AnacondaLocation;
@@ -208,7 +209,7 @@ public class MainMenu : MonoBehaviour
     public void OpenWebserver()
     {
         var SSID = GetSSID();
-        if (SSID == "Curiopo")
+        if (SSID != "Curiopo")
         {
             //EditorUtility.DisplayDialog("Error!", "You have to be on the \"Curiopo\" Network", "Ok");
         } else
@@ -222,7 +223,7 @@ public class MainMenu : MonoBehaviour
 
     private void OpenURL()
     {
-        Application.OpenURL("https://old.reddit.com");
+        Application.OpenURL("http://192.168.4.1:5000");
     }
 
     private string GetSSID()

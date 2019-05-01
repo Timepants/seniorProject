@@ -256,6 +256,8 @@ def go(model_name, epochs=50, inputs='./log/*.jpg', limit=None, aug_mult=1, aug_
         print("problems with loss graph")
 
 if __name__ == "__main__":
+    os.chdir("E:/Libraries/Documents/SeniorProject/sdsandbox-master/src")
+
     parser = argparse.ArgumentParser(description='train script')
     parser.add_argument('model', type=str, help='model name')
     parser.add_argument('--epochs', type=int, default=conf.training_default_epochs, help='number of epochs')

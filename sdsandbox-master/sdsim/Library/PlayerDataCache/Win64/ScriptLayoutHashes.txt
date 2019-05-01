@@ -1,6 +1,6 @@
 Win64
 PlayerPath?
-F:/sdsim.exe
+C:/Users/Joshua/Desktop/sdsim.exe
 SceneListBegin?
 Assets/Scenes/Main_Menu.unity
 Assets/Scenes/TrainingScenes/FlatTrain.unity
@@ -25,9 +25,7 @@ e1bbf0ab858085e38fae6b12ebbdcd35 UnityEngine.Timeline.dll:UnityEngine.Timeline.C
 e1bbf0ab858085e38fae6b12ebbdcd35 UnityEngine.Timeline.dll:UnityEngine.Timeline.GroupTrack
 e1bbf0ab858085e38fae6b12ebbdcd35 UnityEngine.Timeline.dll:UnityEngine.Timeline.PlayableTrack
 201e3fde670b00545944bb3db215c80a UnityEngine.Timeline.dll:UnityEngine.Timeline.TimelineAsset
-71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:Crosstales.FB.FileBrowser
-b45802ab2e7472bb2967f0e47c86737a Assembly-CSharp.dll:Crosstales.UI.UIFocus
-551cb51bb5d7bbeddf702953b04eb33a Assembly-CSharp.dll:.PIDController
+b682ecc954395547f3bbdf04eb5f7466 Assembly-CSharp.dll:.PIDController
 e7a73f5f78ba6445195ec23b74a1ce2d Unity.TextMeshPro.dll:TMPro.TMP_ScrollbarEventHandler
 da7b69dc0d34d208819b782e53072897 Assembly-CSharp.dll:.Lidar
 f00ca901b734f71f99db8f25241154c4 Assembly-CSharp-firstpass.dll:UnityStandardAssets.Vehicles.Car.Suspension
@@ -67,7 +65,6 @@ fc108ce7d98c40ac0907e8ca7f500c76 UnityEngine.UI.dll:UnityEngine.UI.Text
 abf1930d8126d0b2e00e9449129a0190 UnityEngine.UI.dll:UnityEngine.EventSystems.TouchInputModule
 64e54c0cbb0177c5ea26f340efb9ff85 UnityEngine.UI.dll:UnityEngine.UI.VerticalLayoutGroup
 84c75d46041789800ce0c2b9ca540a6d Assembly-CSharp.dll:.TwiddlePID
-4ab5ec27e7e897f073fff64963ee64a4 Assembly-CSharp.dll:Crosstales.UI.UIHint
 98ad81e9f689a492509f07e75b810aaa Unity.TextMeshPro.dll:TMPro.TMP_InputField
 352455aaadb8c98ff36ead557753abfa Assembly-CSharp-firstpass.dll:UnityStandardAssets.CrossPlatformInput.TiltInput
 cf9f5cf2c3145a37ac07f00e50e460f9 UnityEngine.UI.dll:UnityEngine.UI.AspectRatioFitter
@@ -102,8 +99,8 @@ fc108ce7d98c40ac0907e8ca7f500c76 UnityEngine.UI.dll:UnityEngine.UI.Text
 0fd6822f6177297bd0eb4d83cc7a9030 UnityEngine.UI.dll:UnityEngine.UI.ToggleGroup
 abf1930d8126d0b2e00e9449129a0190 UnityEngine.UI.dll:UnityEngine.EventSystems.TouchInputModule
 64e54c0cbb0177c5ea26f340efb9ff85 UnityEngine.UI.dll:UnityEngine.UI.VerticalLayoutGroup
+25c391c825ebcd0d3d9622edd606cb84 Assembly-CSharp.dll:.GroundColorChange
 71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:.TestSocketIO
-500dcfa22c2a0b592251a315f677e23d Assembly-CSharp.dll:Crosstales.Common.Util.RandomScaler
 d0b4309476eb174e43f5565fd26f5ea4 Assembly-CSharp.dll:.SocketIODriveClient
 71bb6a6b6c8f052f948db64c7dd3ca4f UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationPlayableAsset
 06f0fef534ca4c1d6064fd77a26bf722 UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationTrack
@@ -138,7 +135,6 @@ ad9173d3a69d99153f38ed4b62226129 UnityEngine.Networking.dll:UnityEngine.Networki
 d251bf88db6c95a6b1aa0b69298da9ef UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
 71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp-firstpass.dll:UnityStandardAssets.Vehicles.Car.CarUserControl
 2ecdbe75f54c8965e9d317f6c9a2e0e3 Assembly-CSharp.dll:.Marker
-e7521e8047e92cf22b3aa8771e8949f4 Assembly-CSharp.dll:Crosstales.FB.Demo.Examples
 303ad70ce203ad874efe2965d0fbcff9 Unity.Analytics.Tracker.dll:UnityEngine.Analytics.AnalyticsEventTracker
 7fb9de8dcf73854b6b328eca1f7a6e6d Unity.Analytics.Tracker.dll:UnityEngine.Analytics.AnalyticsTracker
 71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:.CollisionSensor
@@ -146,32 +142,26 @@ b7813171eee26514802203ef75d12eaf Assembly-CSharp.dll:.ThrottleManager
 94017dcc9f00fe671ea7dc427b4da011 Unity.TextMeshPro.dll:TMPro.TMP_SpriteAsset
 526e79cdf9b285b39c89f13f437b3834 Assembly-CSharp.dll:.PathManager
 81f1e6e7810b951539272aaee7fb63d2 Assembly-CSharp.dll:.Twiddle
-6d4191fbdf4c160ccd69f04de5396e7e Assembly-CSharp.dll:Crosstales.FB.Demo.GUIScenes
 a8b6c919b2049fcc280823488144371f Assembly-CSharp-firstpass.dll:UnityStandardAssets.CrossPlatformInput.Joystick
-4b4b6c61a3b858c7f5a5c64990309257 Assembly-CSharp.dll:Crosstales.FB.Demo.GUIMain
 71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:.UVAnimation
 60c85f0a09c71d06b5dc3b968e62c928 Assembly-CSharp.dll:.ScreenSaver
-dff57befba8a0eef2d0d2a5f406a7053 Assembly-CSharp.dll:Crosstales.UI.UIResize
 ab390c3d5ab6b7bc6e5fdb9af369495a Assembly-CSharp.dll:.TerrainToolkit
-8df755367e6b6592b04d0058b10fe321 Assembly-CSharp.dll:Crosstales.Common.Util.RandomColor
 4bd1cc3c85989d2213a9a8fd9d09e63f Assembly-CSharp-firstpass.dll:UnityStandardAssets.CrossPlatformInput.InputAxisScrollbar
 fdd7177da17032ba94d98037cc97bb49 Assembly-CSharp-firstpass.dll:UnityStandardAssets.CrossPlatformInput.AxisTouchButton
 b3ab2106268377ffe25dd18ac23dca28 Unity.TextMeshPro.dll:TMPro.TMP_Asset
 71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:.DataManager
-f9e52bee81e32943a15d90647f460a9d Assembly-CSharp.dll:Crosstales.Common.Util.RandomRotator
 c88c4199b288356ec3eb2f0d85abc619 Assembly-CSharp-firstpass.dll:UnityStandardAssets.CrossPlatformInput.ButtonHandler
 71bb6a6b6c8f052f948db64c7dd3ca4f Unity.Analytics.Editor.dll:UnityEditor.Analytics.AnalyticsEventTrackerEditor
 6eb490a7ef32a76291b11d799e29d7a9 Assembly-CSharp.dll:.CarPusher
 71bb6a6b6c8f052f948db64c7dd3ca4f Unity.TextMeshPro.dll:TMPro.TMP_SpriteAnimator
-74222b0e1c432b5dda6d58a0c3cd7c1a Assembly-CSharp.dll:.MainMenu
+acf88802e5f701baa608d71d41610dfa Assembly-CSharp.dll:.MainMenu
 71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp-firstpass.dll:UnityStandardAssets.CrossPlatformInput.MobileControlRig
-dd2fc6165c6cb64dd1d69e63852f48f1 Assembly-CSharp.dll:.RoadBuilder
+885157e23e6de25786ab6f2738801a8e Assembly-CSharp.dll:.RoadBuilder
 e08b7fd025e5743e5563e22fdd827075 Assembly-CSharp-firstpass.dll:UnityStandardAssets.Vehicles.Car.CarController
 0334c4a0effc471453cf665c58f76aff Assembly-CSharp-firstpass.dll:UnityStandardAssets.Vehicles.Car.CarAIControl
 4fd8bf02e3089425d3502e26c44ba31a Unity.TextMeshPro.dll:TMPro.TextContainer
 21ee95b4add1eb6d3d25a1efaa2d13d9 Assembly-CSharp-firstpass.dll:UnityStandardAssets.Vehicles.Car.CarSelfRighting
 6bc1b461efb1253942e1cbceecc97458 Assembly-CSharp.dll:.CameraSensor
-720123875ef449259481ad70e5eb5cdf Assembly-CSharp.dll:Crosstales.Common.Util.PlatformController
 e6ae40841db498b6e673877ac45ad208 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkAnimator
 71bb6a6b6c8f052f948db64c7dd3ca4f UnityEngine.Networking.dll:UnityEngine.Networking.NetworkBehaviour
 1dcb82730d983b77cec736c6ef19f814 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkDiscovery
@@ -189,9 +179,6 @@ ad9173d3a69d99153f38ed4b62226129 UnityEngine.Networking.dll:UnityEngine.Networki
 ebd293e396e51dc26a9333c4067ac759 Unity.VectorGraphics.dll:.SVGImage
 68fb5d772c18ca6bf7e8bf58809a104d Assembly-CSharp.dll:.JoystickCarControl
 510fefd6a544e16a3ffefa557ddcba39 Unity.TextMeshPro.dll:TMPro.PackageResourceImporterWindow
-254450cc74c81c2c18428ca7383346b2 Assembly-CSharp.dll:Crosstales.UI.Util.FPSDisplay
-71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:Crosstales.UI.UIDrag
-f9b22d5311c141c6699ca239d398c008 Assembly-CSharp.dll:Crosstales.UI.UIWindowManager
 aa82b3ce4c0c9b227036c0337315c5d3 Unity.TextMeshPro.dll:TMPro.TMP_FontAsset
 e51c09a4cc447f11db225afcd8e3e490 Unity.TextMeshPro.dll:TMPro.TMP_Settings
 e60c5897efe87faec89e2fef67810640 Assembly-CSharp.dll:.GenPathFromDriving
@@ -211,7 +198,6 @@ b4e32e86ac4734dbf5042c96ceeae70b Assembly-CSharp.dll:.CameraFollow
 fb6a1ea36b4f6ef5948d283d93760765 UnityEngine.GoogleAudioSpatializer.dll:UnityEngine.Experimental.Audio.Google.GvrAudioRoom
 5b0391b7e3d9ea9db6c0a8fbd0ca23f6 UnityEngine.GoogleAudioSpatializer.dll:UnityEngine.Experimental.Audio.Google.GvrAudioSoundfieldExtension
 5b0391b7e3d9ea9db6c0a8fbd0ca23f6 UnityEngine.GoogleAudioSpatializer.dll:UnityEngine.Experimental.Audio.Google.GvrAudioSourceExtension
-677dd8ddc93cafd95564845630c99bc6 Assembly-CSharp.dll:Crosstales.UI.Util.ScrollRectHandler
 39557e0c471d9f876e33cd10cee08e3c Assembly-CSharp.dll:.MenuHandler
 daa6a65fb0f785335ff43e9998133a34 Assembly-CSharp-firstpass.dll:UnityStandardAssets.Vehicles.Car.Mudguard
 7a89febc9ca0e44ce36175968625bc77 Assembly-CSharp.dll:.Logger
@@ -220,13 +206,29 @@ a909505c7e9870f1ee552a40f203397a Assembly-CSharp-firstpass.dll:UnityStandardAsse
 5fc094978ce3e3591a7500ed380d854a Unity.Analytics.DataPrivacy.dll:UnityEngine.Analytics.DataPrivacyButton
 d251bf88db6c95a6b1aa0b69298da9ef UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
 e5686c09108ca9e31da9ddf0e148444d Assembly-CSharp.dll:.HUDFPS
+71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:.ColorChange
 219ec6059796d8951d2adcd8505d0dc2 Assembly-CSharp-firstpass.dll:UnityStandardAssets.CrossPlatformInput.TouchPad
 d791aa6007fa3640be1164ea75bb087d Unity.TextMeshPro.dll:TMPro.TMP_StyleSheet
-020f7ec2a651d1f4a40ee30e6ebf82d1 Assembly-CSharp.dll:Crosstales.UI.WindowManager
 c6666661329916e218bee7f5e79e60f5 Unity.TextMeshPro.dll:TMPro.TextMeshPro
 3165968ba45c74472d279ba04455fccb Unity.TextMeshPro.dll:TMPro.TMP_ColorGradient
-71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:Crosstales.UI.Social
 8649814970b42d345b89944b862453cc Unity.TextMeshPro.dll:TMPro.TMP_SubMesh
 22053b13ba997699539e5b3a5b232336 Assembly-CSharp.dll:.LaneChangeTrainer
-71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:Crosstales.UI.StaticManager
-7bfa388e65e077c1266f9bdc578ea2d7 Assembly-CSharp.dll:Crosstales.Common.Util.TakeScreenshot
+71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp-firstpass.dll:Crosstales.FB.FileBrowser
+b45802ab2e7472bb2967f0e47c86737a Assembly-CSharp-firstpass.dll:Crosstales.UI.UIFocus
+4ab5ec27e7e897f073fff64963ee64a4 Assembly-CSharp-firstpass.dll:Crosstales.UI.UIHint
+500dcfa22c2a0b592251a315f677e23d Assembly-CSharp-firstpass.dll:Crosstales.Common.Util.RandomScaler
+e7521e8047e92cf22b3aa8771e8949f4 Assembly-CSharp-firstpass.dll:Crosstales.FB.Demo.Examples
+6d4191fbdf4c160ccd69f04de5396e7e Assembly-CSharp-firstpass.dll:Crosstales.FB.Demo.GUIScenes
+4b4b6c61a3b858c7f5a5c64990309257 Assembly-CSharp-firstpass.dll:Crosstales.FB.Demo.GUIMain
+dff57befba8a0eef2d0d2a5f406a7053 Assembly-CSharp-firstpass.dll:Crosstales.UI.UIResize
+8df755367e6b6592b04d0058b10fe321 Assembly-CSharp-firstpass.dll:Crosstales.Common.Util.RandomColor
+f9e52bee81e32943a15d90647f460a9d Assembly-CSharp-firstpass.dll:Crosstales.Common.Util.RandomRotator
+720123875ef449259481ad70e5eb5cdf Assembly-CSharp-firstpass.dll:Crosstales.Common.Util.PlatformController
+254450cc74c81c2c18428ca7383346b2 Assembly-CSharp-firstpass.dll:Crosstales.UI.Util.FPSDisplay
+71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp-firstpass.dll:Crosstales.UI.UIDrag
+f9b22d5311c141c6699ca239d398c008 Assembly-CSharp-firstpass.dll:Crosstales.UI.UIWindowManager
+677dd8ddc93cafd95564845630c99bc6 Assembly-CSharp-firstpass.dll:Crosstales.UI.Util.ScrollRectHandler
+020f7ec2a651d1f4a40ee30e6ebf82d1 Assembly-CSharp-firstpass.dll:Crosstales.UI.WindowManager
+71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp-firstpass.dll:Crosstales.UI.Social
+71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp-firstpass.dll:Crosstales.UI.StaticManager
+7bfa388e65e077c1266f9bdc578ea2d7 Assembly-CSharp-firstpass.dll:Crosstales.Common.Util.TakeScreenshot

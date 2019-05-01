@@ -42,7 +42,11 @@ def prepare(src_path, dest_path):
 
 if __name__ == "__main__":
     import argparse
-
+    os.chdir("E:/Libraries/Documents/SeniorProject/sdsandbox-master/src")
+    dirpath = os.getcwd()
+    print("current directory is : " + dirpath)
+    foldername = os.path.basename(dirpath)
+    print("Directory name is : " + foldername)
     # Parameters
     parser = argparse.ArgumentParser(description='Prepare training data from logs and images')
     parser.add_argument('--log-src', dest='log_src', default='../sdsim/log/*.*', help='path to log data')

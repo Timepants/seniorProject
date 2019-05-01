@@ -94,29 +94,46 @@ public class RoadBuilder : MonoBehaviour {
     private float g;
     private float b;
     private Random rnd = new Random();
+
+    public Color baseColor = Color.white;
+
+    public float colorMod = 0.3f;
+
 	public void InitRoad(CarPath path)
 	{
-        
+        Color tempColor = baseColor;
         if(DataManager.Env_Name != "OutdoorTrain")
         {
             if (DataManager.GroundColor == "Red")
             {
-                ground.GetComponent<Renderer>().material.color = Color.red;
+                tempColor.r = baseColor.r + colorMod;
+                tempColor.g = baseColor.g - colorMod;
+                tempColor.b = baseColor.b - colorMod;
+                ground.GetComponent<Renderer>().material.color = tempColor;
             } else if (DataManager.GroundColor == "Blue")
             {
-                ground.GetComponent<Renderer>().material.color = Color.blue;
+                tempColor.r = baseColor.r - colorMod;
+                tempColor.g = baseColor.g - colorMod;
+                tempColor.b = baseColor.b + colorMod;
+                ground.GetComponent<Renderer>().material.color = tempColor;
             }
             else if (DataManager.GroundColor == "Green")
             {
-                ground.GetComponent<Renderer>().material.color = Color.green;
+                tempColor.r = baseColor.r - colorMod;
+                tempColor.g = baseColor.g + colorMod;
+                tempColor.b = baseColor.b - colorMod;
+                ground.GetComponent<Renderer>().material.color = tempColor;
             }
             else if (DataManager.GroundColor == "Gray")
             {
-                ground.GetComponent<Renderer>().material.color = Color.gray;
+                tempColor.r = baseColor.r - colorMod;
+                tempColor.g = baseColor.g - colorMod;
+                tempColor.b = baseColor.b - colorMod;
+                ground.GetComponent<Renderer>().material.color = tempColor;
             }
             else if (DataManager.GroundColor == "???")
             {
-                Color nColor = new Color();
+                Color nColor = baseColor;
                 nColor.r = Random.Range(-1, 1) + nColor.r;
                 nColor.g = Random.Range(-1, 1) + nColor.g;
                 nColor.b = Random.Range(-1, 1) + nColor.b;
