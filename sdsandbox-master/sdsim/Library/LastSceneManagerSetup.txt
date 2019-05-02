@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/TrainingScenes/IndoorTrain.unity
+- path: Assets/Scenes/TrainingScenes/OutdoorTrain.unity
   isLoaded: 1
   isActive: 1

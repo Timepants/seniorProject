@@ -33,7 +33,7 @@ public class MenuHandler : MonoBehaviour {
 
     public void Start()
     {
-        print("I sleep dad");
+        //print("I sleep dad");
         trainingManager.OnMenuNextTrack();
     }
 
